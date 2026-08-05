@@ -662,6 +662,21 @@
 							</select>
 						</div>
 						<div class='readable-background margin-bottom padding'>
+							<h5 class='padding margin-bottom input-description'>Import a full deck list (one card per line: <code>qty Name (SET) number</code>)</h5>
+							<textarea id='decklist-input' class='input margin-bottom' rows='10' placeholder='1 Sigarda, Font of Blessings (MAT) 182&#10;4 Mountain (M21) 237&#10;1 Akroma's Will (CMR) 3'></textarea>
+							<button class='input margin-bottom' onclick='parseDeckList();'>Load Deck List</button>
+							<div id='decklist-progress' style='display:none;'>
+								<h5 id='decklist-counter' class='padding input-description'></h5>
+								<div style='display:flex; gap:8px; flex-wrap:wrap;'>
+									<button class='input' onclick='deckListPrev();'>← Previous</button>
+									<button class='input' onclick='deckListNext();'>Next →</button>
+									<button class='input' id='decklist-save-btn' onclick='deckListSaveCurrent();'>Save Current Card</button>
+								</div>
+								<h5 class='padding margin-top input-description'>Batch download all saved cards from this deck</h5>
+								<button class='input' onclick='deckListBatchDownload();'>Download All Deck Cards (PNG)</button>
+							</div>
+						</div>
+						<div class='readable-background margin-bottom padding'>
 							<h5 class='padding margin-bottom input-description'>Save your current card</h5>
 							<button class='input margin-bottom' onclick='saveCard();'>Save Card</button>
 							<h5 class='padding margin-bottom input-description'>Load a saved card</h5>
