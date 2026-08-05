@@ -7,7 +7,8 @@ HOST="${HOST:-127.0.0.1}"
 
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 
-echo "Starting Card Conjurer on http://${HOST}:${PORT}/creator/index.html"
+echo "Starting Card Conjurer on http://${HOST}:${PORT}/"
+echo "(Open the root URL, then click 'Card Creator' in the menu)"
 echo "Press Ctrl+C to stop."
 
 # Prefer Node.js serve (handles connection aborts gracefully)
