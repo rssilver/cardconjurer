@@ -4983,7 +4983,9 @@ function changeCardIndex() {
 	}
 	//art
 	document.querySelector('#art-name').value = cardToImport.name;
-	fetchScryfallData(cardToImport.name, artFromScryfall, 'art');
+	if (!isDeckListImport) {
+		fetchScryfallData(cardToImport.name, artFromScryfall, 'art');
+	}
 	if (document.querySelector('#importAllPrints').checked) {
 		// document.querySelector('#art-index').value = document.querySelector('#import-index').value;
 		// changeArtIndex();
@@ -5542,6 +5544,7 @@ bindInputs('#show-guidelines', '#show-guidelines-2', true);
 var deckList = [];       // Parsed deck list entries [{qty, name, setCode, collectorNumber}]
 var deckListIndex = 0;   // Current position in deck list
 var deckListSavedKeys = []; // Saved card keys for this deck session
+var isDeckListImport = false; // Flag to skip redundant API calls during import
 
 function parseDeckList() {
 	var rawText = document.querySelector('#decklist-input').value.trim();
@@ -5580,9 +5583,11 @@ function parseDeckList() {
 	deckList = parsed;
 	deckListIndex = 0;
 	deckListSavedKeys = [];
+	isDeckListImport = true;
 
 	document.querySelector('#decklist-progress').style.display = 'block';
 	updateDeckListCounter();
+	showDeckNav(true);
 	notify('Loaded ' + deckList.length + ' cards. Use Next/Previous to navigate.', 3);
 
 	// Auto-load the first card
@@ -5614,7 +5619,34 @@ function parseDeckLine(line) {
 function updateDeckListCounter() {
 	var counterEl = document.querySelector('#decklist-counter');
 	counterEl.textContent = 'Card ' + (deckListIndex + 1) + '/' + deckList.length + ': ' + deckList[deckListIndex].name;
+
+	// Update floating nav counter too
+	var navCounter = document.getElementById('deck-nav-counter');
+	if (navCounter) {
+		navCounter.textContent = 'Card ' + (deckListIndex + 1) + '/' + deckList.length;
+	}
 }
+
+function showDeckNav(show) {
+	var overlay = document.getElementById('deck-nav-overlay');
+	if (!overlay) return;
+	overlay.style.display = show ? 'block' : 'none';
+}
+
+// Keyboard shortcuts for deck list navigation (Left/Right arrow keys)
+document.addEventListener('keydown', function(e) {
+	if (!isDeckListImport || deckList.length === 0) return;
+	// Only trigger when not focused on a text input or textarea
+	var tag = e.target.tagName.toLowerCase();
+	if (tag === 'input' || tag === 'textarea') return;
+	if (e.key === 'ArrowLeft') {
+		e.preventDefault();
+		deckListPrev();
+	} else if (e.key === 'ArrowRight') {
+		e.preventDefault();
+		deckListNext();
+	}
+});
 
 function deckListLoadCard(index) {
 	if (index < 0 || index >= deckList.length) return;
@@ -5627,6 +5659,21 @@ function deckListLoadCard(index) {
 			scryfallCard = cards;
 			document.querySelector('#import-index').innerHTML = '<option value="0">' + cards[0].name + ' (' + cards[0].set.toUpperCase() + ' #' + cards[0].collector_number + ')</option>';
 			document.querySelector('#import-index').value = '0';
+
+			// Fast path: skip redundant API calls when importing via deck list
+			var cardToImport = cards[0];
+
+			// Set art directly from the fetched card data (no extra Scryfall search)
+			if (cardToImport.image_uris && cardToImport.image_uris.art_crop) {
+				scryfallArt = [cardToImport];
+				document.querySelector('#art-index').innerHTML = '<option value="0">' + cardToImport.name + '</option>';
+				document.querySelector('#art-index').value = '0';
+				uploadArt(cardToImport.image_uris.art_crop, 'autoFit');
+				if (cardToImport.artist) {
+					artistEdited(cardToImport.artist);
+				}
+			}
+
 			changeCardIndex();
 			updateDeckListCounter();
 		} else {
