@@ -93,6 +93,11 @@
 			</div>
 		</div>
 		<!-- Regular stuff -->
+		<div id='deck-nav-overlay' style='display:none; position:fixed; z-index:999;'>
+			<button onclick='deckListPrev()' title='Previous card (Left Arrow)' style='position:absolute;left:10px;top:50%;transform:translateY(-50%);z-index:10;background:#333;color:white;border:2px solid #666;border-radius:8px;font-size:24px;padding:12px 10px;cursor:pointer;'>&#9664;</button>
+			<button onclick='deckListNext()' title='Next card (Right Arrow)' style='position:absolute;right:10px;top:50%;transform:translateY(-50%);z-index:10;background:#333;color:white;border:2px solid #666;border-radius:8px;font-size:24px;padding:12px 10px;cursor:pointer;'>&#9654;</button>
+			<div id='deck-nav-counter' style='position:absolute;top:-30px;left:50%;transform:translateX(-50%);z-index:10;background:#333;color:white;border:2px solid #666;border-radius:8px;font-size:14px;padding:6px 14px;cursor:pointer;' title='Click to go to Import/Save tab'>Card 1/0</div>
+		</div>
 		<div class='creator-grid margin-bottom-large'>
 			<canvas class='creator-canvas box-shadow' id='previewCanvas' width='1005' height='1407'></canvas>
 			<div class='creator-menu box-shadow'>
@@ -662,6 +667,21 @@
 							</select>
 						</div>
 						<div class='readable-background margin-bottom padding'>
+							<h5 class='padding margin-bottom input-description'>Import a full deck list (one card per line: <code>qty Name (SET) number</code>)</h5>
+							<textarea id='decklist-input' class='input margin-bottom' rows='10' placeholder='1 Sigarda, Font of Blessings (MAT) 182&#10;4 Mountain (M21) 237&#10;1 Akroma's Will (CMR) 3'></textarea>
+							<button class='input margin-bottom' onclick='parseDeckList();'>Load Deck List</button>
+							<div id='decklist-progress' style='display:none;'>
+								<h5 id='decklist-counter' class='padding input-description'></h5>
+								<div style='display:flex; gap:8px; flex-wrap:wrap;'>
+									<button class='input' onclick='deckListPrev();'>← Previous</button>
+									<button class='input' onclick='deckListNext();'>Next →</button>
+									<button class='input' id='decklist-save-btn' onclick='deckListSaveCurrent();'>Save Current Card</button>
+								</div>
+								<h5 class='padding margin-top input-description'>Batch download all saved cards from this deck</h5>
+								<button class='input' onclick='deckListBatchDownload();'>Download All Deck Cards (PNG)</button>
+							</div>
+						</div>
+						<div class='readable-background margin-bottom padding'>
 							<h5 class='padding margin-bottom input-description'>Save your current card</h5>
 							<button class='input margin-bottom' onclick='saveCard();'>Save Card</button>
 							<h5 class='padding margin-bottom input-description'>Load a saved card</h5>
@@ -740,6 +760,11 @@
 					<!-- <label class='checkbox-container input margin-bottom'>800 DPI
 						<input id='high-res' type='checkbox' onchange='toggleHighRes();'>
 						<span class='checkmark'></span>
+		<div id='deck-nav-overlay' style='display:none; text-align:center; padding:16px 0;'>
+			<button onclick='deckListPrev()' title='Previous card (Left Arrow)' style='background:#333;color:white;border:2px solid #666;border-radius:8px;font-size:24px;padding:12px 10px;cursor:pointer;margin-right:16px;'>&#9664;</button>
+			<button onclick='deckListNext()' title='Next card (Right Arrow)' style='background:#333;color:white;border:2px solid #666;border-radius:8px;font-size:24px;padding:12px 10px;cursor:pointer;margin-left:16px;'>&#9654;</button>
+			<div id='deck-nav-counter' style='display:inline-block;background:#333;color:white;border:2px solid #666;border-radius:8px;font-size:14px;padding:6px 14px;cursor:pointer;margin-left:16px;' title='Click to go to Import/Save tab'>Card 1/0</div>
+		</div>
 					</label> -->
 				</div>
 					
