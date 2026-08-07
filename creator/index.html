@@ -94,10 +94,9 @@
 		</div>
 		<!-- Regular stuff -->
 		<div id='deck-nav-overlay' style='display:none; position:fixed; z-index:999;'>
-			<button onclick='deckListPrev()' title='Previous card (Left Arrow)' style='position:absolute;left:10px;bottom:20px;z-index:10;background:#333;color:white;border:2px solid #666;border-radius:8px;font-size:24px;padding:12px 10px;cursor:pointer;'>&#9664;</button>
-			<button onclick='deckListNext()' title='Next card (Right Arrow)' style='position:absolute;right:10px;bottom:20px;z-index:10;background:#333;color:white;border:2px solid #666;border-radius:8px;font-size:24px;padding:12px 10px;cursor:pointer;'>&#9654;</button>
-			<div id='deck-nav-counter' style='position:absolute;bottom:70px;left:50%;transform:translateX(-50%);z-index:10;background:#333;color:white;border:2px solid #666;border-radius:8px;font-size:14px;padding:6px 14px;cursor:pointer;' title='Click to go to Import/Save tab'>Card 1/0</div>
-		</div>
+			<button onclick='deckListPrev()' title='Previous card (Left Arrow)' style='position:absolute;left:10px;top:40px;transform:translateY(-50%);background:#333;color:white;border:2px solid #666;border-radius:8px;font-size:24px;padding:12px 10px;cursor:pointer;'>&#9664;</button>
+			<button onclick='deckListNext()' title='Next card (Right Arrow)' style='position:absolute;right:10px;top:40px;transform:translateY(-50%);background:#333;color:white;border:2px solid #666;border-radius:8px;font-size:24px;padding:12px 10px;cursor:pointer;'>&#9654;</button>
+			<div id='deck-nav-counter' style='position:absolute;top:25px;left:50%;transform:translateX(-50%);background:#333;color:white;border:2px solid #666;border-radius:8px;font-size:14px;padding:6px 14px;cursor:pointer;' title='Click to go to Import/Save tab'>Card 1/0</div>		</div>
 		<div class='creator-grid margin-bottom-large'>
 			<canvas class='creator-canvas box-shadow' id='previewCanvas' width='1005' height='1407'></canvas>
 			<div class='creator-menu box-shadow'>
