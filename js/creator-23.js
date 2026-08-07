@@ -5630,6 +5630,16 @@ function updateDeckListCounter() {
 function showDeckNav(show) {
 	var overlay = document.getElementById('deck-nav-overlay');
 	if (!overlay) return;
+	if (show) {
+		var canvas = document.getElementById('previewCanvas');
+		if (canvas) {
+			var rect = canvas.getBoundingClientRect();
+			overlay.style.left = rect.left + 'px';
+			overlay.style.top = (rect.bottom + 10) + 'px';
+			overlay.style.width = rect.width + 'px';
+			overlay.style.height = '50px';
+		}
+	}
 	overlay.style.display = show ? 'block' : 'none';
 }
 
