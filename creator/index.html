@@ -96,7 +96,15 @@
 		<div id='deck-nav-overlay' style='display:none; position:fixed; z-index:999;'>
 			<button onclick='deckListPrev()' title='Previous card (Left Arrow)' style='position:absolute;left:10px;top:40px;transform:translateY(-50%);background:#333;color:white;border:2px solid #666;border-radius:8px;font-size:24px;padding:12px 10px;cursor:pointer;'>&#9664;</button>
 			<button onclick='deckListNext()' title='Next card (Right Arrow)' style='position:absolute;right:10px;top:40px;transform:translateY(-50%);background:#333;color:white;border:2px solid #666;border-radius:8px;font-size:24px;padding:12px 10px;cursor:pointer;'>&#9654;</button>
-			<div id='deck-nav-counter' style='position:absolute;top:25px;left:50%;transform:translateX(-50%);background:#333;color:white;border:2px solid #666;border-radius:8px;font-size:14px;padding:6px 14px;cursor:pointer;' title='Click to go to Import/Save tab'>Card 1/0</div>		</div>
+			<div id='deck-nav-controls' style='position:absolute;top:18px;left:50%;transform:translateX(-50%);display:flex;align-items:center;gap:8px;'>
+				<button id='deck-nav-counter' onclick='toggleDeckListDropdown()' title='Click to search decklist' style='background:#333;color:white;border:2px solid #666;border-radius:8px;font-size:14px;padding:6px 14px;cursor:pointer;'>Card 1/0</button>
+				<button id='deck-nav-save-btn' onclick='deckListSaveCurrent()' title='Save current card' style='background:#2a7d2a;color:white;border:2px solid #4a4;border-radius:8px;font-size:13px;padding:6px 12px;cursor:pointer;'>💾 Save</button>
+			</div>
+			<div id='deck-list-dropdown' style='display:none;position:absolute;top:50px;left:50%;transform:translateX(-50%);background:#2a2a2a;border:2px solid #666;border-radius:10px;padding:8px;width:340px;max-height:400px;z-index:1000;box-shadow:0 8px 24px rgba(0,0,0,0.5);'>
+				<input id='deck-list-search' type='text' placeholder='Search cards...' oninput='filterDeckListDropdown()' style='width:100%;padding:8px 10px;border-radius:6px;border:1px solid #555;background:#3a3a3a;color:white;font-size:14px;box-sizing:border-box;margin-bottom:6px;'>
+				<div id='deck-list-dropdown-items' style='max-height:320px;overflow-y:auto;display:flex;flex-direction:column;gap:2px;'></div>
+			</div>
+		</div>
 		<div class='creator-grid margin-bottom-large'>
 			<canvas class='creator-canvas box-shadow' id='previewCanvas' width='1005' height='1407'></canvas>
 			<div class='creator-menu box-shadow'>
