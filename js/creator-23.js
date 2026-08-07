@@ -4984,7 +4984,7 @@ function changeCardIndex() {
 	//art
 	document.querySelector('#art-name').value = cardToImport.name;
 	if (!isDeckListImport) {
-		fetchScryfallData(cardToImport.name, artFromScryfall, 'art');
+		fetchScryfallData(cardToImport.name, 'art').then(artFromScryfall).catch(function(){});
 	}
 	if (document.querySelector('#importAllPrints').checked) {
 		// document.querySelector('#art-index').value = document.querySelector('#import-index').value;
@@ -5014,7 +5014,9 @@ function loadAvailableCards(cardKeys = JSON.parse(localStorage.getItem('cardKeys
 }
 function importChanged() {
 	var unique = document.querySelector('#importAllPrints').checked ? 'prints' : '';
-	fetchScryfallData(document.querySelector("#import-name").value, importCard, unique);
+	fetchScryfallData(document.querySelector("#import-name").value, unique).then(importCard).catch(function(err) {
+		console.log('Import failed:', err);
+	});
 }
 function saveCard(saveFromFile) {
 	var cardKeys = JSON.parse(localStorage.getItem('cardKeys')) || [];
@@ -5539,12 +5541,140 @@ bindInputs('#frame-editor-hsl-saturation', '#frame-editor-hsl-saturation-slider'
 bindInputs('#frame-editor-hsl-lightness', '#frame-editor-hsl-lightness-slider');
 bindInputs('#show-guidelines', '#show-guidelines-2', true);
 
+// ==================== BACKGROUND CARD LOADER (Web Worker) ====================
+
+// Worker source code as a string — handles HTTP fetch + JSON parsing off-main-thread
+var _cardLoaderWorkerSource = `
+self.onmessage = function(e) {
+  var type = e.data.type;
+  var id   = e.data.id;
+  if (type === 'byCodeNumber') {
+    var url = 'https://api.scryfall.com/cards/' + e.data.code + '/' + e.data.number;
+    fetch(url).then(function(r) {
+      return r.json().then(function(json) {
+        self.postMessage({id: id, type: 'result', data: json});
+      });
+    }).catch(function(err) {
+      self.postMessage({id: id, type: 'error', message: err.message || String(err)});
+    });
+  } else if (type === 'byName') {
+    var url = e.data.url;
+    fetch(url).then(function(r) {
+      return r.json().then(function(json) {
+        self.postMessage({id: id, type: 'result', data: json});
+      });
+    }).catch(function(err) {
+      self.postMessage({id: id, type: 'error', message: err.message || String(err)});
+    });
+  } else if (type === 'byID') {
+    var url = 'https://api.scryfall.com/cards/' + e.data.id;
+    fetch(url).then(function(r) {
+      return r.json().then(function(json) {
+        self.postMessage({id: id, type: 'result', data: json});
+      });
+    }).catch(function(err) {
+      self.postMessage({id: id, type: 'error', message: err.message || String(err)});
+    });
+  }
+};
+`;
+
+var _cardLoaderWorker = null;
+var _workerRequestId = 0;
+
+function getCardLoaderWorker() {
+  if (!_cardLoaderWorker) {
+    var blob = new Blob([_cardLoaderWorkerSource], {type: 'application/javascript'});
+    _cardLoaderWorker = new Worker(URL.createObjectURL(blob));
+  }
+  return _cardLoaderWorker;
+}
+
+// Promise-based wrappers that use the worker for off-thread fetching + parsing
+
+function fetchScryfallCardByCodeNumber(code, number) {
+  var worker = getCardLoaderWorker();
+  var id = ++_workerRequestId;
+  return new Promise(function(resolve, reject) {
+    var handler = function(e) {
+      if (e.data.id === id) {
+        worker.removeEventListener('message', handler);
+        if (e.data.type === 'result') {
+          // Process the card data (handles multi-face cards, language normalization)
+          var processed = [];
+          processScryfallCard(e.data.data, processed);
+          resolve(processed);
+        } else {
+          reject(new Error(e.data.message || 'Worker error'));
+        }
+      }
+    };
+    worker.addEventListener('message', handler);
+    worker.postMessage({type: 'byCodeNumber', id: id, code: code, number: number});
+  });
+}
+
+function fetchScryfallData(cardName, unique) {
+  var cardLanguageSelect = document.querySelector('#import-language');
+  var cardLanguage = `lang%3D${cardLanguageSelect.value}`;
+  var uniqueArt = '';
+  if (unique) {
+    uniqueArt = '&unique=' + unique;
+  }
+  var url = 'https://api.scryfall.com/cards/search?order=released&include_extras=true' + uniqueArt + '&q=name%3D' + cardName.replace(/ /g, '_') + ' ' + cardLanguage;
+
+  var worker = getCardLoaderWorker();
+  var id = ++_workerRequestId;
+  return new Promise(function(resolve, reject) {
+    var handler = function(e) {
+      if (e.data.id === id) {
+        worker.removeEventListener('message', handler);
+        if (e.data.type === 'result') {
+          // Extract .data array from search response and process cards
+          var rawCards = e.data.data.data || [];
+          var processed = [];
+          rawCards.forEach(function(card) { processScryfallCard(card, processed); });
+          resolve(processed);
+        } else {
+          reject(new Error(e.data.message || 'Worker error'));
+        }
+      }
+    };
+    worker.addEventListener('message', handler);
+    worker.postMessage({type: 'byName', id: id, url: url});
+  });
+}
+
+function fetchScryfallCardByID(scryfallID) {
+  var worker = getCardLoaderWorker();
+  var id = ++_workerRequestId;
+  return new Promise(function(resolve, reject) {
+    var handler = function(e) {
+      if (e.data.id === id) {
+        worker.removeEventListener('message', handler);
+        if (e.data.type === 'result') {
+          resolve(e.data.data);
+        } else {
+          reject(new Error(e.data.message || 'Worker error'));
+        }
+      }
+    };
+    worker.addEventListener('message', handler);
+    worker.postMessage({type: 'byID', id: id, id: scryfallID});
+  });
+}
+
 // ==================== DECK LIST FEATURES ====================
 
 var deckList = [];       // Parsed deck list entries [{qty, name, setCode, collectorNumber}]
 var deckListIndex = 0;   // Current position in deck list
 var deckListSavedKeys = []; // Saved card keys for this deck session
 var isDeckListImport = false; // Flag to skip redundant API calls during import
+
+// Pre-fetch cache: maps index -> {cardData, artCard} (raw Scryfall JSON)
+var _deckPrefetchCache = {};
+// In-flight requests so we don't double-fetch the same index
+var _deckInFlight = {};
 
 function parseDeckList() {
 	var rawText = document.querySelector('#decklist-input').value.trim();
@@ -5584,6 +5714,8 @@ function parseDeckList() {
 	deckListIndex = 0;
 	deckListSavedKeys = [];
 	isDeckListImport = true;
+	_deckPrefetchCache = {};
+	_deckInFlight = {};
 
 	document.querySelector('#decklist-progress').style.display = 'block';
 	updateDeckListCounter();
@@ -5668,56 +5800,110 @@ document.addEventListener('keydown', function(e) {
 	}
 });
 
+// Fetch raw Scryfall JSON for a deck list entry (uses worker off-main-thread)
+function _fetchDeckEntryRaw(index) {
+	var entry = deckList[index];
+	return fetchScryfallCardByCodeNumber(entry.setCode, entry.collectorNumber);
+}
+
+// Populate the UI from already-fetched card data — runs on main thread in a rAF frame
+function _applyDeckCardToUI(processedCards) {
+	requestAnimationFrame(function() {
+		scryfallCard = processedCards;
+		var cardToImport = processedCards[0];
+		document.querySelector('#import-index').innerHTML = '<option value="0">' + cardToImport.name + ' (' + cardToImport.set.toUpperCase() + ' #' + cardToImport.collector_number + ')</option>';
+		document.querySelector('#import-index').value = '0';
+
+		if (cardToImport.image_uris && cardToImport.image_uris.art_crop) {
+			scryfallArt = [cardToImport];
+			document.querySelector('#art-index').innerHTML = '<option value="0">' + cardToImport.name + '</option>';
+			document.querySelector('#art-index').value = '0';
+			uploadArt(cardToImport.image_uris.art_crop, 'autoFit');
+			if (cardToImport.artist) {
+				artistEdited(cardToImport.artist);
+			}
+		}
+
+		changeCardIndex();
+		updateDeckListCounter();
+	});
+}
+
+// Start pre-fetching neighbors of the given index (±1, ±2), skipping already-cached/in-flight
+function _prefetchNeighbors(index) {
+	var len = deckList.length;
+	for (var offset = -2; offset <= 2; offset++) {
+		if (offset === 0) continue;
+		var ni = ((index + offset) % len + len) % len;
+		if (_deckPrefetchCache[ni] || _deckInFlight[ni]) continue;
+		_deckInFlight[ni] = true;
+		_fetchDeckEntryRaw(ni).then(function(raw, idx) {
+			return function(data) {
+				_deckPrefetchCache[idx] = data;
+				delete _deckInFlight[idx];
+			};
+		}(ni)).catch(function(idx) {
+			return function() {
+				delete _deckInFlight[idx];
+			};
+		}(ni));
+	}
+}
+
 function deckListLoadCard(index) {
 	if (index < 0 || index >= deckList.length) return;
 
 	var entry = deckList[index];
-	notify('Fetching: ' + entry.name + ' (' + entry.setCode + ' #' + entry.collectorNumber + ')', 3);
 
-	fetchScryfallCardByCodeNumber(entry.setCode, entry.collectorNumber, function(cards) {
-		if (cards && cards.length > 0) {
-			scryfallCard = cards;
-			document.querySelector('#import-index').innerHTML = '<option value="0">' + cards[0].name + ' (' + cards[0].set.toUpperCase() + ' #' + cards[0].collector_number + ')</option>';
-			document.querySelector('#import-index').value = '0';
+	// Check pre-fetch cache first — instant display if available
+	if (_deckPrefetchCache[index]) {
+		notify('Loaded: ' + entry.name, 2);
+		_applyDeckCardToUI(_deckPrefetchCache[index]);
+		_prefetchNeighbors(index);
+		return;
+	}
 
-			// Fast path: skip redundant API calls when importing via deck list
-			var cardToImport = cards[0];
-
-			// Set art directly from the fetched card data (no extra Scryfall search)
-			if (cardToImport.image_uris && cardToImport.image_uris.art_crop) {
-				scryfallArt = [cardToImport];
-				document.querySelector('#art-index').innerHTML = '<option value="0">' + cardToImport.name + '</option>';
-				document.querySelector('#art-index').value = '0';
-				uploadArt(cardToImport.image_uris.art_crop, 'autoFit');
-				if (cardToImport.artist) {
-					artistEdited(cardToImport.artist);
-				}
+	// Check if already in-flight — wait for it
+	if (_deckInFlight[index]) {
+		var pollId = setInterval(function() {
+			if (_deckPrefetchCache[index]) {
+				clearInterval(pollId);
+				notify('Loaded: ' + entry.name, 2);
+				_applyDeckCardToUI(_deckPrefetchCache[index]);
+			} else if (!_deckInFlight[index]) {
+				clearInterval(pollId);
 			}
+		}, 50);
+		return;
+	}
 
-			changeCardIndex();
-			updateDeckListCounter();
-		} else {
-			notify('No card found for ' + entry.name + ' (' + entry.setCode + ' #' + entry.collectorNumber + ')', 5);
-		}
+	// Fetch on background thread, then apply to UI via rAF
+	notify('Fetching: ' + entry.name + ' (' + entry.setCode + ' #' + entry.collectorNumber + ')', 3);
+	_deckInFlight[index] = true;
+	fetchScryfallCardByCodeNumber(entry.setCode, entry.collectorNumber).then(function(raw) {
+		delete _deckInFlight[index];
+		// Cache for future navigation
+		_deckPrefetchCache[index] = raw;
+		_applyDeckCardToUI(raw);
+	}).catch(function() {
+		delete _deckInFlight[index];
+		notify('No card found for ' + entry.name + ' (' + entry.setCode + ' #' + entry.collectorNumber + ')', 5);
 	});
+
+	// Start pre-fetching neighbors in parallel
+	_prefetchNeighbors(index);
 }
 
 function deckListNext() {
-	if (deckListIndex < deckList.length - 1) {
-		deckListIndex++;
-		deckListLoadCard(deckListIndex);
-	} else {
-		notify('Already on the last card.', 3);
-	}
+	if (deckList.length === 0) return;
+	deckListIndex = (deckListIndex + 1) % deckList.length;
+	deckListLoadCard(deckListIndex);
 }
 
 function deckListPrev() {
-	if (deckListIndex > 0) {
-		deckListIndex--;
-		deckListLoadCard(deckListIndex);
-	} else {
-		notify('Already on the first card.', 3);
-	}
+	if (deckList.length === 0) return;
+	deckListIndex = ((deckListIndex - 1) % deckList.length + deckList.length) % deckList.length;
+	deckListLoadCard(deckListIndex);
 }
 
 function deckListSaveCurrent() {
