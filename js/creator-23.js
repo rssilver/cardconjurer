@@ -5806,9 +5806,12 @@ function _fetchDeckEntryRaw(index) {
 	return fetchScryfallCardByCodeNumber(entry.setCode, entry.collectorNumber);
 }
 
-// Populate the UI from already-fetched card data — runs on main thread in a rAF frame
-function _applyDeckCardToUI(processedCards) {
+// Populate the UI from already-fetched card data — runs on main thread in a rAF frame.
+// Only applies if the user is still viewing `targetIndex` (guards against stale completions).
+function _applyDeckCardToUI(processedCards, targetIndex) {
 	requestAnimationFrame(function() {
+		if (deckListIndex !== targetIndex) return; // user navigated away while waiting
+
 		scryfallCard = processedCards;
 		var cardToImport = processedCards[0];
 		document.querySelector('#import-index').innerHTML = '<option value="0">' + cardToImport.name + ' (' + cardToImport.set.toUpperCase() + ' #' + cardToImport.collector_number + ')</option>';
@@ -5837,7 +5840,7 @@ function _prefetchNeighbors(index) {
 		var ni = ((index + offset) % len + len) % len;
 		if (_deckPrefetchCache[ni] || _deckInFlight[ni]) continue;
 		_deckInFlight[ni] = true;
-		_fetchDeckEntryRaw(ni).then(function(raw, idx) {
+		_fetchDeckEntryRaw(ni).then(function(idx) {
 			return function(data) {
 				_deckPrefetchCache[idx] = data;
 				delete _deckInFlight[idx];
@@ -5858,7 +5861,7 @@ function deckListLoadCard(index) {
 	// Check pre-fetch cache first — instant display if available
 	if (_deckPrefetchCache[index]) {
 		notify('Loaded: ' + entry.name, 2);
-		_applyDeckCardToUI(_deckPrefetchCache[index]);
+		_applyDeckCardToUI(_deckPrefetchCache[index], index);
 		_prefetchNeighbors(index);
 		return;
 	}
@@ -5869,7 +5872,7 @@ function deckListLoadCard(index) {
 			if (_deckPrefetchCache[index]) {
 				clearInterval(pollId);
 				notify('Loaded: ' + entry.name, 2);
-				_applyDeckCardToUI(_deckPrefetchCache[index]);
+				_applyDeckCardToUI(_deckPrefetchCache[index], index);
 			} else if (!_deckInFlight[index]) {
 				clearInterval(pollId);
 			}
@@ -5877,14 +5880,14 @@ function deckListLoadCard(index) {
 		return;
 	}
 
-	// Fetch on background thread, then apply to UI via rAF
+	// Fetch on background thread, then apply to UI via rAF (guarded by targetIndex)
 	notify('Fetching: ' + entry.name + ' (' + entry.setCode + ' #' + entry.collectorNumber + ')', 3);
 	_deckInFlight[index] = true;
 	fetchScryfallCardByCodeNumber(entry.setCode, entry.collectorNumber).then(function(raw) {
 		delete _deckInFlight[index];
 		// Cache for future navigation
 		_deckPrefetchCache[index] = raw;
-		_applyDeckCardToUI(raw);
+		_applyDeckCardToUI(raw, index);
 	}).catch(function() {
 		delete _deckInFlight[index];
 		notify('No card found for ' + entry.name + ' (' + entry.setCode + ' #' + entry.collectorNumber + ')', 5);
