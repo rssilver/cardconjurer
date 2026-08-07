@@ -436,8 +436,8 @@ a.underline {
 	position: fixed;
 	z-index: 10;
 	bottom: 0;
-	left: 1.5rem;
-	width: calc(100vw - 3rem);
+	right: 1.5rem;
+	width: calc(33vw - 3rem);
 	max-height: 75vh;
 	overflow-y: scroll;
 	transition: 0.5s;

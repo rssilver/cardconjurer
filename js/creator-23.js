@@ -5759,6 +5759,132 @@ function updateDeckListCounter() {
 	}
 }
 
+
+// Deck list dropdown: toggle visibility
+function toggleDeckListDropdown() {
+var dropdown = document.getElementById('deck-list-dropdown');
+if (!dropdown || deckList.length === 0) return;
+var isOpen = dropdown.style.display !== 'none';
+dropdown.style.display = isOpen ? 'none' : 'block';
+if (!isOpen) {
+populateDeckListDropdown();
+var searchInput = document.getElementById('deck-list-search');
+searchInput.value = '';
+searchInput.focus();
+}
+}
+
+// Populate the dropdown with all decklist entries (or filtered subset)
+function populateDeckListDropdown(filterText) {
+var container = document.getElementById('deck-list-dropdown-items');
+if (!container) return;
+container.innerHTML = '';
+var filter = (filterText || '').toLowerCase().trim();
+
+for (var i = 0; i < deckList.length; i++) {
+var entry = deckList[i];
+var displayName = 'Card ' + (i + 1) + ': ' + entry.name;
+if (filter && displayName.toLowerCase().indexOf(filter) === -1) continue;
+
+var item = document.createElement('div');
+item.textContent = displayName;
+item.style.cssText = 'padding:8px 10px;border-radius:6px;cursor:pointer;font-size:13px;color:#ddd;background:' + (i === deckListIndex ? '#4a7d4a' : '#3a3a3a') + ';border:1px solid ' + (i === deckListIndex ? '#5a9d5a' : '#555') + ';';
+item.setAttribute('data-index', i);
+item.addEventListener('click', function() {
+var idx = parseInt(this.getAttribute('data-index'));
+deckListGoToCard(idx);
+closeDeckListDropdown();
+});
+item.addEventListener('mouseenter', function() {
+if (parseInt(this.getAttribute('data-index')) !== deckListIndex) {
+this.style.background = '#4a4a4a';
+}
+});
+item.addEventListener('mouseleave', function() {
+if (parseInt(this.getAttribute('data-index')) !== deckListIndex) {
+this.style.background = '#3a3a3a';
+}
+});
+container.appendChild(item);
+}
+
+var currentItem = container.querySelector('[data-index="' + deckListIndex + '"]');
+if (currentItem) {
+currentItem.scrollIntoView({ block: 'nearest' });
+}
+}
+
+function filterDeckListDropdown() {
+var searchInput = document.getElementById('deck-list-search');
+populateDeckListDropdown(searchInput.value);
+}
+
+function deckListGoToCard(index) {
+if (index < 0 || index >= deckList.length) return;
+deckListIndex = index;
+deckListLoadCard(deckListIndex);
+}
+
+function closeDeckListDropdown() {
+var dropdown = document.getElementById('deck-list-dropdown');
+if (dropdown) {
+dropdown.style.display = 'none';
+}
+}
+
+document.addEventListener('click', function(e) {
+var dropdown = document.getElementById('deck-list-dropdown');
+var counter = document.getElementById('deck-nav-counter');
+if (!dropdown || !counter) return;
+if (dropdown.style.display === 'none') return;
+if (dropdown.contains(e.target) || counter.contains(e.target)) return;
+closeDeckListDropdown();
+});
+
+document.addEventListener('keydown', function(e) {
+var searchInput = document.getElementById('deck-list-search');
+var dd = document.getElementById('deck-list-dropdown');
+if (!searchInput || dd.style.display === 'none') return;
+var container = document.getElementById('deck-list-dropdown-items');
+var items = container ? container.querySelectorAll('[data-index]') : [];
+if (items.length === 0) return;
+
+var activeItem = container.querySelector('.dropdown-active-item');
+var currentIndex = -1;
+for (var i = 0; i < items.length; i++) {
+if (items[i].classList.contains('dropdown-active-item')) {
+currentIndex = i;
+break;
+}
+}
+
+if (e.key === 'ArrowDown') {
+e.preventDefault();
+if (activeItem) activeItem.classList.remove('dropdown-active-item');
+var nextIndex = currentIndex < items.length - 1 ? currentIndex + 1 : 0;
+items[nextIndex].classList.add('dropdown-active-item');
+items[nextIndex].style.background = '#4a4a4a';
+items[nextIndex].scrollIntoView({ block: 'nearest' });
+} else if (e.key === 'ArrowUp') {
+e.preventDefault();
+if (activeItem) activeItem.classList.remove('dropdown-active-item');
+var prevIndex = currentIndex > 0 ? currentIndex - 1 : items.length - 1;
+items[prevIndex].classList.add('dropdown-active-item');
+items[prevIndex].style.background = '#4a4a4a';
+items[prevIndex].scrollIntoView({ block: 'nearest' });
+} else if (e.key === 'Enter') {
+var focusedItem = container.querySelector('.dropdown-active-item');
+if (focusedItem) {
+e.preventDefault();
+var idx = parseInt(focusedItem.getAttribute('data-index'));
+deckListGoToCard(idx);
+closeDeckListDropdown();
+}
+} else if (e.key === 'Escape') {
+closeDeckListDropdown();
+}
+});
+
 function positionDeckNav() {
 	var overlay = document.getElementById('deck-nav-overlay');
 	if (!overlay || overlay.style.display === 'none') return;
