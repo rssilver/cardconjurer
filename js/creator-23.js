@@ -5257,21 +5257,14 @@ async function localDeckConfirmCreate() {
 	}
 
 	try {
-		// Use File System Access API to create the folder
-		var dirHandle = await window.showSaveFilePicker({
-			type: 'folder',
-			suggestedName: deckName,
-			startIn: 'documents'
-		}).then(function(fh) { return fh; })
-		.catch(function() {
-			// Fallback: use showDirectoryPicker for folder selection
-			return window.showDirectoryPicker({ mode: 'readwrite', startIn: 'documents' });
-		});
+		// Step 1: Open the base directory (Documents or user-saved path location)
+		var baseDirHandle = await window.showDirectoryPicker({ mode: 'readwrite', startIn: 'documents' });
 
-		// If we got a FileHandle (from showSaveFilePicker), the parent is our dir
-		if (dirHandle.kind === 'file') {
-			dirHandle = await dirHandle.parent;
-		}
+		// Step 2: Ensure the CardConjurer subfolder exists, create if needed
+		var ccHandle = await baseDirHandle.getDirectoryHandle('CardConjurer', { create: true });
+
+		// Step 3: Create the deck folder inside CardConjurer
+		var dirHandle = await ccHandle.getDirectoryHandle(deckName, { create: true });
 
 		localDeckHandle = dirHandle;
 		localDeckMeta = { name: deckName, cards: [] };
@@ -5314,21 +5307,25 @@ async function populateLocalDeckPicker(filterText) {
 	if (!listEl) return;
 
 	try {
-		var baseDirHandle = await window.showDirectoryPicker({ mode: 'read', startIn: 'documents' });
 		listEl.innerHTML = '<h5 class="input-description">Scanning for decks...</h5>';
 
-		var filter = (filterText || '').toLowerCase().trim();
-		var foundDecks = [];
+		// Step 1: Open the base directory (Documents)
+		var baseDirHandle = await window.showDirectoryPicker({ mode: 'read', startIn: 'documents' });
 
-		for await (var [name, handle] of baseDirHandle.entries()) {
-			if (handle.kind !== 'file') continue;
-			if (!name.endsWith('.json')) continue;
-			foundDecks.push({ name: name, handle: handle });
+		// Step 2: Look for CardConjurer subfolder
+		var ccHandle;
+		try {
+			ccHandle = await baseDirHandle.getDirectoryHandle('CardConjurer');
+		} catch (e) {
+			listEl.innerHTML = '<h5 class="input-description">No decks found. Create one or check your save location.</h5>';
+			return;
 		}
 
-		// Look for meta.json files in subdirectories
+		var filter = (filterText || '').toLowerCase().trim();
 		var deckFolders = [];
-		for await (var [entryName, entryHandle] of baseDirHandle.entries()) {
+
+		// Step 3: Scan CardConjurer folder for decks with meta.json
+		for await (var [entryName, entryHandle] of ccHandle.entries()) {
 			if (entryHandle.kind !== 'directory') continue;
 			try {
 				var metaFile = await entryHandle.getFile('meta.json');
@@ -5363,6 +5360,7 @@ async function populateLocalDeckPicker(filterText) {
 		listEl.innerHTML = '<h5 class="input-description">Open failed: ' + e.message + '</h5>';
 	}
 }
+
 
 function filterLocalDeckPicker() {
 	var searchInput = document.querySelector('#local-deck-search-input');
@@ -5625,14 +5623,11 @@ function localDeckOpenFileLocation() {
 		notify('Save location: ' + path, 3);
 		return;
 	}
-	// Use the File System Access API to open in file explorer (Chrome 120+)
-	if (window.showOpenFilePicker && localDeckHandle.name) {
-		// Best effort - some browsers support opening parent directory
-		var path = loadDefaultDeckPath() + '/' + localDeckMeta.name;
-		notify('Deck location: ' + path, 3);
-	} else {
-		notify('File location: ' + loadDefaultDeckPath(), 3);
-	}
+	// Show the full path including CardConjurer subfolder and deck name
+	var os = detectOS();
+	var basePath = (os === 'windows') ? '%USERPROFILE%\\Documents' : '~/Documents';
+	var fullPath = basePath + '/CardConjurer/' + localDeckMeta.name;
+	notify('Deck location: ' + fullPath, 3);
 }
 
 // --- Rename Deck ---
