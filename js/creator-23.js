@@ -5213,6 +5213,11 @@ function localDeckSavePath() {
 	}
 }
 
+function sanitizeFolderName(name) {
+    return name.replace(/[<>:"/\\|?*]/g, '_');
+}
+
+
 // --- UI Helpers ---
 
 function hideAllLocalDeckSubsections() {
@@ -5264,7 +5269,7 @@ async function localDeckConfirmCreate() {
 		var ccHandle = await baseDirHandle.getDirectoryHandle('CardConjurer', { create: true });
 
 		// Step 3: Create the deck folder inside CardConjurer
-		var dirHandle = await ccHandle.getDirectoryHandle(deckName, { create: true });
+		var safeDeckName = sanitizeFolderName(deckName); var dirHandle = await ccHandle.getDirectoryHandle(safeDeckName, { create: true });
 
 		localDeckHandle = dirHandle;
 		localDeckMeta = { name: deckName, cards: [] };
