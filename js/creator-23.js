@@ -5185,6 +5185,49 @@ var localDeckMeta = null;         // Parsed meta.json contents
 var localDeckSavedCards = [];     // Names of cards that have been saved to disk
 var _jsZipLoaded = false;         // Whether JSZip has been dynamically loaded
 
+async function getStoredRootHandle() {
+	return new Promise((resolve) => {
+		const request = indexedDB.open('CardConjurerStorage', 1);
+		request.onupgradeneeded = (e) => {
+			const db = e.target.result;
+			if (!db.objectStoreNames.contains('handles')) {
+				db.createObjectStore('handles');
+			}
+		};
+		request.onsuccess = (e) => {
+			const db = e.target.result;
+			const tx = db.transaction('handles', 'readonly');
+			const store = tx.objectStore('handles');
+			// Store the handle to the CardConjurer root folder here
+			const getReq = store.get('rootHandle');
+			getReq.onsuccess = () => resolve(getReq.result);
+			getReq.onerror = () => resolve(null);
+		};
+		request.onerror = () => resolve(null);
+	});
+}
+
+async function setStoredRootHandle(handle) {
+	return new Promise((resolve, reject) => {
+		const request = indexedDB.open('CardConjurerStorage', 1);
+		request.onupgradeneeded = (e) => {
+			const db = e.target.result;
+			if (!db.objectStoreNames.contains('handles')) {
+				db.createObjectStore('handles');
+			}
+		};
+		request.onsuccess = (e) => {
+			const db = e.target.result;
+			const tx = db.transaction('handles', 'readwrite');
+			const store = tx.objectStore('handles');
+			store.put(handle, 'rootHandle');
+			tx.oncomplete = () => resolve();
+		};
+		request.onerror = (e) => reject(e);
+	});
+}
+
+
 // --- Path Management (localStorage) ---
 
 function getDefaultDeckPath() {
