@@ -5470,7 +5470,7 @@ async function localDeckSaveCurrentCard() {
 
 // --- Auto-save on Arrow Navigation ---
 
-function deckListNext() {
+async function deckListNext() {
 	if (deckList.length === 0) return;
 	await localDeckAutoSaveCurrent();
 	var prevIndex = deckListIndex;
@@ -5478,7 +5478,7 @@ function deckListNext() {
 	deckListLoadCard(deckListIndex);
 }
 
-function deckListPrev() {
+async function deckListPrev() {
 	if (deckList.length === 0) return;
 	await localDeckAutoSaveCurrent();
 	var prevIndex = deckListIndex;
