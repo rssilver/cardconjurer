@@ -1,0 +1,32 @@
+  5299	async function localDeckConfirmCreate() {
+  5300		var nameInput = document.querySelector('#local-deck-name-input');
+  5301		var deckName = (nameInput ? nameInput.value.trim() : '');
+  5302		if (!deckName) {
+  5303			notify('Please enter a deck name.', 3);
+  5304			return;
+  5305		}
+  5306	
+  5307		try {
+  5308			// Step 1: Open the base directory (Documents or user-saved path location)
+  5309			var baseDirHandle = await window.showDirectoryPicker({ mode: 'readwrite', startIn: 'documents' });
+  5310	
+  5311			// Step 2: Ensure the CardConjurer subfolder exists, create if needed
+  5312			var ccHandle = await baseDirHandle.getDirectoryHandle('CardConjurer', { create: true });
+  5313	
+  5314			// Step 3: Create the deck folder inside CardConjurer
+  5315			var safeDeckName = sanitizeFolderName(deckName); var dirHandle = await ccHandle.getDirectoryHandle(safeDeckName, { create: true });
+  5316	
+  5317			localDeckHandle = dirHandle;
+  5318			localDeckMeta = { name: deckName, cards: [] };
+  5319	
+  5320			await writeMetaJSON();
+  5321			showLocalDeckOpenState();
+  5322			updateLocalDeckUI();
+  5323	
+  5324			// Show the decklist input section for optional import
+  5325			var dlSection = document.querySelector('#local-deck-create-decklist-section');
+  5326			if (dlSection) dlSection.style.display = 'block';
+  5327	
+  5328			notify('Deck "' + deckName + '" created.', 3);
+  5329		} catch (e) {
+  5330			if (e.name === 'AbortError') return;

@@ -1,0 +1,34 @@
+  5102	async function loadCard(selectedCardKey) {
+  5103		//clear the draggable frames
+  5104		document.querySelector('#frame-list').innerHTML = null;
+  5105		//clear the existing card, then replace it with the new JSON
+  5106		card = {};
+  5107		card = JSON.parse(localStorage.getItem(selectedCardKey));
+  5108		//if the card was loaded properly...
+  5109		if (card) {
+  5110			//load values from card into html inputs
+  5111			document.querySelector('#info-number').value = card.infoNumber;
+  5112			document.querySelector('#info-rarity').value = card.infoRarity;
+  5113			document.querySelector('#info-set').value = card.infoSet;
+  5114			document.querySelector('#info-language').value = card.infoLanguage;
+  5115			document.querySelector('#info-note').value = card.infoNote;
+  5116			document.querySelector('#info-year').value = card.infoYear || date.getFullYear();
+  5117			artistEdited(card.infoArtist);
+  5118			document.querySelector('#text-editor').value = card.text[Object.keys(card.text)[selectedTextIndex]].text;
+  5119			document.querySelector('#text-editor-font-size').value = card.text[Object.keys(card.text)[selectedTextIndex]].fontSize || 0;
+  5120			loadTextOptions(card.text);
+  5121			document.querySelector('#art-x').value = scaleX(card.artX) - scaleWidth(card.marginX);
+  5122			document.querySelector('#art-y').value = scaleY(card.artY) - scaleHeight(card.marginY);
+  5123			document.querySelector('#art-zoom').value = card.artZoom * 100;
+  5124			document.querySelector('#art-rotate').value = card.artRotate || 0;
+  5125			uploadArt(card.artSource);
+  5126			document.querySelector('#setSymbol-x').value = scaleX(card.setSymbolX) - scaleWidth(card.marginX);
+  5127			document.querySelector('#setSymbol-y').value = scaleY(card.setSymbolY) - scaleHeight(card.marginY);
+  5128			document.querySelector('#setSymbol-zoom').value = card.setSymbolZoom * 100;
+  5129			uploadSetSymbol(card.setSymbolSource);
+  5130			document.querySelector('#watermark-x').value = scaleX(card.watermarkX) - scaleWidth(card.marginX);
+  5131			document.querySelector('#watermark-y').value = scaleY(card.watermarkY) - scaleHeight(card.marginY);
+  5132			document.querySelector('#watermark-zoom').value = card.watermarkZoom * 100;
+  5133			// document.querySelector('#watermark-left').value = card.watermarkLeft;
+  5134			// document.querySelector('#watermark-right').value = card.watermarkRight;
+  5135			document.querySelector('#watermark-opacity').value = card.watermarkOpacity * 100;

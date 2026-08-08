@@ -5297,39 +5297,46 @@ function localDeckCreateNew() {
 }
 
 async function localDeckConfirmCreate() {
-	var nameInput = document.querySelector('#local-deck-name-input');
-	var deckName = (nameInput ? nameInput.value.trim() : '');
-	if (!deckName) {
-		notify('Please enter a deck name.', 3);
-		return;
-	}
+        var nameInput = document.querySelector('#local-deck-name-input');
+        var deckName = (nameInput ? nameInput.value.trim() : '');
+        if (!deckName) {
+                notify('Please enter a deck name.', 3);
+                return;
+        }
 
-	try {
-		// Step 1: Open the base directory (Documents or user-saved path location)
-		var baseDirHandle = await window.showDirectoryPicker({ mode: 'readwrite', startIn: 'documents' });
+        try {
+                // Step 1: Try to get the persisted root directory handle from IndexedDB
+                var baseDirHandle = await getStoredRootHandle();
+                
+                if (!baseDirHandle) {
+                        // If no handle is stored, we must ask the user for the base directory once.
+                        baseDirHandle = await window.showDirectoryPicker({ mode: 'readwrite', startIn: 'documents' });
+                        await setStoredRootHandle(baseDirHandle);
+                }
 
-		// Step 2: Ensure the CardConjurer subfolder exists, create if needed
-		var ccHandle = await baseDirHandle.getDirectoryHandle('CardConjurer', { create: true });
+                // Step 2: Ensure the CardConjurer subfolder exists, create if needed
+                var ccHandle = await baseDirHandle.getDirectoryHandle('CardConjurer', { create: true });
 
-		// Step 3: Create the deck folder inside CardConjurer
-		var safeDeckName = sanitizeFolderName(deckName); var dirHandle = await ccHandle.getDirectoryHandle(safeDeckName, { create: true });
+                // Step 3: Create the deck folder inside CardConjurer using a sanitized name
+                var safeDeckName = sanitizeFolderName(deckName);
+                var dirHandle = await ccHandle.getDirectoryHandle(safeDeckName, { create: true });
 
-		localDeckHandle = dirHandle;
-		localDeckMeta = { name: deckName, cards: [] };
+                localDeckHandle = dirHandle;
+                localDeckMeta = { name: deckName, cards: [] };
 
-		await writeMetaJSON();
-		showLocalDeckOpenState();
-		updateLocalDeckUI();
+                await writeMetaJSON();
+                showLocalDeckOpenState();
+                updateLocalDeckUI();
 
-		// Show the decklist input section for optional import
-		var dlSection = document.querySelector('#local-deck-create-decklist-section');
-		if (dlSection) dlSection.style.display = 'block';
+                // Show the decklist input section for optional import
+                var dlSection = document.querySelector('#local-deck-create-decklist-section');
+                if (dlSection) dlSection.style.display = 'block';
 
-		notify('Deck "' + deckName + '" created.', 3);
-	} catch (e) {
-		if (e.name === 'AbortError') return;
-		notify('Failed to create deck: ' + e.message, 5);
-	}
+                notify('Deck "' + deckName + '" created.', 3);
+        } catch (e) {
+                if (e.name === 'AbortError') return;
+                notify('Failed to create deck: ' + e.message, 5);
+        }
 }
 
 function localDeckCreateLoadDecklist() {

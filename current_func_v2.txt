@@ -1,0 +1,30 @@
+  5256		}
+  5257	}
+  5258	
+  5259	function sanitizeFolderName(name) {
+  5260	    return name.replace(/[<>:"/\\|?*]/g, '_');
+  5261	}
+  5262	
+  5263	
+  5264	// --- UI Helpers ---
+  5265	
+  5266	function hideAllLocalDeckSubsections() {
+  5267		var els = [
+  5268			'local-deck-open-state', 'local-deck-open-picker',
+  5269			'local-deck-create-section', 'decklist-progress-old'
+  5270		];
+  5271		els.forEach(id => {
+  5272			var el = document.querySelector('#' + id);
+  5273			if (el) el.style.display = 'none';
+  5274		});
+  5275	}
+  5276	
+  5277	function showLocalDeckOpenState() {
+  5278		hideAllLocalDeckSubsections();
+  5279		var el = document.querySelector('#local-deck-open-state');
+  5280		if (el) el.style.display = 'block';
+  5281	}
+  5282	
+  5283	// --- Create New Deck ---
+  5284	
+  5285	function localDeckCreateNew() {
