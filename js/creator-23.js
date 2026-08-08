@@ -5469,6 +5469,59 @@ async function localDeckSaveCurrentCard() {
 	}
 }
 
+// --- Load Saved Card from Disk ---
+
+async function localDeckLoadSavedCard(index) {
+	if (!localDeckHandle || !localDeckMeta || !isDeckListImport) return;
+	var entry = deckList[index];
+	if (!entry) return;
+
+	try {
+		var fileName = sanitizeFileName(entry.name) + '.json';
+		var fileHandle = await localDeckHandle.getFileHandle(fileName);
+		var file = await fileHandle.getFile();
+		var savedData = JSON.parse(await file.text());
+
+		// Merge saved data into global card object (saved values override Scryfall defaults)
+		Object.assign(card, savedData);
+
+		// Rebuild frames from saved data
+		if (card.frames && card.frames.length > 0) {
+			card.frames.reverse();
+			for (var fi = 0; fi < card.frames.length; fi++) {
+				await addFrame([], card.frames[fi]);
+			}
+			card.frames.reverse();
+		}
+
+		if (card.onload) await loadScript(card.onload);
+		if (card.manaSymbols) card.manaSymbols.forEach(function(item) { loadScript(item); });
+
+		var canvasesResized = false;
+		canvasList.forEach(function(name) {
+			if (window[name + 'Canvas'].width != card.width * (1 + card.marginX) || window[name + 'Canvas'].height != card.height * (1 + card.marginY)) {
+				sizeCanvas(name);
+				canvasesResized = true;
+			}
+		});
+
+		if (canvasesResized) {
+			drawTextBuffer();
+			drawFrames();
+			bottomInfoEdited();
+			watermarkEdited();
+		}
+
+		drawCard();
+		console.log('Loaded saved version of:', entry.name);
+	} catch (e) {
+		// No saved file for this card — use Scryfall defaults
+		if (e.name !== 'NotFoundError') {
+			console.warn('Failed to load saved card:', entry.name, e.message);
+		}
+	}
+}
+
 // --- Auto-save on Arrow Navigation ---
 
 async function deckListNext() {
@@ -6510,6 +6563,9 @@ function _applyDeckCardToUI(processedCards, targetIndex) {
 
 		changeCardIndex();
 		updateDeckListCounter();
+
+		// After loading Scryfall defaults, check for saved version on disk and merge it in
+		localDeckLoadSavedCard(targetIndex);
 	});
 }
 
