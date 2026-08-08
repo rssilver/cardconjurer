@@ -5171,6 +5171,613 @@ function uploadSavedCards(event) {
 	}
 	reader.readAsText(event.target.files[0]);
 }
+// ============================================================
+// LOCAL DECK MANAGEMENT SYSTEM
+// Cards saved as individual JSON files in a folder on disk.
+// Uses the File System Access API (Chrome/Edge) with fallbacks.
+// ============================================================
+
+var localDeckHandle = null;       // DirectoryHandle for current deck folder
+var localDeckMeta = null;         // Parsed meta.json contents
+var localDeckSavedCards = [];     // Names of cards that have been saved to disk
+var _jsZipLoaded = false;         // Whether JSZip has been dynamically loaded
+
+// --- Path Management (localStorage) ---
+
+function getDefaultDeckPath() {
+	var os = detectOS();
+	if (os === 'windows') return '%USERPROFILE%\\Documents\\CardConjurer';
+	if (os === 'macos')   return '~/Documents/CardConjurer';
+	return '~/Documents/CardConjurer';
+}
+
+function detectOS() {
+	var ua = navigator.userAgent.toLowerCase();
+	if (ua.includes('win')) return 'windows';
+	if (ua.includes('mac')) return 'macos';
+	return 'linux';
+}
+
+function loadDefaultDeckPath() {
+	return localStorage.getItem('localDeckPath') || getDefaultDeckPath();
+}
+
+function localDeckSavePath() {
+	var input = document.querySelector('#local-deck-path-input');
+	if (input) {
+		localStorage.setItem('localDeckPath', input.value.trim());
+		notify('Save location updated.', 2);
+	}
+}
+
+// --- UI Helpers ---
+
+function hideAllLocalDeckSubsections() {
+	var els = [
+		'local-deck-open-state', 'local-deck-open-picker',
+		'local-deck-create-section', 'decklist-progress-old'
+	];
+	els.forEach(id => {
+		var el = document.querySelector('#' + id);
+		if (el) el.style.display = 'none';
+	});
+}
+
+function showLocalDeckOpenState() {
+	hideAllLocalDeckSubsections();
+	var el = document.querySelector('#local-deck-open-state');
+	if (el) el.style.display = 'block';
+}
+
+// --- Create New Deck ---
+
+function localDeckCreateNew() {
+	hideAllLocalDeckSubsections();
+	var section = document.querySelector('#local-deck-create-section');
+	if (section) section.style.display = 'block';
+	var input = document.querySelector('#local-deck-name-input');
+	if (input) {
+		input.value = '';
+		input.focus();
+	}
+	// Hide the decklist sub-section until after creation
+	var dlSection = document.querySelector('#local-deck-create-decklist-section');
+	if (dlSection) dlSection.style.display = 'none';
+}
+
+async function localDeckConfirmCreate() {
+	var nameInput = document.querySelector('#local-deck-name-input');
+	var deckName = (nameInput ? nameInput.value.trim() : '');
+	if (!deckName) {
+		notify('Please enter a deck name.', 3);
+		return;
+	}
+
+	try {
+		// Use File System Access API to create the folder
+		var dirHandle = await window.showSaveFilePicker({
+			type: 'folder',
+			suggestedName: deckName,
+			startIn: 'documents'
+		}).then(function(fh) { return fh; })
+		.catch(function() {
+			// Fallback: use showDirectoryPicker for folder selection
+			return window.showDirectoryPicker({ mode: 'readwrite', startIn: 'documents' });
+		});
+
+		// If we got a FileHandle (from showSaveFilePicker), the parent is our dir
+		if (dirHandle.kind === 'file') {
+			dirHandle = await dirHandle.parent;
+		}
+
+		localDeckHandle = dirHandle;
+		localDeckMeta = { name: deckName, cards: [] };
+
+		await writeMetaJSON();
+		showLocalDeckOpenState();
+		updateLocalDeckUI();
+
+		// Show the decklist input section for optional import
+		var dlSection = document.querySelector('#local-deck-create-decklist-section');
+		if (dlSection) dlSection.style.display = 'block';
+
+		notify('Deck "' + deckName + '" created.', 3);
+	} catch (e) {
+		if (e.name === 'AbortError') return;
+		notify('Failed to create deck: ' + e.message, 5);
+	}
+}
+
+function localDeckCreateLoadDecklist() {
+	var rawText = document.querySelector('#local-deck-create-decklist-input').value.trim();
+	if (!rawText) {
+		notify('Paste a deck list into the text area above.', 5);
+		return;
+	}
+	parseDeckListFromText(rawText, true);
+}
+
+// --- Open Deck Picker ---
+
+function localDeckOpenPicker() {
+	hideAllLocalDeckSubsections();
+	var picker = document.querySelector('#local-deck-open-picker');
+	if (picker) picker.style.display = 'block';
+	populateLocalDeckPicker();
+}
+
+async function populateLocalDeckPicker(filterText) {
+	var listEl = document.querySelector('#local-deck-picker-list');
+	if (!listEl) return;
+
+	try {
+		var baseDirHandle = await window.showDirectoryPicker({ mode: 'read', startIn: 'documents' });
+		listEl.innerHTML = '<h5 class="input-description">Scanning for decks...</h5>';
+
+		var filter = (filterText || '').toLowerCase().trim();
+		var foundDecks = [];
+
+		for await (var [name, handle] of baseDirHandle.entries()) {
+			if (handle.kind !== 'file') continue;
+			if (!name.endsWith('.json')) continue;
+			foundDecks.push({ name: name, handle: handle });
+		}
+
+		// Look for meta.json files in subdirectories
+		var deckFolders = [];
+		for await (var [entryName, entryHandle] of baseDirHandle.entries()) {
+			if (entryHandle.kind !== 'directory') continue;
+			try {
+				var metaFile = await entryHandle.getFile('meta.json');
+				var metaText = await metaFile.text();
+				var meta = JSON.parse(metaText);
+				deckFolders.push({ name: meta.name || entryName, handle: entryHandle });
+			} catch (e) {
+				// No meta.json in this folder
+			}
+		}
+
+		if (deckFolders.length === 0) {
+			listEl.innerHTML = '<h5 class="input-description">No decks found. Create one or check your save location.</h5>';
+			return;
+		}
+
+		listEl.innerHTML = '';
+		deckFolders.forEach(function(deck, idx) {
+			if (filter && deck.name.toLowerCase().indexOf(filter) === -1) return;
+
+			var item = document.createElement('div');
+			item.textContent = '📁 ' + deck.name;
+			item.style.cssText = 'padding:8px 10px;border-radius:6px;cursor:pointer;font-size:13px;color:#ddd;background:#3a3a3a;border:1px solid #555;';
+			item.addEventListener('click', function() { openDeckByHandle(deck.handle, deck.name); });
+			item.addEventListener('mouseenter', function() { item.style.background = '#4a4a4a'; });
+			item.addEventListener('mouseleave', function() { item.style.background = '#3a3a3a'; });
+			listEl.appendChild(item);
+		});
+
+	} catch (e) {
+		if (e.name === 'AbortError') return;
+		listEl.innerHTML = '<h5 class="input-description">Open failed: ' + e.message + '</h5>';
+	}
+}
+
+function filterLocalDeckPicker() {
+	var searchInput = document.querySelector('#local-deck-search-input');
+	populateLocalDeckPicker(searchInput ? searchInput.value : '');
+}
+
+function closeLocalDeckPicker() {
+	var picker = document.querySelector('#local-deck-open-picker');
+	if (picker) picker.style.display = 'none';
+}
+
+async function openDeckByHandle(dirHandle, deckName) {
+	localDeckHandle = dirHandle;
+	try {
+		var metaFile = await dirHandle.getFile('meta.json');
+		var metaText = await metaFile.text();
+		localDeckMeta = JSON.parse(metaText);
+		if (!localDeckMeta.name) localDeckMeta.name = deckName;
+	} catch (e) {
+		localDeckMeta = { name: deckName, cards: [] };
+	}
+
+	closeLocalDeckPicker();
+	showLocalDeckOpenState();
+	updateLocalDeckUI();
+	notify('Opened deck "' + localDeckMeta.name + '".', 3);
+}
+
+// --- Write meta.json ---
+
+async function writeMetaJSON() {
+	if (!localDeckHandle || !localDeckMeta) return;
+	try {
+		var fileHandle = await localDeckHandle.getFileHandle('meta.json', { create: true });
+		var writable = await fileHandle.createWritable();
+		await writable.write(JSON.stringify(localDeckMeta, null, 2));
+		await writable.close();
+	} catch (e) {
+		console.warn('writeMetaJSON failed:', e);
+	}
+}
+
+// --- Save Current Card to Local Deck ---
+
+function stripCardImages(cardObj) {
+	var c = JSON.parse(JSON.stringify(cardObj));
+	if (c.frames) {
+		c.frames.forEach(function(frame) {
+			delete frame.image;
+			if (frame.masks) frame.masks.forEach(function(mask) { delete mask.image; });
+		});
+	}
+	return c;
+}
+
+function sanitizeFileName(name) {
+	return name.replace(/[^a-zA-Z0-9 _\-\.]/g, '').replace(/\s+/g, ' ').trim();
+}
+
+async function localDeckSaveCurrentCard() {
+	if (!localDeckHandle || !localDeckMeta) {
+		notify('No deck is currently open. Create or open a deck first.', 3);
+		return;
+	}
+
+	var cardData = stripCardImages(card);
+	var entryName = '';
+
+	// Determine the card name from the current context
+	if (isDeckListImport && deckList[deckListIndex]) {
+		entryName = deckList[deckListIndex].name;
+	} else if (card.text) {
+		var firstKey = Object.keys(card.text)[0];
+		entryName = card.text[firstKey] ? card.text[firstKey].text : '';
+	}
+
+	if (!entryName || entryName.trim() === '') {
+		entryName = 'Card_' + String(deckListIndex + 1).padStart(3, '0');
+	}
+
+	var fileName = sanitizeFileName(entryName) + '.json';
+
+	try {
+		var fileHandle = await localDeckHandle.getFileHandle(fileName, { create: true });
+		var writable = await fileHandle.createWritable();
+		await writable.write(JSON.stringify(cardData, null, 2));
+		await writable.close();
+
+		// Update meta.json card list
+		if (!localDeckMeta.cards) localDeckMeta.cards = [];
+		var existingIdx = localDeckMeta.cards.indexOf(entryName);
+		if (existingIdx === -1) {
+			localDeckMeta.cards.push(entryName);
+			await writeMetaJSON();
+		}
+
+		// Track saved cards for this session
+		if (!localDeckSavedCards.includes(deckListIndex)) {
+			localDeckSavedCards.push(deckListIndex);
+		}
+
+		updateLocalDeckUI();
+		notify('Saved: ' + entryName, 2);
+	} catch (e) {
+		notify('Save failed: ' + e.message, 5);
+	}
+}
+
+// --- Auto-save on Arrow Navigation ---
+
+function deckListNext() {
+	if (deckList.length === 0) return;
+	await localDeckAutoSaveCurrent();
+	var prevIndex = deckListIndex;
+	deckListIndex = (deckListIndex + 1) % deckList.length;
+	deckListLoadCard(deckListIndex);
+}
+
+function deckListPrev() {
+	if (deckList.length === 0) return;
+	await localDeckAutoSaveCurrent();
+	var prevIndex = deckListIndex;
+	deckListIndex = ((deckListIndex - 1) % deckList.length + deckList.length) % deckList.length;
+	deckListLoadCard(deckListIndex);
+}
+
+async function localDeckAutoSaveCurrent() {
+	if (!isDeckListImport || !localDeckHandle || !localDeckMeta) return;
+	var entry = deckList[deckListIndex];
+	if (!entry) return;
+
+	var cardData = stripCardImages(card);
+	var fileName = sanitizeFileName(entry.name) + '.json';
+
+	try {
+		var fileHandle = await localDeckHandle.getFileHandle(fileName, { create: true });
+		var writable = await fileHandle.createWritable();
+		await writable.write(JSON.stringify(cardData, null, 2));
+		await writable.close();
+
+		if (!localDeckMeta.cards) localDeckMeta.cards = [];
+		var existingIdx = localDeckMeta.cards.indexOf(entry.name);
+		if (existingIdx === -1) {
+			localDeckMeta.cards.push(entry.name);
+			await writeMetaJSON();
+		}
+
+		if (!localDeckSavedCards.includes(deckListIndex)) {
+			localDeckSavedCards.push(deckListIndex);
+		}
+		updateLocalDeckUI();
+	} catch (e) {
+		console.warn('Auto-save failed:', e.message);
+	}
+}
+
+// --- Export Deck as PNG Zip ---
+
+async function ensureJSZip() {
+	if (_jsZipLoaded) return;
+	return new Promise(function(resolve, reject) {
+		var script = document.createElement('script');
+		script.src = 'https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js';
+		script.onload = function() { _jsZipLoaded = true; resolve(); };
+		script.onerror = function() { reject(new Error('JSZip failed to load')); };
+		document.head.appendChild(script);
+	});
+}
+
+async function localDeckExportPNGZip() {
+	if (!localDeckHandle || !localDeckMeta) {
+		notify('No deck is currently open.', 3);
+		return;
+	}
+
+	await ensureJSZip();
+	var zip = new JSZip();
+	var totalCards = localDeckMeta.cards ? localDeckMeta.cards.length : 0;
+
+	if (totalCards === 0) {
+		notify('No cards saved in this deck yet.', 3);
+		return;
+	}
+
+	notify('Exporting ' + totalCards + ' cards as PNG...', 3);
+	var completed = 0;
+
+	for (var i = 0; i < localDeckMeta.cards.length; i++) {
+		var cardName = localDeckMeta.cards[i];
+		var fileName = sanitizeFileName(cardName) + '.json';
+
+		try {
+			var fileHandle = await localDeckHandle.getFileHandle(fileName);
+			var file = await fileHandle.getFile();
+			var cardData = JSON.parse(await file.text());
+
+			// Load card data into global card object for rendering
+			card = {};
+			Object.assign(card, cardData);
+
+			// Rebuild frames
+			if (card.frames) {
+				card.frames.reverse();
+				for (var fi = 0; fi < card.frames.length; fi++) {
+					await addFrame([], card.frames[fi]);
+				}
+				card.frames.reverse();
+			}
+
+			if (card.onload) await loadScript(card.onload);
+			if (card.manaSymbols) card.manaSymbols.forEach(function(item) { loadScript(item); });
+
+			var canvasesResized = false;
+			canvasList.forEach(function(name) {
+				if (window[name + 'Canvas'].width != card.width * (1 + card.marginX) || window[name + 'Canvas'].height != card.height * (1 + card.marginY)) {
+					sizeCanvas(name);
+					canvasesResized = true;
+				}
+			});
+
+			if (canvasesResized) {
+				drawTextBuffer();
+				drawFrames();
+				bottomInfoEdited();
+				watermarkEdited();
+			}
+
+			drawCard();
+
+			await new Promise(function(resolve) { setTimeout(resolve, 300); });
+
+			var imageDataURL = cardCanvas.toDataURL('image/png');
+			var pngName = sanitizeFileName(cardName) + '.png';
+			var base64 = imageDataURL.split(',')[1];
+			zip.file(pngName, base64, { base64: true });
+
+			completed++;
+			notify('Exported ' + completed + '/' + totalCards + ': ' + cardName, 2);
+		} catch (e) {
+			console.warn('Failed to export card:', cardName, e.message);
+		}
+	}
+
+	var blob = await zip.generateAsync({ type: 'blob' });
+	var downloadLink = document.createElement('a');
+	downloadLink.href = URL.createObjectURL(blob);
+	downloadLink.download = sanitizeFileName(localDeckMeta.name) + '.zip';
+	document.body.appendChild(downloadLink);
+	downloadLink.click();
+	downloadLink.remove();
+
+	notify('Export complete! (' + completed + '/' + totalCards + ' cards)', 3);
+}
+
+// --- Open File Location ---
+
+function localDeckOpenFileLocation() {
+	if (!localDeckHandle) {
+		var path = loadDefaultDeckPath();
+		notify('Save location: ' + path, 3);
+		return;
+	}
+	// Use the File System Access API to open in file explorer (Chrome 120+)
+	if (window.showOpenFilePicker && localDeckHandle.name) {
+		// Best effort - some browsers support opening parent directory
+		var path = loadDefaultDeckPath() + '/' + localDeckMeta.name;
+		notify('Deck location: ' + path, 3);
+	} else {
+		notify('File location: ' + loadDefaultDeckPath(), 3);
+	}
+}
+
+// --- Rename Deck ---
+
+async function localDeckRename() {
+	var input = document.querySelector('#local-deck-rename-input');
+	if (!input || !localDeckMeta) return;
+	var newName = input.value.trim();
+	if (!newName) {
+		notify('Enter a new deck name.', 3);
+		return;
+	}
+
+	localDeckMeta.name = newName;
+	await writeMetaJSON();
+	updateLocalDeckUI();
+	input.value = '';
+	notify('Deck renamed to "' + newName + '".', 2);
+}
+
+// --- Update UI for Open Deck State ---
+
+function updateLocalDeckUI() {
+	if (!localDeckMeta) return;
+
+	var nameDisplay = document.querySelector('#local-deck-name-display');
+	if (nameDisplay) nameDisplay.textContent = '📁 ' + localDeckMeta.name;
+
+	var renameInput = document.querySelector('#local-deck-rename-input');
+	if (renameInput) renameInput.placeholder = localDeckMeta.name;
+
+	var cardCount = document.querySelector('#local-deck-card-count');
+	if (cardCount) cardCount.textContent = localDeckMeta.cards ? localDeckMeta.cards.length : 0;
+
+	// Update cards list
+	var listEl = document.querySelector('#local-deck-cards-list');
+	if (!listEl) return;
+
+	if (!localDeckMeta.cards || localDeckMeta.cards.length === 0) {
+		listEl.innerHTML = '<h5 class="input-description">No cards saved yet. Use the arrow buttons below the card preview to navigate and auto-save.</h5>';
+		return;
+	}
+
+	listEl.innerHTML = '';
+	localDeckMeta.cards.forEach(function(cardName, idx) {
+		var item = document.createElement('div');
+		item.style.cssText = 'padding:6px 10px;border-radius:4px;font-size:12px;color:#ccc;background:#3a3a3a;display:flex;justify-content:space-between;align-items:center;';
+
+		var nameSpan = document.createElement('span');
+		nameSpan.textContent = cardName;
+		item.appendChild(nameSpan);
+
+		var removeBtn = document.createElement('button');
+		removeBtn.textContent = '✕';
+		removeBtn.style.cssText = 'background:#6a3a3a;color:white;border:1px solid #8a4a4a;border-radius:4px;font-size:10px;padding:2px 6px;cursor:pointer;margin-left:8px;';
+		removeBtn.addEventListener('click', function() { removeCardFromDeck(idx); });
+		item.appendChild(removeBtn);
+
+		listEl.appendChild(item);
+	});
+}
+
+async function removeCardFromDeck(cardIndex) {
+	if (!localDeckMeta || !localDeckHandle) return;
+	var cardName = localDeckMeta.cards[cardIndex];
+	if (!confirm('Remove "' + cardName + '" from deck?')) return;
+
+	try {
+		var fileName = sanitizeFileName(cardName) + '.json';
+		await localDeckHandle.removeEntry(fileName);
+		localDeckMeta.cards.splice(cardIndex, 1);
+		await writeMetaJSON();
+		updateLocalDeckUI();
+		notify('Removed: ' + cardName, 2);
+	} catch (e) {
+		notify('Remove failed: ' + e.message, 5);
+	}
+}
+
+// --- Parse Deck List from Text (supports both textareas) ---
+
+function parseDeckListFromText(rawText, isCreateMode) {
+	if (!rawText) {
+		notify('Paste a deck list into the text area above.', 5);
+		return;
+	}
+
+	var lines = rawText.split('\n')
+		.map(l => l.trim())
+		.filter(l => l.length > 0 && !l.startsWith('#'));
+
+	if (lines.length === 0) {
+		notify('No valid lines found in deck list.', 5);
+		return;
+	}
+
+	if (lines.length > 200) {
+		notify('Deck list exceeds 200 cards. Truncating...', 5);
+		lines = lines.slice(0, 200);
+	}
+
+	var parsed = [];
+	for (var i = 0; i < lines.length; i++) {
+		var entry = parseDeckLine(lines[i]);
+		if (entry) {
+			parsed.push(entry);
+		}
+	}
+
+	if (parsed.length === 0) {
+		notify('No valid card entries found. Format: qty Name (SET) number', 5);
+		return;
+	}
+
+	deckList = parsed;
+	deckListIndex = 0;
+	deckListSavedKeys = [];
+	isDeckListImport = true;
+	_deckPrefetchCache = {};
+	_deckInFlight = {};
+
+	document.querySelector('#decklist-progress').style.display = 'block';
+	updateDeckListCounter();
+	showDeckNav(true);
+	notify('Loaded ' + deckList.length + ' cards. Use Next/Previous to navigate.', 3);
+
+	// Auto-load the first card
+	deckListLoadCard(0);
+}
+
+// Override parseDeckList to work with both textareas
+function parseDeckList() {
+	var createInput = document.querySelector('#local-deck-create-decklist-input');
+	var openInput = document.querySelector('#decklist-input');
+	var rawText = '';
+	if (createInput && createInput.value.trim()) {
+		rawText = createInput.value.trim();
+	} else if (openInput) {
+		rawText = openInput.value.trim();
+	}
+
+	parseDeckListFromText(rawText, !!createInput);
+}
+
+// ============================================================
+// END LOCAL DECK MANAGEMENT SYSTEM
+// ============================================================
+
 //TUTORIAL TAB
 function loadTutorialVideo() {
 	var video = document.querySelector('.video > iframe');
@@ -5676,56 +6283,6 @@ var _deckPrefetchCache = {};
 // In-flight requests so we don't double-fetch the same index
 var _deckInFlight = {};
 
-function parseDeckList() {
-	var rawText = document.querySelector('#decklist-input').value.trim();
-	if (!rawText) {
-		notify('Paste a deck list into the text area above.', 5);
-		return;
-	}
-
-	var lines = rawText.split('\n')
-		.map(l => l.trim())
-		.filter(l => l.length > 0 && !l.startsWith('#'));
-
-	if (lines.length === 0) {
-		notify('No valid lines found in deck list.', 5);
-		return;
-	}
-
-	if (lines.length > 200) {
-		notify('Deck list exceeds 200 cards. Truncating...', 5);
-		lines = lines.slice(0, 200);
-	}
-
-	var parsed = [];
-	for (var i = 0; i < lines.length; i++) {
-		var entry = parseDeckLine(lines[i]);
-		if (entry) {
-			parsed.push(entry);
-		}
-	}
-
-	if (parsed.length === 0) {
-		notify('No valid card entries found. Format: qty Name (SET) number', 5);
-		return;
-	}
-
-	deckList = parsed;
-	deckListIndex = 0;
-	deckListSavedKeys = [];
-	isDeckListImport = true;
-	_deckPrefetchCache = {};
-	_deckInFlight = {};
-
-	document.querySelector('#decklist-progress').style.display = 'block';
-	updateDeckListCounter();
-	showDeckNav(true);
-	notify('Loaded ' + deckList.length + ' cards. Use Next/Previous to navigate.', 3);
-
-	// Auto-load the first card
-	deckListLoadCard(0);
-}
-
 function parseDeckLine(line) {
 	// Format: qty Name (SET) number
 	// Examples:
@@ -6023,18 +6580,6 @@ function deckListLoadCard(index) {
 	_prefetchNeighbors(index);
 }
 
-function deckListNext() {
-	if (deckList.length === 0) return;
-	deckListIndex = (deckListIndex + 1) % deckList.length;
-	deckListLoadCard(deckListIndex);
-}
-
-function deckListPrev() {
-	if (deckList.length === 0) return;
-	deckListIndex = ((deckListIndex - 1) % deckList.length + deckList.length) % deckList.length;
-	deckListLoadCard(deckListIndex);
-}
-
 function deckListSaveCurrent() {
 	var entry = deckList[deckListIndex];
 	if (!entry) return;
@@ -6157,3 +6702,11 @@ async function deckListBatchDownload() {
 loadScript('/js/frames/groupStandard-3.js');
 loadAvailableCards();
 initDraggableArt();
+
+// Initialize local deck path input on page load
+(function() {
+	var pathInput = document.querySelector('#local-deck-path-input');
+	if (pathInput) {
+		pathInput.value = loadDefaultDeckPath();
+	}
+})();

@@ -98,7 +98,7 @@
 			<button onclick='deckListNext()' title='Next card (Right Arrow)' style='position:absolute;right:10px;top:40px;transform:translateY(-50%);background:#333;color:white;border:2px solid #666;border-radius:8px;font-size:24px;padding:12px 10px;cursor:pointer;'>&#9654;</button>
 			<div id='deck-nav-controls' style='position:absolute;top:18px;left:50%;transform:translateX(-50%);display:flex;align-items:center;gap:8px;'>
 				<button id='deck-nav-counter' onclick='toggleDeckListDropdown()' title='Click to search decklist' style='background:#333;color:white;border:2px solid #666;border-radius:8px;font-size:14px;padding:6px 14px;cursor:pointer;'>Card 1/0</button>
-				<button id='deck-nav-save-btn' onclick='deckListSaveCurrent()' title='Save current card' style='background:#2a7d2a;color:white;border:2px solid #4a4;border-radius:8px;font-size:13px;padding:6px 12px;cursor:pointer;'>💾 Save</button>
+				<button id='deck-nav-save-btn' onclick='localDeckSaveCurrentCard()' title='Save current card to local deck' style='background:#2a7d2a;color:white;border:2px solid #4a4;border-radius:8px;font-size:13px;padding:6px 12px;cursor:pointer;'>💾 Save</button>
 			</div>
 			<div id='deck-list-dropdown' style='display:none;position:absolute;top:50px;left:50%;transform:translateX(-50%);background:#2a2a2a;border:2px solid #666;border-radius:10px;padding:8px;width:340px;max-height:400px;z-index:1000;box-shadow:0 8px 24px rgba(0,0,0,0.5);'>
 				<input id='deck-list-search' type='text' placeholder='Search cards...' oninput='filterDeckListDropdown()' style='width:100%;padding:8px 10px;border-radius:6px;border:1px solid #555;background:#3a3a3a;color:white;font-size:14px;box-sizing:border-box;margin-bottom:6px;'>
@@ -674,45 +674,100 @@
 							</select>
 						</div>
 						<div class='readable-background margin-bottom padding'>
-							<h5 class='padding margin-bottom input-description'>Import a full deck list (one card per line: <code>qty Name (SET) number</code>)</h5>
-							<textarea id='decklist-input' class='input margin-bottom' rows='10' placeholder='1 Sigarda, Font of Blessings (MAT) 182&#10;4 Mountain (M21) 237&#10;1 Akroma's Will (CMR) 3'></textarea>
-							<button class='input margin-bottom' onclick='parseDeckList();'>Load Deck List</button>
-							<div id='decklist-progress' style='display:none;'>
-								<h5 id='decklist-counter' class='padding input-description'></h5>
+							<h5 class='padding margin-bottom input-description'>Local Deck Management</h5>
+							<div style='display:flex; gap:8px; flex-wrap:wrap;'>
+								<button class='input' onclick='localDeckCreateNew();'>📁 Create New Deck</button>
+								<button class='input' onclick='localDeckOpenPicker();'>📂 Open Deck</button>
+							</div>
+
+							<div id='local-deck-path-section' style='margin-top:12px;'>
+								<h5 class='collapsible collapsed padding input-description margin-bottom' onclick='toggleCollapse(event);'>Save Location</h5>
+								<div class='padding hidden' style='background:#2a2a2a;border-radius:6px;padding:8px 10px;'>
+									<input id='local-deck-path-input' type='text' class='input margin-bottom' placeholder='%USERPROFILE%\Documents\CardConjurer'>
+									<button class='input' onclick='localDeckSavePath();'>Update Path</button>
+								</div>
+							</div>
+
+							<div id='local-deck-open-state' style='display:none; margin-top:12px;'>
+								<h5 id='local-deck-name-display' class='padding input-description'></h5>
+								<div style='display:flex; gap:8px; flex-wrap:wrap;'>
+									<button class='input' onclick='localDeckSaveCurrentCard();'>💾 Save Card to Local Deck</button>
+									<button class='input' onclick='localDeckExportPNGZip();'>🖼️ Export Deck as PNG Zip</button>
+									<button class='input' onclick='localDeckOpenFileLocation();'>📂 Open File Location</button>
+								</div>
+
+								<div id='local-deck-rename-section' style='margin-top:12px;'>
+									<h5 class='padding input-description margin-bottom'>Rename Deck</h5>
+									<input id='local-deck-rename-input' type='text' class='input margin-bottom' placeholder='New deck name'>
+									<button class='input' onclick='localDeckRename();'>Apply New Name</button>
+								</div>
+
+								<div id='local-deck-cards-section' style='margin-top:12px;'>
+									<h5 class='padding input-description margin-bottom'>Cards in Deck (<span id='local-deck-card-count'>0</span>)</h5>
+									<div id='local-deck-cards-list' style='max-height:300px;overflow-y:auto;display:flex;flex-direction:column;gap:2px;background:#2a2a2a;border-radius:6px;padding:8px 10px;'>
+										<h5 class='input-description'>No cards saved yet. Use the arrow buttons below the card preview to navigate and auto-save.</h5>
+									</div>
+								</div>
+
+								<div id='local-deck-decklist-section' style='margin-top:12px;'>
+									<h5 class='padding input-description margin-bottom'>Import Deck List (one card per line: <code>qty Name (SET) number</code>)</h5>
+									<textarea id='decklist-input' class='input margin-bottom' rows='6' placeholder='1 Sigarda, Font of Blessings (MAT) 182&#10;4 Mountain (M21) 237&#10;1 Akroma's Will (CMR) 3'></textarea>
+									<button class='input' onclick='parseDeckList();'>Load Deck List</button>
+								</div>
+
+								<div id='decklist-progress' style='display:none;'>
+									<h5 id='decklist-counter' class='padding input-description margin-top'></h5>
+									<div style='display:flex; gap:8px; flex-wrap:wrap;'>
+										<button class='input' onclick='deckListPrev();'>← Previous</button>
+										<button class='input' onclick='deckListNext();'>Next →</button>
+									</div>
+								</div>
+							</div>
+
+							<div id='local-deck-open-picker' style='display:none; margin-top:12px;'>
+								<h5 class='padding input-description margin-bottom'>Select a Deck to Open</h5>
+								<input id='local-deck-search-input' type='text' class='input margin-bottom' placeholder='Search decks...' oninput='filterLocalDeckPicker()'>
+								<div id='local-deck-picker-list' style='max-height:300px;overflow-y:auto;display:flex;flex-direction:column;gap:2px;background:#2a2a2a;border-radius:6px;padding:8px 10px;'>
+									<h5 class='input-description'>No decks found. Create one or check your save location.</h5>
+								</div>
+								<button class='input margin-top' onclick='closeLocalDeckPicker();'>Close Picker</button>
+							</div>
+
+							<div id='local-deck-create-section' style='display:none; margin-top:12px;'>
+								<h5 class='padding input-description margin-bottom'>Enter Deck Name</h5>
+								<input id='local-deck-name-input' type='text' class='input margin-bottom' placeholder='My Custom Deck'>
+								<button class='input' onclick='localDeckConfirmCreate();'>Create Deck</button>
+								<div id='local-deck-create-decklist-section' style='display:none; margin-top:12px;'>
+									<h5 class='padding input-description margin-bottom'>Import Deck List (one card per line: <code>qty Name (SET) number</code>)</h5>
+									<textarea id='local-deck-create-decklist-input' class='input margin-bottom' rows='6' placeholder='1 Sigarda, Font of Blessings (MAT) 182&#10;4 Mountain (M21) 237&#10;1 Akroma's Will (CMR) 3'></textarea>
+									<button class='input' onclick='localDeckCreateLoadDecklist();'>Load Deck List</button>
+								</div>
+							</div>
+
+							<div id='decklist-progress-old' style='display:none;'>
+								<h5 id='decklist-counter-old' class='padding input-description'></h5>
 								<div style='display:flex; gap:8px; flex-wrap:wrap;'>
 									<button class='input' onclick='deckListPrev();'>← Previous</button>
 									<button class='input' onclick='deckListNext();'>Next →</button>
-									<button class='input' id='decklist-save-btn' onclick='deckListSaveCurrent();'>Save Current Card</button>
+									<button class='input' id='decklist-save-btn' onclick='localDeckSaveCurrentCard();'>Save Current Card</button>
 								</div>
-								<h5 class='padding margin-top input-description'>Batch download all saved cards from this deck</h5>
-								<button class='input' onclick='deckListBatchDownload();'>Download All Deck Cards (PNG)</button>
 							</div>
 						</div>
+
 						<div class='readable-background margin-bottom padding'>
-							<h5 class='padding margin-bottom input-description'>Save your current card</h5>
-							<button class='input margin-bottom' onclick='saveCard();'>Save Card</button>
-							<h5 class='padding margin-bottom input-description'>Load a saved card</h5>
+							<h5 class='padding margin-bottom input-description'>Browser Local Storage (Legacy)</h5>
+							<button class='input margin-bottom' onclick='saveCard();'>Save Card to Browser</button>
+							<h5 class='padding margin-bottom input-description'>Load a saved card from browser storage</h5>
 							<select id='load-card-options' class='input margin-bottom' type='text' onchange='loadCard(this.value);'></select>
-							<h5 class='padding margin-bottom input-description'>Delete selected card</h5>
+							<h5 class='padding margin-bottom input-description'>Delete selected card from browser storage</h5>
 							<button class='input' onclick='deleteCard();'>Delete Card</button>
 						</div>
 						<div class='readable-background padding margin-bottom'>
-							<h5 class='padding margin-bottom input-description'>Download all saved cards</h5>
-							<button class='input margin-bottom' onclick='downloadSavedCards();'>Download All</button>
-							<h5 class='padding margin-bottom input-description'>Upload previously downloaded file of saved cards (downloaded from above)</h5>
-							<input type='file' accept='.cardconjurer,.txt' class='input margin-bottom' oninput='uploadSavedCards(event);'>
-							<h5 class='padding margin-bottom input-description'>Delete ALL saved cards</h5>
-							<button class='input margin-bottom' onclick='deleteSavedCards();'>Delete All</button>
-						</div>
-						<div class='readable-background padding margin-bottom'>
-							<h5 class='collapsible collapsed padding input-description' onclick='toggleCollapse(event);'>
-								How are my cards saved?
-							</h5>
+							<h5 class='collapsible collapsed padding input-description' onclick='toggleCollapse(event);'>How are my cards saved?</h5>
 							<div class='padding'>
-								<h5 class='margin-top'>Cards are saved on your computer under your browser's localstorage, which usually has a limit of 5MB and cannot be changed.</h5>
-								<h5 class='margin-top'>Unfortunately, this means that if you save a lot of cards, you could run out of space.</h5>
-								<h5 class='margin-top'>Your localstorage runs out of space especially fast when you upload images directly from your computer, because the image itself has to be saved. However, if possible, uploading images via URL will save massive amounts of space, allowing you to save many more cards.</h5>
-								<h5 class='margin-top'>And if you do run out of space, don't worry! You can download all saved cards then delete all saved cards,  freeing up all 5MB of space. And when you'd like to edit the cards you previously downloaded/deleted, you can reupload them via the file upload (under "Upload previously downloaded cards").</h5>
+								<h5 class='margin-top'><strong>Local Decks:</strong> Cards are saved as individual JSON files in a folder on your computer. Each deck has its own folder containing card data and metadata.</h5>
+								<h5 class='margin-top'><strong>Browser Storage (Legacy):</strong> Cards can also be saved to your browser's localStorage, which usually has a limit of 5MB. This is useful for quick saves but limited in capacity.</h5>
+								<h5 class='margin-top'>Local decks are recommended for most use cases as they have no size limits and persist across browsers/sessions.</h5>
 							</div>
 						</div>
 					</div>
