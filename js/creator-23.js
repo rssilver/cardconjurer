@@ -231,6 +231,9 @@ function getInlineCardName() {
 	return imageName.replace(/\{[^}]+\}/g, '');
 }
 //UI
+function toggleCollapse(event) {
+	event.target.closest('.collapsible').classList.toggle('collapsed');
+}
 function toggleCreatorTabs(event, target) {
 	Array.from(document.querySelector('#creator-menu-sections').children).forEach(element => element.classList.add('hidden'));
 	document.querySelector('#creator-menu-' + target).classList.remove('hidden');
