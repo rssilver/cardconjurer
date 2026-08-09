@@ -5310,8 +5310,14 @@ async function localDeckConfirmCreate() {
                 
                 if (!baseDirHandle) {
                         // If no handle is stored, we must ask the user for the base directory once.
-                        baseDirHandle = await window.showDirectoryPicker({ mode: 'readwrite', startIn: 'documents' });
-                        await setStoredRootHandle(baseDirHandle);
+                        // Note: This prompt is required by browsers to grant permission to a local folder.
+                        try {
+                            baseDirHandle = await window.showDirectoryPicker({ mode: 'readwrite', startIn: 'documents' });
+                            await setStoredRootHandle(baseDirHandle);
+                        } catch (e) {
+                            if (e.name === 'AbortError') throw e;
+                            throw new Error('Permission to access the local folder is required to save decks.');
+                        }
                 }
 
                 // Step 2: Ensure the CardConjurer subfolder exists, create if needed
