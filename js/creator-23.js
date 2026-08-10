@@ -5321,7 +5321,10 @@ async function localDeckConfirmCreate() {
                 }
 
                 // Step 2: Ensure the CardConjurer subfolder exists, create if needed
-                var ccHandle = await baseDirHandle.getDirectoryHandle('CardConjurer', { create: true });
+                var ccHandle = baseDirHandle;
+                if (baseDirHandle.name !== 'CardConjurer') {
+                    ccHandle = await baseDirHandle.getDirectoryHandle('CardConjurer', { create: true });
+                }
 
                 // Step 3: Create the deck folder inside CardConjurer using a sanitized name
                 var safeDeckName = sanitizeFolderName(deckName);
@@ -5367,20 +5370,32 @@ async function populateLocalDeckPicker(filterText) {
 	var listEl = document.querySelector('#local-deck-picker-list');
 	if (!listEl) return;
 
-	try {
-		listEl.innerHTML = '<h5 class="input-description">Scanning for decks...</h5>';
+try {
+listEl.innerHTML = "<h5 class="input-description">Scanning for decks...</h5>";
 
-		// Step 1: Open the base directory (Documents)
-		var baseDirHandle = await window.showDirectoryPicker({ mode: 'read', startIn: 'documents' });
+// Step 1: Use the persisted root directory handle from IndexedDB to avoid popups
+var baseDirHandle = await getStoredRootHandle();
 
-		// Step 2: Look for CardConjurer subfolder
-		var ccHandle;
-		try {
-			ccHandle = await baseDirHandle.getDirectoryHandle('CardConjurer');
-		} catch (e) {
-			listEl.innerHTML = '<h5 class="input-description">No decks found. Create one or check your save location.</h5>';
-			return;
-		}
+if (!baseDirHandle) {
+// Only prompt if no root is stored. Note: this will trigger a popup once.
+listEl.innerHTML = "<h5 class="input-description">Please select your CardConjurer save folder to load decks.</h5>";
+var newHandle = await window.showDirectoryPicker({ mode: "readwrite", startIn: "documents" });
+await setStoredRootHandle(newHandle);
+baseDirHandle = newHandle;
+}
+
+// Step 2: Determine if we are already in the CardConjurer folder or need to look for it as a subfolder
+var ccHandle;
+if (baseDirHandle.name === "CardConjurer") {
+ccHandle = baseDirHandle;
+} else {
+try {
+ccHandle = await baseDirHandle.getDirectoryHandle("CardConjurer");
+} catch (e) {
+listEl.innerHTML = "<h5 class="input-description">No CardConjurer folder found in the selected location.</h5>";
+return;
+}
+}
 
 		var filter = (filterText || '').toLowerCase().trim();
 		var deckFolders = [];
