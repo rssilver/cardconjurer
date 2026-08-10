@@ -74,7 +74,7 @@ watermark.onerror = function() {if (!this.src.includes('/img/blank.png')) {this.
 watermark.onload = watermarkEdited;
 //preview canvas
 var previewCanvas = document.querySelector('#previewCanvas');
-var previewContext = previewCanvas.getContext('2d');
+var previewContext = previewCanvas ? previewCanvas.getContext('2d') : null;
 var canvasList = [];
 //frame/mask picker stuff
 var availableFrames = [];
