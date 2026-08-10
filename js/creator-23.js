@@ -82,7 +82,7 @@ var selectedFrame = null;
 var selectedFrameIndex = 0;
 var selectedMaskIndex = 0;
 var selectedTextIndex = 0;
-var replacementMasks = {};;
+var replacementMasks = {};
 var customCount = 0;
 var lastFrameClick = null;
 var lastMaskClick = null;
@@ -105,14 +105,14 @@ document.querySelector("#info-year").value = card.infoYear;
 
 var loadedVersions = [];
 //Card Object managament
-async function resetCardIrregularities({canvas = [getStandardWidth(), getStandardHeight(), 0, 0], resetOthers = true}; = {}) {
+async function resetCardIrregularities({canvas = [getStandardWidth(), getStandardHeight(), 0, 0], resetOthers = true} = {}) {
 	//misc details
 	card.margins = false;
-	card.bottomInfoTranslate = {x:0, y:0};;
+	        card.bottomInfoTranslate = {x:0, y:0};
 	card.bottomInfoRotate = 0;
 	card.bottomInfoZoom = 1;
 	card.bottomInfoColor = 'white';
-	replacementMasks = {};;
+	replacementMasks = {};
 	//rotation
 	if (card.landscape) {
 		// previewContext.scale(card.width/card.height, card.height/card.width);
