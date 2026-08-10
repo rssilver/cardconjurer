@@ -12,7 +12,7 @@ function fixUri(input) {
 	var prefix = 'https://card-conjurer.storage.googleapis.com';//'https://raw.githubusercontent.com/ImKyle4815/cardconjurer/remake';
 	if (input.includes(prefix) || input.includes('http') || input.includes('data:image') || window.location.href.includes('localhost')) {
 		return input;
-	}; else {
+	} else {
 		return prefix + input; //input.replace('/img/frames', prefix + '/img/frames');
 	}; */
 	return input;
@@ -131,7 +131,7 @@ async function resetCardIrregularities({canvas = [getStandardWidth(), getStandar
 		if (window[name + 'Canvas'].width != card.width * (1 + card.marginX) || window[name + 'Canvas'].height != card.height * (1 + card.marginY)) {
 			sizeCanvas(name);
 		};
-	};);
+	});
 	if (resetOthers) {
 		setBottomInfoStyle();		
 		//onload
@@ -147,20 +147,20 @@ async function setBottomInfoStyle() {
 				midLeft: {text:'{elemidinfo-set}; \u2022 {elemidinfo-language}  {savex}{fontbelerenbsc}{fontsize' + scaleHeight(0.001) + '}{upinline' + scaleHeight(0.0005) + '}\uFFEE{savex2}{elemidinfo-artist}', x:0.0647, y:0.9548, width:0.8707, height:0.0171, oneLine:true, font:'gothammedium', size:0.0171, color:card.bottomInfoColor, outlineWidth:0.003},
 				topLeft: {text:'{elemidinfo-rarity}; {kerning3}{elemidinfo-number}{kerning0}', x:0.0647, y:0.9377, width:0.8707, height:0.0171, oneLine:true, font:'gothammedium', size:0.0171, color:card.bottomInfoColor, outlineWidth:0.003},
 				note: {text:'{loadx};{elemidinfo-note}', x:0.0647, y:0.9377, width:0.8707, height:0.0171, oneLine:true, font:'gothammedium', size:0.0171, color:card.bottomInfoColor, outlineWidth:0.003},
-				bottomLeft: {text:'NOT FOR SALE', x:0.0647, y:0.9719, width:0.8707, height:0.0143, oneLine:true, font:'gothammedium', size:0.0143, color:card.bottomInfoColor, outlineWidth:0.003};,
+				bottomLeft: {text:'NOT FOR SALE', x:0.0647, y:0.9719, width:0.8707, height:0.0143, oneLine:true, font:'gothammedium', size:0.0143, color:card.bottomInfoColor, outlineWidth:0.003},
 				wizards: {name:'wizards', text:'{ptshift0,0.0172};\u2122 & \u00a9 {elemidinfo-year} Wizards of the Coast', x:0.0647, y:0.9377, width:0.8707, height:0.0167, oneLine:true, font:'mplantin', size:0.0162, color:card.bottomInfoColor, align:'right', outlineWidth:0.003},
 				bottomRight: {text:'{ptshift0,0.0172};CardConjurer.com', x:0.0647, y:0.9548, width:0.8707, height:0.0143, oneLine:true, font:'mplantin', size:0.0143, color:card.bottomInfoColor, align:'right', outlineWidth:0.003}
-			};);
-		}; else {
+			});
+		} else {
 			await loadBottomInfo({
 				midLeft: {text:'{elemidinfo-set}; \u2022 {elemidinfo-language}  {savex}{fontbelerenbsc}{fontsize' + scaleHeight(0.001) + '}{upinline' + scaleHeight(0.0005) + '}\uFFEE{savex2}{elemidinfo-artist}', x:0.0647, y:0.9548, width:0.8707, height:0.0171, oneLine:true, font:'gothammedium', size:0.0171, color: card.bottomInfoColor, outlineWidth:0.003},
 				topLeft: {text:'{elemidinfo-number};', x:0.0647, y:0.9377, width:0.8707, height:0.0171, oneLine:true, font:'gothammedium', size:0.0171, color:card.bottomInfoColor, outlineWidth:0.003},
 				note: {text:'{loadx2};{elemidinfo-note}', x:0.0647, y:0.9377, width:0.8707, height:0.0171, oneLine:true, font:'gothammedium', size:0.0171, color:card.bottomInfoColor, outlineWidth:0.003},
 				rarity: {text:'{loadx};{elemidinfo-rarity}', x:0.0647, y:0.9377, width:0.8707, height:0.0171, oneLine:true, font:'gothammedium', size:0.0171, color:card.bottomInfoColor, outlineWidth:0.003},
-				bottomLeft: {text:'NOT FOR SALE', x:0.0647, y:0.9719, width:0.8707, height:0.0143, oneLine:true, font:'gothammedium', size:0.0143, color:card.bottomInfoColor, outlineWidth:0.003};,
+				bottomLeft: {text:'NOT FOR SALE', x:0.0647, y:0.9719, width:0.8707, height:0.0143, oneLine:true, font:'gothammedium', size:0.0143, color:card.bottomInfoColor, outlineWidth:0.003},
 				wizards: {name:'wizards', text:'{ptshift0,0.0172};\u2122 & \u00a9 {elemidinfo-year} Wizards of the Coast', x:0.0647, y:0.9377, width:0.8707, height:0.0167, oneLine:true, font:'mplantin', size:0.0162, color:card.bottomInfoColor, align:'right', outlineWidth:0.003},
 				bottomRight: {text:'{ptshift0,0.0172};CardConjurer.com', x:0.0647, y:0.9548, width:0.8707, height:0.0143, oneLine:true, font:'mplantin', size:0.0143, color:card.bottomInfoColor, align:'right', outlineWidth:0.003}
-			};);
+			});
 		};
 };
 //Canvas management
@@ -262,13 +262,13 @@ function touchMove(event) {
 		if (clientY > elementBounds.top && clientY < elementBounds.bottom) {
 			dragOver(element, false);
 		};
-	};)
+	});
 };
 function dragOver(event, drag=true) {
 	var eventTarget;
 	if (drag) {
 		eventTarget = event.target.closest('.draggable');
-	}; else {
+	} else {
 		eventTarget = event;
 	};
 	var movingElement = document.querySelector('.dragging');
@@ -284,17 +284,17 @@ function dragOver(event, drag=true) {
 				if(movingElementPassed) {
 					elements.appendChild(element.cloneNode(true));
 					elements.appendChild(movingElement.cloneNode(true));
-				}; else {
+				} else {
 					elements.appendChild(movingElement.cloneNode(true));
 					elements.appendChild(element.cloneNode(true));
 				};
-			}; else if(element != movingElement) {
+			} else if(element != movingElement) {
 				elements.appendChild(element.cloneNode(true));
-			}; else {
+			} else {
 				movingElementOldIndex = index;
 				movingElementPassed = true;
 			};
-		};);
+		});
 		Array.from(elements.children).forEach(element => {
 			element.ondragstart = dragStart;
 			element.ontouchstart = dragStart;
@@ -304,7 +304,7 @@ function dragOver(event, drag=true) {
 			element.ontouchmove = touchMove;
 			element.onclick = frameElementClicked;
 			element.children[3].onclick = removeFrame;
-		};)
+		});
 		parentElement.innerHTML = null;
 		parentElement.appendChild(elements);
 		if (movingElementNewIndex >= 0) {
@@ -348,7 +348,7 @@ function loadManaSymbols(matchColor, manaSymbolPaths, size = [1, 1]) {
 		if (typeof item == 'string') {
 			manaSymbol.name = item.split('.')[0];
 			manaSymbol.path = item;
-		}; else {
+		} else {
 			manaSymbol.name = item[0].split('.')[0];
 			manaSymbol.path = item[0];
 		};
@@ -377,7 +377,7 @@ function loadManaSymbols(matchColor, manaSymbolPaths, size = [1, 1]) {
 		manaSymbol.image.src = fixUri(manaSymbolPath);
 		mana.set(manaSymbol.name, manaSymbol);
 		// manaSymbols.push(manaSymbol);
-	};);
+	});
 };
 function findManaSymbolIndex(string) {
 	return mana.get(key) || -1;
@@ -433,7 +433,7 @@ function drawFrames() {
 					};
 				};
 				frameContext.putImageData(existingData, 0, 0);
-			}; else {
+			} else {
 				//mask the image
 				frameMaskingContext.drawImage(item.image, frameX, frameY, frameWidth, frameHeight);
 				//color overlay
@@ -447,7 +447,7 @@ function drawFrames() {
 				frameContext.drawImage(frameMaskingCanvas, 0, 0, frameCanvas.width, frameCanvas.height);
 			};
 		};
-	};);
+	});
 	if (!haveDrawnPrePTCanvas && drawTextBetweenFrames) {
 		haveDrawnPrePTCanvas = true;
 		frameContext.globalCompositeOperation = 'source-over';
@@ -463,11 +463,11 @@ function loadFramePacks(framePackOptions = []) {
 		framePackOption.innerHTML = item.name;
 		if (item.value == 'disabled') {
 			framePackOption.disabled = true;
-		}; else {
+		} else {
 			framePackOption.value = item.value;
 		};
 		document.querySelector('#selectFramePack').appendChild(framePackOption);
-	};);
+	});
 	loadScript("/js/frames/pack" + document.querySelector('#selectFramePack').value + ".js");
 };
 function loadFramePack(frameOptions = availableFrames) {
@@ -484,12 +484,12 @@ function loadFramePack(frameOptions = availableFrames) {
 		};
 		if (!item.noThumb && !item.src.includes('/img/black.png')) {
 			frameOptionImage.src = fixUri(item.src.replace('.png', 'Thumb.png').replace('.svg', 'Thumb.png'));
-		}; else {
+		} else {
 			frameOptionImage.src = fixUri(item.src);
 		};
 		document.querySelector('#frame-picker').appendChild(frameOption);
 
-	};)
+	});
 	document.querySelector('#mask-picker').innerHTML = '';
 	document.querySelector('#frame-picker').children[0].click();
 	if (localStorage.getItem('autoLoadFrameVersion') == 'true') {
@@ -510,7 +510,7 @@ function frameOptionClicked(event) {
 		selectedFrameIndex = newFrameIndex;
 		if (!availableFrames[selectedFrameIndex].noDefaultMask) {
 			document.querySelector('#mask-picker').innerHTML = '<div class="mask-option" onclick="maskOptionClicked(event)"><img src="' + black.src + '"><p>No Mask</p></div>';
-		}; else {
+		} else {
 			document.querySelector('#mask-picker').innerHTML = '';
 		};
 		document.querySelector('#selectedPreview').innerHTML = '(Selected: ' + availableFrames[selectedFrameIndex].name + ', No Mask)';
@@ -529,12 +529,12 @@ function frameOptionClicked(event) {
 				maskOptionLabel.innerHTML = item.name;
 				maskOption.appendChild(maskOptionLabel);
 				document.querySelector('#mask-picker').appendChild(maskOption);
-			};);
+			});
 		};
 		const firstChild = document.querySelector('#mask-picker').firstChild;
 		firstChild.classList.add('selected');
 		firstChild.click();
-	}; else if (button) { button.click(); resetDoubleClick(); }
+	} else if (button) { button.click(); resetDoubleClick(); }
 };
 function maskOptionClicked(event) {
 	var button = doubleClick(event, 'mask');
@@ -558,7 +558,7 @@ function doubleClick(event, maskOrFrame) {
 	if (maskOrFrame == 'mask') {
 		lastClick = lastMaskClick;
 		lastMaskClick = currentClick;
-	}; else {
+	} else {
 		lastClick = lastFrameClick + 0;
 		lastFrameClick = currentClick + 0;
 	};
@@ -566,11 +566,11 @@ function doubleClick(event, maskOrFrame) {
 		var buttonID = null;
 		if (event.shiftKey) {
 			buttonID = '#addToRightHalf';
-		}; else if (event.ctrlKey) {
+		} else if (event.ctrlKey) {
 			buttonID = '#addToLeftHalf';
-		}; else if (event.altKey) {
+		} else if (event.altKey) {
 			buttonID = '#addToMiddleThird';
-		}; else {
+		} else {
 			buttonID = '#addToFull';
 		};
 		return document.querySelector(buttonID);
@@ -601,41 +601,41 @@ function cardFrameProperties(colors, manaCost, typeLine, power, style) {
 		if (typeLine.includes('Land')) {
 			if (colors.length == 0 || colors.length > 2) {
 				rules = 'L';
-			}; else {
+			} else {
 				rules = colors[0] + 'L';
 			};
-		}; else {
+		} else {
 			if (colors.length == 1) {
 				rules = colors[0];
-			}; else if (colors.length >=2) {
+			} else if (colors.length >=2) {
 				rules = 'M';
-			}; else if (typeLine.includes("Artifact")) {
+			} else if (typeLine.includes("Artifact")) {
 				rules = 'A';
-			}; else {
+			} else {
 				rules = 'C';
 			};
 		};
 
-	}; else {
+	} else {
 		if (typeLine.includes('Land')) {
 			if (colors.length == 0) {
 				rules = 'L';
-			}; else if (colors.length > 2) {
+			} else if (colors.length > 2) {
 				rules = 'ML';
-			}; else {
+			} else {
 				rules = colors[0] + 'L';
 			};
-		}; else if (colors.length > 2) {
+		} else if (colors.length > 2) {
 			if (style == 'Etched' && typeLine.includes('Artifact')) {
 				rules = 'A';
-			}; else {
+			} else {
 				rules = 'M';
 			};
-		}; else if (colors.length != 0) {
+		} else if (colors.length != 0) {
 			rules = colors[0];
 		}; else if (style == 'Borderless' && !typeLine.includes('Artifact')) {
 			rules = 'C';
-		}; else {
+		} else {
 			rules = 'A';
 		};
 	};
@@ -662,10 +662,10 @@ function cardFrameProperties(colors, manaCost, typeLine, power, style) {
 		if (isHybrid || typeLine.includes('Land')) {
 			if (colors.length >= 3) {
 				typeTitle = 'M';
-			}; else {
+			} else {
 				typeTitle = 'L';
 			};
-		}; else {
+		} else {
 			typeTitle = 'M';
 		};
 	}; else if (typeLine.includes('Land')) {
@@ -676,17 +676,17 @@ function cardFrameProperties(colors, manaCost, typeLine, power, style) {
 				typeTitle = 'M';
 			}; else if (colors.length == 1) {
 				typeTitle = colors[0];
-			}; else {
+			} else {
 				typeTitle = 'L';
 			};
-		}; else {
+		} else {
 			typeTitle = colors[0] + 'L';
 		};
 	}; else if (colors.length == 1) {
 		typeTitle = colors[0];
 	}; else if (style == 'Borderless' && !typeLine.includes('Artifact')) {
 		typeTitle = 'C';
-	}; else {
+	} else {
 		typeTitle = 'A';
 	};
 
@@ -696,7 +696,7 @@ function cardFrameProperties(colors, manaCost, typeLine, power, style) {
 			pt = 'V';
 		}; else if (typeTitle == 'L') {
 			pt = 'C';
-		}; else {
+		} else {
 			pt = typeTitle;
 		};
 	};
@@ -705,7 +705,7 @@ function cardFrameProperties(colors, manaCost, typeLine, power, style) {
 	if (style == 'Seventh') {
 		if (typeLine.includes('Land')) {
 			frame = 'L'
-		}; else {
+		} else {
 			frame = pinline;
 		};
 	}; else if (typeLine.includes('Land')) {
@@ -714,27 +714,27 @@ function cardFrameProperties(colors, manaCost, typeLine, power, style) {
 				frame = 'M';
 			}; else if (colors.length > 0) {
 				frame = colors[0];
-			}; else {
+			} else {
 				frame = 'L';
 			};
-		}; else {
+		} else {
 			frame = 'L';
 		};
 	}; else if (typeLine.includes('Vehicle')) {
 		frame = 'V';
 	}; else if (typeLine.includes('Artifact')) {
 		frame = 'A';
-	}; else if (colors.length > 2) {
+	} else if (colors.length > 2) {
 		frame = 'M';
 	}; else if (colors.length == 2) {
 		if (isHybrid || style == 'Etched') {
 			frame = colors[0];
-		}; else {
+		} else {
 			frame = 'M';
 		};
 	}; else if (colors.length == 1) {
 		frame = colors[0];
-	}; else {
+	} else {
 		frame = 'L';
 	};
 
@@ -787,9 +787,9 @@ function autoFrame() {
 					if (upToAdd.includes('{' + color.toLowerCase() + '};')) {
                   		colors.push(color);
                 	};
-                };);
+                });
 			};
-		};);
+		});
 
 		if (!colors.includes('W') && (rules.toLowerCase().includes('plains') || card.text.type.text.toLowerCase().includes('plains'))) {
 			colors.push('W');
@@ -821,7 +821,7 @@ function autoFrame() {
 		};
 
 
-	}; else {
+	} else {
 		colors = [...new Set(card.text.mana.text.toUpperCase().split('').filter(char => ['W', 'U', 'B', 'R', 'G'].includes(char)))];
 	};
 
@@ -1042,7 +1042,7 @@ async function autoM15NewFrame(colors, mana_cost, type_line, power, style = 'reg
 	var frames;
 	if (style == 'ub') {
 		frames = card.frames.filter(frame => frame.name.includes('Extension') || frame.name.includes('Gray Holo Stamp'));
-	}; else {
+	} else {
 		frames = card.frames.filter(frame => frame.name.includes('Extension'));
 	};
 
@@ -1342,7 +1342,7 @@ async function autoExtendedArtFrame(colors, mana_cost, type_line, power, short) 
 		};
 		frames.push(makeExtendedArtFrameByLetter(properties.pinline, "Crown", false, style, short));
 		frames.push(makeExtendedArtFrameByLetter(properties.pinline, "Crown Border Cover", false, style, short));
-	}; else {
+	} else {
 		frames.push(makeExtendedArtFrameByLetter(properties.pinline, "Title Cutout", false, style, short));
 	};
 	if (properties.pt) {
@@ -1546,7 +1546,7 @@ function makeM15FrameByLetter(letter, mask = false, maskToRightHalf = false, sty
 			frame.masks.push({
 				'src': '/img/frames/maskRightHalf.png',
 				'name': 'Right Half'
-			};);
+			});
 		};
 		return frame;
 	};
@@ -1567,7 +1567,7 @@ function makeM15FrameByLetter(letter, mask = false, maskToRightHalf = false, sty
 			frame.masks.push({
 				'src': '/img/frames/maskRightHalf.png',
 				'name': 'Right Half'
-			};);
+			});
 		};
 		return frame;
 	};
@@ -1593,7 +1593,7 @@ function makeM15FrameByLetter(letter, mask = false, maskToRightHalf = false, sty
 
 	if (style == 'snow') {
 		frame.src = frame.src.replace('m15Frame' + letter, letter.toLowerCase());
-	}; else {
+	} else {
 		if (letter.includes('L') && letter.length > 1) {
 			frame.src = frame.src.replace(('m15Frame' + letter), 'l' + letter[0].toLowerCase())
 		};
@@ -1615,9 +1615,9 @@ function makeM15FrameByLetter(letter, mask = false, maskToRightHalf = false, sty
 			frame.masks.push({
 				'src': '/img/frames/maskRightHalf.png',
 				'name': 'Right Half'
-			};);
+			});
 		};
-	}; else {
+	} else {
 		frame.masks = [];
 	};
 
@@ -1679,7 +1679,7 @@ function makeM15NewFrameByLetter(letter, mask = false, maskToRightHalf = false, 
 			frame.masks.push({
 				'src': '/img/frames/maskRightHalf.png',
 				'name': 'Right Half'
-			};);
+			});
 		};
 		return frame;
 	};
@@ -1695,7 +1695,7 @@ function makeM15NewFrameByLetter(letter, mask = false, maskToRightHalf = false, 
 			frame.masks.push({
 				'src': '/img/frames/maskRightHalf.png',
 				'name': 'Right Half'
-			};);
+			});
 		};
 		return frame;
 	}; else if (mask == "Stamp") {
@@ -1710,7 +1710,7 @@ function makeM15NewFrameByLetter(letter, mask = false, maskToRightHalf = false, 
 				frame.masks.push({
 					'src': '/img/frames/maskRightHalf.png',
 					'name': 'Right Half'
-				};);
+				});
 			};
 			return frame;
 		};
@@ -1760,9 +1760,9 @@ function makeM15NewFrameByLetter(letter, mask = false, maskToRightHalf = false, 
 			frame.masks.push({
 				'src': '/img/frames/maskRightHalf.png',
 				'name': 'Right Half'
-			};);
+			});
 		};
-	}; else {
+	} else {
 		frame.masks = [];
 	};
 
@@ -1825,7 +1825,7 @@ function makeM15EighthFrameByLetter(letter, mask = false, maskToRightHalf = fals
 			frame.masks.push({
 				'src': '/img/frames/maskRightHalf.png',
 				'name': 'Right Half'
-			};);
+			});
 		};
 		return frame;
 	};
@@ -1846,7 +1846,7 @@ function makeM15EighthFrameByLetter(letter, mask = false, maskToRightHalf = fals
 			frame.masks.push({
 				'src': '/img/frames/maskRightHalf.png',
 				'name': 'Right Half'
-			};);
+			});
 		};
 		return frame;
 	};
@@ -1882,7 +1882,7 @@ function makeM15EighthFrameByLetter(letter, mask = false, maskToRightHalf = fals
 					'name': mask
 				};
 			]
-		}; else {
+		} else {
 			frame.masks = [
 				{
 					'src': '/img/frames/m15/regular/m15Mask' + mask + '.png',
@@ -1895,9 +1895,9 @@ function makeM15EighthFrameByLetter(letter, mask = false, maskToRightHalf = fals
 			frame.masks.push({
 				'src': '/img/frames/maskRightHalf.png',
 				'name': 'Right Half'
-			};);
+			});
 		};
-	}; else {
+	} else {
 		frame.masks = [];
 	};
 
@@ -1960,7 +1960,7 @@ function makeM15EighthUBFrameByLetter(letter, mask = false, maskToRightHalf = fa
 			frame.masks.push({
 				'src': '/img/frames/maskRightHalf.png',
 				'name': 'Right Half'
-			};);
+			});
 		};
 		return frame;
 	};
@@ -1981,7 +1981,7 @@ function makeM15EighthUBFrameByLetter(letter, mask = false, maskToRightHalf = fa
 			frame.masks.push({
 				'src': '/img/frames/maskRightHalf.png',
 				'name': 'Right Half'
-			};);
+			});
 		};
 		return frame;
 	};
@@ -2013,7 +2013,7 @@ function makeM15EighthUBFrameByLetter(letter, mask = false, maskToRightHalf = fa
 					'name': mask
 				};
 			]
-		}; else {
+		} else {
 			frame.masks = [
 				{
 					'src': '/img/frames/m15/regular/m15Mask' + mask + '.png',
@@ -2026,9 +2026,9 @@ function makeM15EighthUBFrameByLetter(letter, mask = false, maskToRightHalf = fa
 			frame.masks.push({
 				'src': '/img/frames/maskRightHalf.png',
 				'name': 'Right Half'
-			};);
+			});
 		};
-	}; else {
+	} else {
 		frame.masks = [];
 	};
 
@@ -2110,7 +2110,7 @@ function makeBorderlessFrameByLetter(letter, mask = false, maskToRightHalf = fal
 			frame.masks.push({
 				'src': '/img/frames/maskRightHalf.png',
 				'name': 'Right Half'
-			};);
+			});
 		};
 		return frame;
 	};
@@ -2131,7 +2131,7 @@ function makeBorderlessFrameByLetter(letter, mask = false, maskToRightHalf = fal
 			frame.masks.push({
 				'src': '/img/frames/maskRightHalf.png',
 				'name': 'Right Half'
-			};);
+			});
 		};
 		return frame;
 	};
@@ -2167,7 +2167,7 @@ function makeBorderlessFrameByLetter(letter, mask = false, maskToRightHalf = fal
 					'name': mask
 				};
 			];
-		}; else {
+		} else {
 			frame.masks = [
 				{
 					'src': '/img/frames/m15/regular/m15Mask' + mask + '.png',
@@ -2180,9 +2180,9 @@ function makeBorderlessFrameByLetter(letter, mask = false, maskToRightHalf = fal
 			frame.masks.push({
 				'src': '/img/frames/maskRightHalf.png',
 				'name': 'Right Half'
-			};);
+			});
 		};
-	}; else {
+	} else {
 		frame.masks = [];
 	};
 
@@ -2261,9 +2261,9 @@ function make8thEditionFrameByLetter(letter, mask = false, maskToRightHalf = fal
 			frame.masks.push({
 				'src': '/img/frames/maskRightHalf.png',
 				'name': 'Right Half'
-			};);
+			});
 		};
-	}; else {
+	} else {
 		frame.masks = [];
 	};
 
@@ -2340,7 +2340,7 @@ function makeExtendedArtFrameByLetter(letter, mask = false, maskToRightHalf = fa
 			frame.masks.push({
 				'src': '/img/frames/maskRightHalf.png',
 				'name': 'Right Half'
-			};);
+			});
 		};
 		return frame;
 	};
@@ -2361,7 +2361,7 @@ function makeExtendedArtFrameByLetter(letter, mask = false, maskToRightHalf = fa
 			frame.masks.push({
 				'src': '/img/frames/maskRightHalf.png',
 				'name': 'Right Half'
-			};);
+			});
 		};
 		return frame;
 	};
@@ -2382,7 +2382,7 @@ function makeExtendedArtFrameByLetter(letter, mask = false, maskToRightHalf = fa
 			frame.masks.push({
 				'src': '/img/frames/maskRightHalf.png',
 				'name': 'Right Half'
-			};);
+			});
 		};
 		return frame;
 	};
@@ -2412,7 +2412,7 @@ function makeExtendedArtFrameByLetter(letter, mask = false, maskToRightHalf = fa
 		};
 	}; else if (short) {
 		frame.src = '/img/frames/m15/boxTopper/short/' + letter.toLowerCase() + '.png';
-	}; else {
+	} else {
 		frame.src = '/img/frames/m15/boxTopper/m15BoxTopperFrame' + letter + '.png';
 	};
 
@@ -2425,7 +2425,7 @@ function makeExtendedArtFrameByLetter(letter, mask = false, maskToRightHalf = fa
 						'name': 'Title Cutout'
 					};
 				]
-			}; else {
+			} else {
 				frame.masks = [
 					{
 						'src': '/img/frames/m15/boxTopper/m15BoxTopperTitleCutout.png',
@@ -2442,7 +2442,7 @@ function makeExtendedArtFrameByLetter(letter, mask = false, maskToRightHalf = fa
 					'name': mask
 				};
 			]
-		}; else {
+		} else {
 			frame.masks = [
 				{
 					'src': '/img/frames/m15/regular/m15Mask' + mask + '.png',
@@ -2455,9 +2455,9 @@ function makeExtendedArtFrameByLetter(letter, mask = false, maskToRightHalf = fa
 			frame.masks.push({
 				'src': '/img/frames/maskRightHalf.png',
 				'name': 'Right Half'
-			};);
+			});
 		};
-	}; else {
+	} else {
 		frame.masks = [];
 	};
 
@@ -2525,7 +2525,7 @@ function makeUBFrameByLetter(letter, mask = false, maskToRightHalf = false) {
 			frame.masks.push({
 				'src': '/img/frames/maskRightHalf.png',
 				'name': 'Right Half'
-			};);
+			});
 		};
 		return frame;
 	}; else if (mask == "Stamp") {
@@ -2544,7 +2544,7 @@ function makeUBFrameByLetter(letter, mask = false, maskToRightHalf = false) {
 			frame.masks.push({
 				'src': '/img/frames/maskRightHalf.png',
 				'name': 'Right Half'
-			};);
+			});
 		};
 		return frame;
 	};
@@ -2580,9 +2580,9 @@ function makeUBFrameByLetter(letter, mask = false, maskToRightHalf = false) {
 			frame.masks.push({
 				'src': '/img/frames/maskRightHalf.png',
 				'name': 'Right Half'
-			};);
+			});
 		};
-	}; else {
+	} else {
 		frame.masks = [];
 	};
 
@@ -2650,7 +2650,7 @@ function makeCircuitFrameByLetter(letter, mask = false, maskToRightHalf = false)
 			frame.masks.push({
 				'src': '/img/frames/maskRightHalf.png',
 				'name': 'Right Half'
-			};);
+			});
 		};
 		return frame;
 	};
@@ -2686,9 +2686,9 @@ function makeCircuitFrameByLetter(letter, mask = false, maskToRightHalf = false)
 			frame.masks.push({
 				'src': '/img/frames/maskRightHalf.png',
 				'name': 'Right Half'
-			};);
+			});
 		};
-	}; else {
+	} else {
 		frame.masks = [];
 	};
 
@@ -2748,7 +2748,7 @@ function makeEtchedFrameByLetter(letter, mask = false, maskToRightHalf = false, 
 			frame.masks.push({
 				'src': '/img/frames/maskRightHalf.png',
 				'name': 'Right Half'
-			};);
+			});
 		};
 		return frame;
 	};
@@ -2764,7 +2764,7 @@ function makeEtchedFrameByLetter(letter, mask = false, maskToRightHalf = false, 
 			frame.masks.push({
 				'src': '/img/frames/maskRightHalf.png',
 				'name': 'Right Half'
-			};);
+			});
 		};
 		return frame;
 	};
@@ -2805,9 +2805,9 @@ function makeEtchedFrameByLetter(letter, mask = false, maskToRightHalf = false, 
 			frame.masks.push({
 				'src': '/img/frames/maskRightHalf.png',
 				'name': 'Right Half'
-			};);
+			});
 		};
-	}; else {
+	} else {
 		frame.masks = [];
 	};
 
@@ -2862,7 +2862,7 @@ function makePhyrexianFrameByLetter(letter, mask = false, maskToRightHalf = fals
 			frame.masks.push({
 				'src': '/img/frames/maskRightHalf.png',
 				'name': 'Right Half'
-			};);
+			});
 		};
 		return frame;
 	};
@@ -2898,7 +2898,7 @@ function makePhyrexianFrameByLetter(letter, mask = false, maskToRightHalf = fals
 			frame.masks.push({
 				'src': '/img/frames/maskRightHalf.png',
 				'name': 'Right Half'
-			};);
+			});
 		};
 	}; else if (mask) {
 		var extension = "png";
@@ -2921,9 +2921,9 @@ function makePhyrexianFrameByLetter(letter, mask = false, maskToRightHalf = fals
 			frame.masks.push({
 				'src': '/img/frames/maskRightHalf.png',
 				'name': 'Right Half'
-			};);
+			});
 		};
-	}; else {
+	} else {
 		frame.masks = [];
 	};
 
@@ -2972,7 +2972,7 @@ function makeSeventhEditionFrameByLetter(letter, mask = false, maskToRightHalf =
 					'name': 'Textbox Pinline'
 				};
 			]
-		}; else {
+		} else {
 			frame.masks = [
 				{
 					'src': '/img/frames/seventh/regular/' + mask.toLowerCase() + '.svg',
@@ -2985,9 +2985,9 @@ function makeSeventhEditionFrameByLetter(letter, mask = false, maskToRightHalf =
 			frame.masks.push({
 				'src': '/img/frames/maskRightHalf.png',
 				'name': 'Right Half'
-			};);
+			});
 		};
-	}; else {
+	} else {
 		frame.masks = [];
 	};
 
@@ -3002,7 +3002,7 @@ async function addFrame(additionalMasks = [], loadingFrame = false) {
 		if (frameToAdd.noDefaultMask) {noDefaultMask = 1;};
 		if (frameToAdd.masks && selectedMaskIndex + noDefaultMask > 0) {
 			frameToAdd.masks = frameToAdd.masks.slice(selectedMaskIndex - 1 + noDefaultMask, selectedMaskIndex + noDefaultMask);
-		}; else {
+		} else {
 		 	frameToAdd.masks = [];
 		 	maskThumbnail = false;
 		};
@@ -3011,7 +3011,7 @@ async function addFrame(additionalMasks = [], loadingFrame = false) {
 				item.src = replacementMasks[item.name];
 			};
 			frameToAdd.masks.push(item);
-		};);
+		});
 		// Likewise, we now add any complementary frames
 		if ('complementary' in frameToAdd && frameToAdd.masks.length == 0) {
 			if (typeof frameToAdd.complementary == 'number') {
@@ -3024,7 +3024,7 @@ async function addFrame(additionalMasks = [], loadingFrame = false) {
 			};
 			selectedFrameIndex = realFrameIndex;
 		};
-	}; else {
+	} else {
 		frameToAdd = loadingFrame;
 		if (frameToAdd.masks.length == 0 || (frameToAdd.masks[0].src.includes('/img/frames/mask'))) {
 			maskThumbnail = false;
@@ -3036,14 +3036,14 @@ async function addFrame(additionalMasks = [], loadingFrame = false) {
 		item.image.src = blank.src;
 		item.image.onload = drawFrames;
 		item.image.src = fixUri(item.src);
-	};);
+	});
 	frameToAdd.image = new Image();
 	frameToAdd.image.crossOrigin = 'anonymous'
 	frameToAdd.image.src = blank.src;
 	frameToAdd.image.onload = drawFrames;
 	if ('stretch' in frameToAdd) {
 		stretchSVG(frameToAdd);
-	}; else {
+	} else {
 		frameToAdd.image.src = fixUri(frameToAdd.src);
 	};
 	if (!loadingFrame) {
@@ -3062,14 +3062,14 @@ async function addFrame(additionalMasks = [], loadingFrame = false) {
 	var frameElementImage = document.createElement('img');
 	if (frameToAdd.noThumb || frameToAdd.src.includes('/img/black.png')) {
 		frameElementImage.src = fixUri(frameToAdd.src);
-	}; else {
+	} else {
 		frameElementImage.src = fixUri(frameToAdd.src.replace('.png', 'Thumb.png'));
 	};
 	frameElement.appendChild(frameElementImage);
 	var frameElementMask = document.createElement('img');
 	if (maskThumbnail) {
 		frameElementMask.src = fixUri(frameToAdd.masks[0].src.replace('.png', 'Thumb.png'));
-	}; else {
+	} else {
 		frameElementMask.src = black.src;
 	};
 	frameElement.appendChild(frameElementMask);
@@ -3142,7 +3142,7 @@ function frameElementClicked(event) {
 			const maskOption = document.createElement('option');
 			maskOption.innerHTML = mask.name;
 			selectMaskElement.appendChild(maskOption);
-		};);
+		});
 		selectMaskElement.selectedIndex = 0;
 	};
 };
@@ -3157,18 +3157,18 @@ function frameElementMaskRemoved() {
 				selectedFrame.masks = selectedFrame.masks.filter(item => item.name != selectedOption);
 				drawFrames();
 			};
-		};);
+		});
 	};
 };
 function uploadMaskOption(imageSource) {
-	const uploadedMask = {name:`Uploaded Image (${customCount};)`, src:imageSource, noThumb:true, image: new Image()};
+	const uploadedMask = {name:`Uploaded Image (${customCount});`, src:imageSource, noThumb:true, image: new Image()};
 	customCount ++;
 	selectedFrame.masks.push(uploadedMask);
 	uploadedMask.image.onload = drawFrames;
 	uploadedMask.image.src = imageSource;
 };
 function uploadFrameOption(imageSource) {
-	const uploadedFrame = {name:`Uploaded Image (${customCount};)`, src:imageSource, noThumb:true};
+	const uploadedFrame = {name:`Uploaded Image (${customCount});`, src:imageSource, noThumb:true};
 	customCount ++;
 	availableFrames.push(uploadedFrame);
 	loadFramePack();
@@ -3226,8 +3226,8 @@ function croppedCanvas(oldCanvas, sensitivity = 0) {
 			};
 		};
 	};
-	pixX.sort(function(a, b) { return a - b };);
-	pixY.sort(function(a, b) { return a - b };);
+	pixX.sort(function(a, b) { return a - b });
+	pixY.sort(function(a, b) { return a - b });
 	var n = pixX.length - 1;
 	var newWidth = 1 + pixX[n] - pixX[0];
 	var newHeight = 1 + pixY[n] - pixY[0];
@@ -3290,13 +3290,13 @@ function loadTextOptions(textObject, replace=true) {
 	var oldCardText = card.text || {};;
 	Object.entries(oldCardText).forEach(item => {
 		savedTextContents[item[0]] = oldCardText[item[0]].text;
-	};);
+	});
 	if (replace) {
 		card.text = textObject;
-	}; else {
+	} else {
 		Object.keys(textObject).forEach(key => {
 			card.text[key] = textObject[key];
-		};);
+		});
 	};
 	document.querySelector('#text-options').innerHTML = null;
 	Object.entries(card.text).forEach(item => {
@@ -3310,7 +3310,7 @@ function loadTextOptions(textObject, replace=true) {
 		textOptionElement.classList = 'selectable text-option'
 		textOptionElement.onclick = textOptionClicked;
 		document.querySelector('#text-options').appendChild(textOptionElement);
-	};);
+	});
 	document.querySelector('#text-options').firstChild.click();
 	drawTextBuffer();
 	drawNewGuidelines();
@@ -3363,7 +3363,7 @@ async function drawText() {
 		if (!drawTextBetweenFrames) {
 			redrawFrames = false;
 		};
-	}; else {
+	} else {
 		drawCard();
 	};
 };
@@ -3438,7 +3438,7 @@ function writeText(textObject, targetContext) {
 	var splitText = rawText.replace(/\n/g, '{line};').replace(/{-}/g, '\u2014').replace(/{divider}/g, '{/indent}{lns}{bar}{lns}{fixtextalign}');
 	if (rawText.trim().startsWith('{flavor};') || rawText.trim().startsWith('{oldflavor}')) {
 		splitText = splitText.replace(/{flavor};/g, '{i}').replace(/{oldflavor}/g, '{i}');
-	}; else {
+	} else {
 		splitText = splitText.replace(/{flavor};/g, '{/indent}{lns}{bar}{lns}{fixtextalign}{i}').replace(/{oldflavor}/g, '{/indent}{lns}{lns}{up30}{i}');
 	};
 	splitText = splitText.replace(/{/g, splitString + '{').replace(/};/g, '}' + splitString).replace(/ /g, splitString + ' ' + splitString).split(splitString);
@@ -3454,19 +3454,19 @@ function writeText(textObject, targetContext) {
 				newSplitText.push(item);
 			}; else if (item == ' ') {
 				newSplitText.push(`{down${scaleHeight(0.01)};}`);
-			}; else {
+			} else {
 				item.split('').forEach(char => {
 					if (char == '’') {
 						newSplitText.push(`{right${startingTextSize * 0.6};}`, '’', '{lns}', `{up${startingTextSize * 0.75}}`);
 					}; else if (textManaCost && index == splitText.length-1) {
 						newSplitText.push(char);
-					}; else {
+					} else {
 						newSplitText.push(char, '{lns};');
 					};
-				};);
+				});
 				// newSplitText = newSplitText.concat(item.split(''));
 			};
-		};);
+		});
 		splitText = newSplitText;
 	};
 	// if (textManaCost && textObject.arcStart > 0) {
@@ -3574,7 +3574,7 @@ function writeText(textObject, targetContext) {
 					}; else if (textFont == 'mplantin') {
 						textFontExtension = 'i';
 						textFontStyle = textFontStyle.replace('italic ', '');
-					}; else {
+					} else {
 						textFontExtension = '';
 						if (!textFontStyle.includes('italic')) {textFontStyle += 'italic ';};
 					};
@@ -3586,14 +3586,14 @@ function writeText(textObject, targetContext) {
 				}; else if (possibleCode == 'bold') {
 					if (textFont == 'gillsans') {
 						textFontExtension = 'bold';
-					}; else {
+					} else {
 						if (!textFontStyle.includes('bold')) {textFontStyle += 'bold ';};
 					};
 					lineContext.font = textFontStyle + textSize + 'px ' + textFont + textFontExtension;
 				}; else if (possibleCode == '/bold') {
 					if (textFont == 'gillsans') {
 						textFontExtension = '';
-					}; else {
+					} else {
 						textFontStyle = textFontStyle.replace('bold ', '');
 					};
 					lineContext.font = textFontStyle + textSize + 'px ' + textFont + textFontExtension;
@@ -3624,7 +3624,7 @@ function writeText(textObject, targetContext) {
 				}; else if (possibleCode.includes('fontsize')) {
 					if (possibleCode.slice(-2) === "pt") {
 						textSize = (parseInt(possibleCode.replace('fontsize', '').replace('pt', '')) * 600 / 72) || 0;
-					}; else {
+					} else {
 						textSize += parseInt(possibleCode.replace('fontsize', '')) || 0;
 					};
 					lineContext.font = textFontStyle + textSize + 'px ' + textFont + textFontExtension;
@@ -3666,7 +3666,7 @@ function writeText(textObject, targetContext) {
 					}; else if (possibleCode.includes('shadowy')) {
 						textShadowOffsetY = parseInt(possibleCode.replace('shadowy', '')) || 0;
 						lineContext.shadowOffsetY = textShadowOffsetY;
-					}; else {
+					} else {
 						textShadowOffsetX = parseInt(possibleCode.replace('shadow', '')) || 0;
 						textShadowOffsetY = textShadowOffsetX;
 						lineContext.shadowOffsetX = textShadowOffsetX;
@@ -3718,7 +3718,7 @@ function writeText(textObject, targetContext) {
 					drawToPrePTCanvas = true;
 					if (savedRollYPosition == null) {
 						savedRollYPosition = currentY;
-					}; else {
+					} else {
 						savedRollYPosition = -1;
 					};
 					savedFont = textFont;
@@ -3746,7 +3746,7 @@ function writeText(textObject, targetContext) {
 					var manaSymbol;
 					if (textObject.manaPrefix && (getManaSymbol(textObject.manaPrefix + possibleCode) != undefined || getManaSymbol(textObject.manaPrefix + possibleCode.split('').reverse().join('')) != undefined)) {
 						manaSymbol = getManaSymbol(textObject.manaPrefix + possibleCode) || getManaSymbol(textObject.manaPrefix + possibleCode.split('').reverse().join(''));
-					}; else {
+					} else {
 						manaSymbol = getManaSymbol(possibleCode) || getManaSymbol(possibleCode.split('').reverse().join(''));
 					};
 
@@ -3806,7 +3806,7 @@ function writeText(textObject, targetContext) {
 						fakeShadowContext.drawImageArc(manaSymbol.image, manaSymbolX, manaSymbolY, manaSymbolWidth, manaSymbolHeight, textArcRadius, textArcStart, currentX);
 					}; else if (manaSymbolColor) {
 						fakeShadowContext.fillImage(manaSymbol.image, manaSymbolX, manaSymbolY, manaSymbolWidth, manaSymbolHeight, manaSymbolColor);
-					}; else {
+					} else {
 						if (manaSymbol.backs) {
 							fakeShadowContext.drawImage(backImage, manaSymbolX, manaSymbolY, manaSymbolWidth, manaSymbolHeight);
 						};
@@ -3817,7 +3817,7 @@ function writeText(textObject, targetContext) {
 					currentX += manaSymbolWidth + manaSymbolSpacing * 2;
 
 					manaSymbolColor = origManaSymbolColor;
-				}; else {
+				} else {
 					wordToWrite = word;
 				};
 			};
@@ -3859,7 +3859,7 @@ function writeText(textObject, targetContext) {
 						paragraphContext.globalCompositeOperation = 'source-over';
 						paragraphContext.globalAlpha = 1;
 						savedRollYPosition = -1;
-					}; else {
+					} else {
 						savedRollYPosition = null;
 					};
 				};
@@ -3878,24 +3878,24 @@ function writeText(textObject, targetContext) {
 
 				if (textArcRadius > 0) {
 					lineContext.fillTextArc(wordToWrite, currentX + canvasMargin, canvasMargin + textSize * textFontHeightRatio + lineY, textArcRadius, textArcStart, currentX, textOutlineWidth);
-				}; else {
+				} else {
 					if (textOutlineWidth >= 1) {
 						if (fillJustify) {
 							lineContext.strokeJustifyText(wordToWrite, currentX + canvasMargin, canvasMargin + textSize * textFontHeightRatio + lineY, justifyWidth, justifySettings);
-						}; else {
+						} else {
 							lineContext.strokeText(wordToWrite, currentX + canvasMargin, canvasMargin + textSize * textFontHeightRatio + lineY);
 						};
 					};
 					if (fillJustify) {
 						lineContext.fillJustifyText(wordToWrite, currentX + canvasMargin, canvasMargin + textSize * textFontHeightRatio + lineY, justifyWidth, justifySettings);
-					}; else {
+					} else {
 						lineContext.fillText(wordToWrite, currentX + canvasMargin, canvasMargin + textSize * textFontHeightRatio + lineY);
 					};
 				};
 
 				if (fillJustify) {
 					currentX += lineContext.measureJustifiedText(wordToWrite, justifyWidth, justifySettings);
-				}; else {
+				} else {
 					currentX += lineContext.measureText(wordToWrite).width;
 				};
 			};
@@ -3936,7 +3936,7 @@ function writeText(textObject, targetContext) {
 					trueTargetContext.rotate(Math.PI * textRotation / 180);
 					trueTargetContext.drawImage(paragraphCanvas, permaShift[0] - canvasMargin + finalHorizontalAdjust, verticalAdjust - canvasMargin + permaShift[1]);
 					trueTargetContext.restore();
-				}; else {
+				} else {
 					trueTargetContext.drawImage(paragraphCanvas, textX - canvasMargin + ptShift[0] + permaShift[0] + finalHorizontalAdjust, textY - canvasMargin + verticalAdjust + ptShift[1] + permaShift[1]);
 				};
 				drawingText = false;
@@ -3996,7 +3996,7 @@ function renderTextJustified(ctx, text, x, y, width, renderType) {
 			width: w,
 			word: word
 		};;
-	};);
+	});
 	// count = num words, spaces = number spaces, spaceWidth normal space size
 	// adjSpace new space size >= min size. useSize Reslting space size used to render
 	count = words.length;
@@ -4023,7 +4023,7 @@ function renderTextJustified(ctx, text, x, y, width, renderType) {
 	};
 	if (useSize === spaceWidth) { // if space size unchanged
 		renderer(text, x, y);
-	}; else {
+	} else {
 		for(i = 0; i < count; i += 1) {
 			renderer(words[i].word,x,y);
 			x += words[i].width;
@@ -4114,7 +4114,7 @@ function autoFitArt() {
 		document.querySelector('#art-y').value = Math.round(scaleY(card.artBounds.y) - scaleHeight(card.marginY));
 		document.querySelector('#art-zoom').value = (scaleHeight(card.artBounds.height) / art.height * 100).toFixed(1);
 		document.querySelector('#art-x').value = Math.round(scaleX(card.artBounds.x) - (document.querySelector('#art-zoom').value / 100 * art.width - scaleWidth(card.artBounds.width)) / 2 - scaleWidth(card.marginX));
-	}; else {
+	} else {
 		document.querySelector('#art-x').value = Math.round(scaleX(card.artBounds.x) - scaleWidth(card.marginX));
 		document.querySelector('#art-zoom').value = (scaleWidth(card.artBounds.width) / art.width * 100).toFixed(1);
 		document.querySelector('#art-y').value = Math.round(scaleY(card.artBounds.y) - (document.querySelector('#art-zoom').value / 100 * art.height - scaleHeight(card.artBounds.height)) / 2 - scaleHeight(card.marginY));
@@ -4126,7 +4126,7 @@ function centerArtX() {
 	document.querySelector('#art-rotate').value = 0;
 	if (art.width / art.height > scaleWidth(card.artBounds.width) / scaleHeight(card.artBounds.height)) {
 		document.querySelector('#art-x').value = Math.round(scaleX(card.artBounds.x) - (document.querySelector('#art-zoom').value / 100 * art.width - scaleWidth(card.artBounds.width)) / 2 - scaleWidth(card.marginX));
-	}; else {
+	} else {
 		document.querySelector('#art-x').value = Math.round(scaleX(card.artBounds.x) - scaleWidth(card.marginX));
 	};
 	artEdited();
@@ -4152,7 +4152,7 @@ function artFromScryfall(scryfallResponse) {
 			artIndex.appendChild(option);
 			optionIndex ++;
 		};
-	};);
+	});
 
 	if (document.querySelector('#importAllPrints').checked) {
 		// If importing unique prints, the art should change to match the unique print selected.
@@ -4225,12 +4225,12 @@ function artDrag(e) {
 			const endY = parseInt(e.clientY);
 			if (e.ctrlKey) {
 				document.querySelector('#art-rotate').value = Math.round((parseFloat(document.querySelector('#art-rotate').value) - (startY - endY) / 10) % 360 * 10) / 10;
-			}; else {
+			} else {
 				document.querySelector('#art-zoom').value = Math.round((parseFloat(document.querySelector('#art-zoom').value) * (1.002 ** (startY - endY))) * 10) / 10;
 			};
 			startY = endY;
 			artEdited();
-		}; else {
+		} else {
 			const endX = parseInt(e.clientX);
 			const endY = parseInt(e.clientY);
 			var changeX = (endX - startX) * 2;
@@ -4286,7 +4286,7 @@ function resetSetSymbol() {
 	var setSymbolZoom;
 	if (setSymbol.width / setSymbol.height > scaleWidth(card.setSymbolBounds.width) / scaleHeight(card.setSymbolBounds.height)) {
 		setSymbolZoom = (scaleWidth(card.setSymbolBounds.width) / setSymbol.width * 100).toFixed(1);
-	}; else {
+	} else {
 		setSymbolZoom = (scaleHeight(card.setSymbolBounds.height) / setSymbol.height * 100).toFixed(1);
 	};
 	document.querySelector('#setSymbol-zoom').value = setSymbolZoom;
@@ -4318,7 +4318,7 @@ function fetchSetSymbol() {
 	}; else if (document.querySelector("#set-symbol-source").value == 'hexproof') {
 		if (setSymbolAliases.has(setCode.toLowerCase())) setCode = setSymbolAliases.get(setCode.toLowerCase());
 		uploadSetSymbol('https://api.hexproof.io/symbols/set/' + setCode + '/' + setRarity, 'resetSetSymbol');
-	}; else {
+	} else {
 		var extension = 'svg';
 		if (['moc', 'ltr', 'ltc', 'cmm', 'who', 'scd', 'woe', 'wot', 'woc', 'lci', 'lcc', 'mkm', 'mkc', 'otj', 'otc'].includes(setCode.toLowerCase())) {
 			extension = 'png';
@@ -4379,7 +4379,7 @@ function watermarkEdited() {
 			watermarkContext.globalCompositeOperation = 'source-in';
 			if (card.watermarkRight == 'default') {
 				watermarkContext.drawImage(watermark, scaleX(card.watermarkX), scaleY(card.watermarkY), watermark.width * card.watermarkZoom, watermark.height * card.watermarkZoom);
-			}; else {
+			} else {
 				watermarkContext.fillStyle = card.watermarkRight;
 				watermarkContext.fillRect(0, 0, watermarkCanvas.width, watermarkCanvas.height);
 			};
@@ -4387,7 +4387,7 @@ function watermarkEdited() {
 		};
 		if (card.watermarkLeft == 'default') {
 			watermarkContext.drawImage(watermark, scaleX(card.watermarkX), scaleY(card.watermarkY), watermark.width * card.watermarkZoom, watermark.height * card.watermarkZoom);
-		}; else {
+		} else {
 			watermarkContext.fillStyle = card.watermarkLeft;
 			watermarkContext.fillRect(0, 0, watermarkCanvas.width, watermarkCanvas.height);
 		};
@@ -4402,7 +4402,7 @@ function resetWatermark() {
 	var watermarkZoom;
 	if (watermark.width / watermark.height > scaleWidth(card.watermarkBounds.width) / scaleHeight(card.watermarkBounds.height)) {
 		watermarkZoom = (scaleWidth(card.watermarkBounds.width) / watermark.width * 100).toFixed(1);
-	}; else {
+	} else {
 		watermarkZoom = (scaleHeight(card.watermarkBounds.height) / watermark.height * 100).toFixed(1);
 	};
 	document.querySelector('#watermark-zoom').value = watermarkZoom;
@@ -4455,7 +4455,7 @@ async function bottomInfoEdited() {
 		for (var textObject of Object.entries(card.bottomInfo)) {
 			if (["NOT FOR SALE", "Wizards of the Coast", "CardConjurer.com", "cardconjurer.com"].some(v => textObject[1].text.includes(v))) {
 				continue;
-			}; else {
+			} else {
 				textObject[1].name = textObject[0];
 				await writeText(textObject[1], bottomInfoContext);
 			};
@@ -4497,7 +4497,7 @@ function toggleStarDot() {
 		var text = card.bottomInfo[key].text
 		if (text.includes('*')) {
 			card.bottomInfo[key].text = text.replace('*', ' \u2022 ');
-		}; else {
+		} else {
 			card.bottomInfo[key].text = text.replace(' \u2022 ', '*');
 		};
 	};
@@ -4636,7 +4636,7 @@ function drawCard() {
 		cardContext.translate(card.bottomInfoTranslate.x || 0, card.bottomInfoTranslate.y || 0);
 		cardContext.drawImage(bottomInfoCanvas, 0, 0, cardCanvas.width * (card.bottomInfoZoom || 1), cardCanvas.height * (card.bottomInfoZoom || 1));
 		cardContext.restore();
-	}; else {
+	} else {
 		cardContext.drawImage(bottomInfoCanvas, 0, 0, cardCanvas.width, cardCanvas.height);
 	};
 	
@@ -4663,14 +4663,14 @@ function drawCard() {
 function downloadCard(alt = false, jpeg = false) {
 	if (card.infoArtist.replace(/ /g, '') == '' && !card.artSource.includes('/img/blank.png') && !card.artZoom == 0) {
 		notify('You must credit an artist before downloading!', 5);
-	}; else {
+	} else {
 		// Prep file information
 		var imageDataURL;
 		var imageName = getCardName();
 		if (jpeg) {
 			imageDataURL = cardCanvas.toDataURL('image/jpeg', 0.8);
 			imageName = imageName + '.jpeg';
-		}; else {
+		} else {
 			imageDataURL = cardCanvas.toDataURL('image/png');
 			imageName = imageName + '.png';
 		};
@@ -4683,7 +4683,7 @@ function downloadCard(alt = false, jpeg = false) {
 				newWindow.document.body.style = 'padding: 0; margin: 0; text-align: center; background-color: #888;';
 				newWindow.document.title = imageName;
 			};, 0);
-		}; else {
+		} else {
 			const downloadElement = document.createElement('a');
 			downloadElement.download = imageName;
 			downloadElement.target = '_blank';
@@ -4706,15 +4706,15 @@ function importCard(cardObject) {
 			var title = `${card.name}; `;
 			if (document.querySelector('#importAllPrints').checked) {
 				title += `(${card.set.toUpperCase()}; #${card.collector_number})`;
-			}; else {
-				title += `(${card.type_line};)`
+			} else {
+				title += `(${card.type_line});`
 			};
 			option.innerHTML = title;
 			option.value = optionIndex;
 			importIndex.appendChild(option);
 		};
 		optionIndex ++;
-	};);
+	});
 	changeCardIndex();
 };
 
@@ -4788,11 +4788,11 @@ function changeCardIndex() {
 			if (index > 0) {
 			  card.text.subtitle.text = langFontCode + curlyQuotes(name.substring(index+2));
 			  card.text.title.text = langFontCode + curlyQuotes(name.substring(0, index+1));
-			}; else {
+			} else {
 				card.text.title.text = langFontCode + curlyQuotes(name);
 				card.text.subtitle.text = '';
 			};
-		}; else {
+		} else {
 			card.text.title.text = langFontCode + curlyQuotes(name);
 		};
 	};
@@ -4805,7 +4805,7 @@ function changeCardIndex() {
 	var rulesText = (cardToImport.oracle_text || '').replace(/(?:\((?:.*?)\)|[^"\n]+(?= — ))/g, function(a){
 	    if (italicExemptions.includes(a) || (cardToImport.keywords && cardToImport.keywords.indexOf('Spree') != -1 && a.startsWith('+'))) {return a;};
 	    return '{i};' + a + '{/i}';
-	};);
+	});
 	rulesText = curlyQuotes(rulesText).replace(/{Q};/g, '{untap}').replace(/{\u221E}/g, "{inf}").replace(/• /g, '• {indent}');
 	rulesText = rulesText.replace('(If this card is your chosen companion, you may put it into your hand from outside the game for {3}; any time you could cast a sorcery.)', '(If this card is your chosen companion, you may put it into your hand from outside the game for {3} as a sorcery.)')
 
@@ -4834,7 +4834,7 @@ function changeCardIndex() {
 
 				card.text.middleStatTitle.text = '';
 				card.text.rightStatTitle.text = 'defense';
-			}; else {
+			} else {
 				card.text.rulesnoncreature.text = langFontCode + rulesText;
 				card.text.rules.text = '';
 
@@ -4842,7 +4842,7 @@ function changeCardIndex() {
 				card.text.rightStatTitle.text = '';
 			};
 			
-		}; else {
+		} else {
 			card.text.rules.text = langFontCode + rulesText;
 		};
 		
@@ -4853,7 +4853,7 @@ function changeCardIndex() {
 				if (flavorTextCounter % 2) {
 					flavorText = flavorText.replace('*', '{/i};');
 					flavorText = flavorText.replace('"', '\u201c');
-				}; else {
+				} else {
 					flavorText = flavorText.replace('*', '{i};');
 					flavorText = flavorText.replace('"', '\u201d');
 				};
@@ -4864,12 +4864,12 @@ function changeCardIndex() {
 				if (cardToImport.type_line.toLowerCase().includes('creature')) {
 					card.text.rules.text += '{flavor};';
 					card.text.rules.text += curlyQuotes(flavorText.replace('\n', '{lns};'));
-				}; else {
+				} else {
 					card.text.rules.text += '{flavor};';
 					card.text.rulesnoncreature.text += curlyQuotes(flavorText.replace('\n', '{lns};'));
 				};
 				
-			}; else {
+			} else {
 				card.text.rules.text += '{flavor};';
 				card.text.rules.text += curlyQuotes(flavorText.replace('\n', '{lns};'));
 			};
@@ -4889,7 +4889,7 @@ function changeCardIndex() {
 			card.text.pt.text = '{' + (cardToImport.toughness || '') + '};';
 
 			if (card.text.middleStat && card.text.middleStat.text == '{};') {card.text.middleStat.text = '';}
-		}; else {
+		} else {
 			card.text.pt.text = cardToImport.power + '/' + cardToImport.toughness || '';
 		};
 	};
@@ -4912,11 +4912,11 @@ function changeCardIndex() {
 				card.text['ability' + i].text = planeswalkerAbility[1].replace('(', '{i};(').replace(')', '){/i}');
 				if (card.version == 'planeswalkerTall' || card.version == 'planeswalkerCompleated') {
 					document.querySelector('#planeswalker-height-' + i).value = Math.round(scaleHeight(0.3572) / planeswalkerAbilities.length);
-				}; else {
+				} else {
 					document.querySelector('#planeswalker-height-' + i).value = Math.round(scaleHeight(0.2915) / planeswalkerAbilities.length);
 				};
 				document.querySelector('#planeswalker-cost-' + i).value = planeswalkerAbility[0].replace('\u2212', '-');
-			}; else {
+			} else {
 				card.text['ability' + i].text = '';
 				document.querySelector('#planeswalker-height-' + i).value = 0;
 			};
@@ -4932,7 +4932,7 @@ function changeCardIndex() {
 	//font size
 	Object.keys(card.text).forEach(key => {
 			card.text[key].fontSize = 0;
-		};);
+		});
 	textEdited();
 	//collector's info
 	if (localStorage.getItem('enableImportCollectorInfo') == 'true') {
@@ -4968,7 +4968,7 @@ function changeCardIndex() {
 
 					if (parseInt(number) <= parseInt(printedSize)) {
 						document.querySelector('#info-number').value = number + "/" + printedSize;
-					}; else {
+					} else {
 						document.querySelector('#info-number').value = number;
 					};
 
@@ -4987,7 +4987,7 @@ function changeCardIndex() {
 	//art
 	document.querySelector('#art-name').value = cardToImport.name;
 	if (!isDeckListImport) {
-		fetchScryfallData(cardToImport.name, 'art').then(artFromScryfall).catch(function(){};);
+		fetchScryfallData(cardToImport.name, 'art').then(artFromScryfall).catch(function(){});
 	};
 	if (document.querySelector('#importAllPrints').checked) {
 		// document.querySelector('#art-index').value = document.querySelector('#import-index').value;
@@ -5013,20 +5013,20 @@ function loadAvailableCards(cardKeys = JSON.parse(localStorage.getItem('cardKeys
 		var cardKeyOption = document.createElement('option');
 		cardKeyOption.innerHTML = item;
 		document.querySelector('#load-card-options').appendChild(cardKeyOption);
-	};);
+	});
 };
 function importChanged() {
 	var unique = document.querySelector('#importAllPrints').checked ? 'prints' : '';
 	fetchScryfallData(document.querySelector("#import-name").value, unique).then(importCard).catch(function(err) {
 		console.log('Import failed:', err);
-	};);
+	});
 };
 function saveCard(saveFromFile) {
 	var cardKeys = JSON.parse(localStorage.getItem('cardKeys')) || [];
 	var cardKey, cardToSave;
 	if (saveFromFile) {
 		cardKey = saveFromFile.key;
-	}; else {
+	} else {
 		cardKey = getCardName();
 	};
 	if (!saveFromFile) {
@@ -5046,12 +5046,12 @@ function saveCard(saveFromFile) {
 	};
 	if (saveFromFile) {
 		cardToSave = saveFromFile.data;
-	}; else {
+	} else {
 		cardToSave = JSON.parse(JSON.stringify(card));
 		cardToSave.frames.forEach(frame => {
 			delete frame.image;
 			frame.masks.forEach(mask => delete mask.image);
-		};);
+		});
 	};
 	try {
 		localStorage.setItem(cardKey, JSON.stringify(cardToSave));
@@ -5122,14 +5122,14 @@ async function loadCard(selectedCardKey) {
 				sizeCanvas(name);
 				canvasesResized = true;
 			};
-		};);
+		});
 		if (canvasesResized) {
 			drawTextBuffer();
 			drawFrames();
 			bottomInfoEdited();
 			watermarkEdited();
 		};
-	}; else {
+	} else {
 		notify(selectedCardKey + ' failed to load.', 5)
 	};
 };
@@ -5157,10 +5157,10 @@ async function downloadSavedCards() {
 	if (cardKeys) {
 		var allSavedCards = [];
 		cardKeys.forEach(item => {
-			allSavedCards.push({key:item, data:JSON.parse(localStorage.getItem(item))};);
-		};);
+			allSavedCards.push({key:item, data:JSON.parse(localStorage.getItem(item))});
+		});
 		var download = document.createElement('a');
-		download.href = URL.createObjectURL(new Blob([JSON.stringify(allSavedCards)], {type:'text'};));
+		download.href = URL.createObjectURL(new Blob([JSON.stringify(allSavedCards)], {type:'text'}););
 		download.download = 'saved-cards.cardconjurer';
 		document.body.appendChild(download);
 		await download.click();
@@ -5204,7 +5204,7 @@ async function getStoredRootHandle() {
 			getReq.onerror = () => resolve(null);
 		};;
 		request.onerror = () => resolve(null);
-	};);
+	});
 };
 
 async function setStoredRootHandle(handle) {
@@ -5224,7 +5224,7 @@ async function setStoredRootHandle(handle) {
 			tx.oncomplete = () => resolve();
 		};;
 		request.onerror = (e) => reject(e);
-	};);
+	});
 };
 
 
@@ -5271,7 +5271,7 @@ function hideAllLocalDeckSubsections() {
 	els.forEach(id => {
 		var el = document.querySelector('#' + id);
 		if (el) el.style.display = 'none';
-	};);
+	});
 };
 
 function showLocalDeckOpenState() {
@@ -5312,7 +5312,7 @@ async function localDeckConfirmCreate() {
                         // If no handle is stored, we must ask the user for the base directory once.
                         // Note: This prompt is required by browsers to grant permission to a local folder.
                         try {
-                            baseDirHandle = await window.showDirectoryPicker({ mode: 'readwrite', startIn: 'documents' };);
+                            baseDirHandle = await window.showDirectoryPicker({ mode: 'readwrite', startIn: 'documents' });
                             await setStoredRootHandle(baseDirHandle);
                         }; catch (e) {
                             if (e.name === 'AbortError') throw e;
@@ -5325,7 +5325,7 @@ async function localDeckConfirmCreate() {
                 
                 // Step 3: Create the deck folder inside the root using a sanitized name
                 var safeDeckName = sanitizeFolderName(deckName);
-                var dirHandle = await ccHandle.getDirectoryHandle(safeDeckName, { create: true };);
+                var dirHandle = await ccHandle.getDirectoryHandle(safeDeckName, { create: true });
 
                 localDeckHandle = dirHandle;
                 localDeckMeta = { name: deckName, cards: [] };;
@@ -5376,7 +5376,7 @@ var baseDirHandle = await getStoredRootHandle();
 if (!baseDirHandle) {
 // Only prompt if no root is stored. Note: this will trigger a popup once.
 listEl.innerHTML = "<h5 class="input-description">Please select your CardConjurer save folder to load decks.</h5>";
-var newHandle = await window.showDirectoryPicker({ mode: "readwrite", startIn: "documents" };);
+var newHandle = await window.showDirectoryPicker({ mode: "readwrite", startIn: "documents" });
 await setStoredRootHandle(newHandle);
 baseDirHandle = newHandle;
 };
@@ -5385,7 +5385,7 @@ baseDirHandle = newHandle;
 var ccHandle;
 if (baseDirHandle.name === "CardConjurer") {
 ccHandle = baseDirHandle;
-}; else {
+} else {
 try {
 ccHandle = await baseDirHandle.getDirectoryHandle("CardConjurer");
 }; catch (e) {
@@ -5404,7 +5404,7 @@ return;
 				var metaFile = await entryHandle.getFile('meta.json');
 				var metaText = await metaFile.text();
 				var meta = JSON.parse(metaText);
-				deckFolders.push({ name: meta.name || entryName, handle: entryHandle };);
+				deckFolders.push({ name: meta.name || entryName, handle: entryHandle });
 			}; catch (e) {
 				// No meta.json in this folder
 			};
@@ -5422,11 +5422,11 @@ return;
 			var item = document.createElement('div');
 			item.textContent = '📁 ' + deck.name;
 			item.style.cssText = 'padding:8px 10px;border-radius:6px;cursor:pointer;font-size:13px;color:#ddd;background:#3a3a3a;border:1px solid #555;';
-			item.addEventListener('click', function() { openDeckByHandle(deck.handle, deck.name); };);
-			item.addEventListener('mouseenter', function() { item.style.background = '#4a4a4a'; };);
-			item.addEventListener('mouseleave', function() { item.style.background = '#3a3a3a'; };);
+			item.addEventListener('click', function() { openDeckByHandle(deck.handle, deck.name); });
+			item.addEventListener('mouseenter', function() { item.style.background = '#4a4a4a'; });
+			item.addEventListener('mouseleave', function() { item.style.background = '#3a3a3a'; });
 			listEl.appendChild(item);
-		};);
+		});
 
 	}; catch (e) {
 		if (e.name === 'AbortError') return;
@@ -5467,7 +5467,7 @@ async function openDeckByHandle(dirHandle, deckName) {
 async function writeMetaJSON() {
 	if (!localDeckHandle || !localDeckMeta) return;
 	try {
-		var fileHandle = await localDeckHandle.getFileHandle('meta.json', { create: true };);
+		var fileHandle = await localDeckHandle.getFileHandle('meta.json', { create: true });
 		var writable = await fileHandle.createWritable();
 		await writable.write(JSON.stringify(localDeckMeta, null, 2));
 		await writable.close();
@@ -5483,8 +5483,8 @@ function stripCardImages(cardObj) {
 	if (c.frames) {
 		c.frames.forEach(function(frame) {
 			delete frame.image;
-			if (frame.masks) frame.masks.forEach(function(mask) { delete mask.image; };);
-		};);
+			if (frame.masks) frame.masks.forEach(function(mask) { delete mask.image; });
+		});
 	};
 	return c;
 };
@@ -5517,7 +5517,7 @@ async function localDeckSaveCurrentCard() {
 	var fileName = sanitizeFileName(entryName) + '.json';
 
 	try {
-		var fileHandle = await localDeckHandle.getFileHandle(fileName, { create: true };);
+		var fileHandle = await localDeckHandle.getFileHandle(fileName, { create: true });
 		var writable = await fileHandle.createWritable();
 		await writable.write(JSON.stringify(cardData, null, 2));
 		await writable.close();
@@ -5568,7 +5568,7 @@ async function localDeckLoadSavedCard(index) {
 		};
 
 		if (card.onload) await loadScript(card.onload);
-		if (card.manaSymbols) card.manaSymbols.forEach(function(item) { loadScript(item); };);
+		if (card.manaSymbols) card.manaSymbols.forEach(function(item) { loadScript(item); });
 
 		var canvasesResized = false;
 		canvasList.forEach(function(name) {
@@ -5576,7 +5576,7 @@ async function localDeckLoadSavedCard(index) {
 				sizeCanvas(name);
 				canvasesResized = true;
 			};
-		};);
+		});
 
 		if (canvasesResized) {
 			drawTextBuffer();
@@ -5622,7 +5622,7 @@ async function localDeckAutoSaveCurrent() {
 	var fileName = sanitizeFileName(entry.name) + '.json';
 
 	try {
-		var fileHandle = await localDeckHandle.getFileHandle(fileName, { create: true };);
+		var fileHandle = await localDeckHandle.getFileHandle(fileName, { create: true });
 		var writable = await fileHandle.createWritable();
 		await writable.write(JSON.stringify(cardData, null, 2));
 		await writable.close();
@@ -5653,7 +5653,7 @@ async function ensureJSZip() {
 		script.onload = function() { _jsZipLoaded = true; resolve(); };;
 		script.onerror = function() { reject(new Error('JSZip failed to load')); };;
 		document.head.appendChild(script);
-	};);
+	});
 };
 
 async function localDeckExportPNGZip() {
@@ -5697,7 +5697,7 @@ async function localDeckExportPNGZip() {
 			};
 
 			if (card.onload) await loadScript(card.onload);
-			if (card.manaSymbols) card.manaSymbols.forEach(function(item) { loadScript(item); };);
+			if (card.manaSymbols) card.manaSymbols.forEach(function(item) { loadScript(item); });
 
 			var canvasesResized = false;
 			canvasList.forEach(function(name) {
@@ -5705,7 +5705,7 @@ async function localDeckExportPNGZip() {
 					sizeCanvas(name);
 					canvasesResized = true;
 				};
-			};);
+			});
 
 			if (canvasesResized) {
 				drawTextBuffer();
@@ -5716,12 +5716,12 @@ async function localDeckExportPNGZip() {
 
 			drawCard();
 
-			await new Promise(function(resolve) { setTimeout(resolve, 300); };);
+			await new Promise(function(resolve) { setTimeout(resolve, 300); });
 
 			var imageDataURL = cardCanvas.toDataURL('image/png');
 			var pngName = sanitizeFileName(cardName) + '.png';
 			var base64 = imageDataURL.split(',')[1];
-			zip.file(pngName, base64, { base64: true };);
+			zip.file(pngName, base64, { base64: true });
 
 			completed++;
 			notify('Exported ' + completed + '/' + totalCards + ': ' + cardName, 2);
@@ -5730,7 +5730,7 @@ async function localDeckExportPNGZip() {
 		};
 	};
 
-	var blob = await zip.generateAsync({ type: 'blob' };);
+	var blob = await zip.generateAsync({ type: 'blob' });
 	var downloadLink = document.createElement('a');
 	downloadLink.href = URL.createObjectURL(blob);
 	downloadLink.download = sanitizeFileName(localDeckMeta.name) + '.zip';
@@ -5809,11 +5809,11 @@ function updateLocalDeckUI() {
 		var removeBtn = document.createElement('button');
 		removeBtn.textContent = '✕';
 		removeBtn.style.cssText = 'background:#6a3a3a;color:white;border:1px solid #8a4a4a;border-radius:4px;font-size:10px;padding:2px 6px;cursor:pointer;margin-left:8px;';
-		removeBtn.addEventListener('click', function() { removeCardFromDeck(idx); };);
+		removeBtn.addEventListener('click', function() { removeCardFromDeck(idx); });
 		item.appendChild(removeBtn);
 
 		listEl.appendChild(item);
-	};);
+	});
 };
 
 async function removeCardFromDeck(cardIndex) {
@@ -5919,7 +5919,7 @@ function drawNewGuidelines() {
 	guidelinesContext.fillStyle = 'blue';
 	Object.entries(card.text).forEach(item => {
 		guidelinesContext.fillRect(scaleX(item[1].x || 0), scaleY(item[1].y || 0), scaleWidth(item[1].width || 1), scaleHeight(item[1].height || 1));
-	};);
+	});
 	// art
 	guidelinesContext.fillStyle = 'green';
 	guidelinesContext.fillRect(scaleX(card.artBounds.x), scaleY(card.artBounds.y), scaleWidth(card.artBounds.width), scaleHeight(card.artBounds.height));
@@ -5976,7 +5976,7 @@ function drawNewGuidelines() {
 function toggleCardBackgroundColor(highlight) {
 	if (highlight) {
 		previewCanvas.style["background-color"] = "#ff007fff";
-	}; else {
+	} else {
 		previewCanvas.style["background-color"] = "#0000";
 	};
 };
@@ -6048,18 +6048,18 @@ function stretchSVGReal(data, frameObject) {
 					item.slice(1).split(' ').forEach(pair => {
 						coords = pair.split(',');
 						newCoords.push((scaleWidth(change[0]) * sign + parseFloat(coords[0])) + ',' + (scaleHeight(change[1]) * sign + parseFloat(coords[1])));
-					};);
+					});
 					newData += item[0] + newCoords.join(' ');
-				}; else {
+				} else {
 					const coords = item.slice(1).split(/[, ]/);
 					newData += item[0] + (scaleWidth(change[0]) * sign + parseFloat(coords[0])) + ',' + (scaleHeight(change[1]) * sign + parseFloat(coords[1]))
 				};
-			}; else {
+			} else {
 				newData += item;
 			};
 		};
 		returnData = returnData.replace(oldData, newData);
-	};);
+	});
 	return returnData;
 };
 function processScryfallCard(card, responseCards) {
@@ -6078,8 +6078,8 @@ function processScryfallCard(card, responseCards) {
 			if (!face.image_uris) {
 				face.image_uris = card.image_uris;
 			};
-		};);
-	}; else {
+		});
+	} else {
 		if (card.lang != 'en') {
 			card.oracle_text = card.printed_text;
 			card.name = card.printed_name;
@@ -6097,7 +6097,7 @@ function fetchScryfallCardByID(scryfallID, callback = console.log) {
 			importedCards = [JSON.parse(this.responseText)];
 			importedCards.forEach(card => {
 				processScryfallCard(card, responseCards);
-			};);
+			});
 			callback(responseCards);
 		}; else if (this.readyState == 4 && this.status == 404 && !unique && cardName != '') {
 			notify(`No card found for "${cardName};" in ${cardLanguageSelect.options[cardLanguageSelect.selectedIndex].text}.`, 5);
@@ -6119,7 +6119,7 @@ function fetchScryfallCardByCodeNumber(code, number, callback = console.log) {
 			importedCards = [JSON.parse(this.responseText)];
 			importedCards.forEach(card => {
 				processScryfallCard(card, responseCards);
-			};);
+			});
 			callback(responseCards);
 		}; else if (this.readyState == 4 && this.status == 404 && !unique && cardName != '') {
 			notify('No card found for ' + code + ' #' + number, 5);
@@ -6142,7 +6142,7 @@ function fetchScryfallData(cardName, callback = console.log, unique = '') {
 			importedCards = JSON.parse(this.responseText).data;
 			importedCards.forEach(card => {
 				processScryfallCard(card, responseCards);
-			};);
+			});
 			callback(responseCards);
 		}; else if (this.readyState == 4 && this.status == 404 && !unique && cardName != '') {
 			notify(`No cards found for "${cardName};" in ${cardLanguageSelect.options[cardLanguageSelect.selectedIndex].text}.`, 5);
@@ -6183,7 +6183,7 @@ function toggleTextTag(tag) {
 		suffix = suffix.substring(closeTag.length);
 	}; else if (selection.startsWith(openTag) && selection.endsWith(closeTag)) {
 		selection = selection.substring(openTag.length, selection.length-closeTag.length);
-	}; else {
+	} else {
 		selection = openTag + selection + closeTag;
 	};
 
@@ -6215,32 +6215,32 @@ if ('number' in defaultCollector) {
 	document.querySelector('#info-set').value = defaultCollector.setCode;
 	document.querySelector('#info-language').value = defaultCollector.lang;
 	if (defaultCollector.starDot) {setTimeout(function(){defaultCollector.starDot = false; toggleStarDot();};, 500);}
-}; else {
+} else {
 	document.querySelector('#info-number').value = date.getFullYear();
 };
 if (!localStorage.getItem('enableImportCollectorInfo')) {
 	localStorage.setItem('enableImportCollectorInfo', 'false');
-}; else {
+} else {
 	document.querySelector('#enableImportCollectorInfo').checked = (localStorage.getItem('enableImportCollectorInfo') == 'true');
 };
 if (!localStorage.getItem('enableNewCollectorStyle')) {
 	localStorage.setItem('enableNewCollectorStyle', 'false');
-}; else {
+} else {
 	document.querySelector('#enableNewCollectorStyle').checked = (localStorage.getItem('enableNewCollectorStyle') == 'true');
 };
 if (!localStorage.getItem('enableCollectorInfo')) {
 	localStorage.setItem('enableCollectorInfo', 'true');
-}; else {
+} else {
 	document.querySelector('#enableCollectorInfo').checked = (localStorage.getItem('enableCollectorInfo') == 'true');
 };
 if (!localStorage.getItem('autoFrame')) {
 	localStorage.setItem('autoFrame', 'false');
-}; else {
+} else {
 	document.querySelector('#autoFrame').value = localStorage.getItem('autoFrame');
 };
 if (!localStorage.getItem('autoFit')) {
 	localStorage.setItem('autoFit', 'true');
-}; else {
+} else {
 	document.querySelector('#art-update-autofit').checked = localStorage.getItem('autoFit');
 };
 
@@ -6283,29 +6283,29 @@ self.onmessage = function(e) {
     var url = 'https://api.scryfall.com/cards/' + e.data.code + '/' + e.data.number;
     fetch(url).then(function(r) {
       return r.json().then(function(json) {
-        self.postMessage({id: id, type: 'result', data: json};);
-      };);
-    };).catch(function(err) {
-      self.postMessage({id: id, type: 'error', message: err.message || String(err)};);
-    };);
+        self.postMessage({id: id, type: 'result', data: json});
+      });
+    });.catch(function(err) {
+      self.postMessage({id: id, type: 'error', message: err.message || String(err)});
+    });
   }; else if (type === 'byName') {
     var url = e.data.url;
     fetch(url).then(function(r) {
       return r.json().then(function(json) {
-        self.postMessage({id: id, type: 'result', data: json};);
-      };);
-    };).catch(function(err) {
-      self.postMessage({id: id, type: 'error', message: err.message || String(err)};);
-    };);
+        self.postMessage({id: id, type: 'result', data: json});
+      });
+    });.catch(function(err) {
+      self.postMessage({id: id, type: 'error', message: err.message || String(err)});
+    });
   }; else if (type === 'byID') {
     var url = 'https://api.scryfall.com/cards/' + e.data.id;
     fetch(url).then(function(r) {
       return r.json().then(function(json) {
-        self.postMessage({id: id, type: 'result', data: json};);
-      };);
-    };).catch(function(err) {
-      self.postMessage({id: id, type: 'error', message: err.message || String(err)};);
-    };);
+        self.postMessage({id: id, type: 'result', data: json});
+      });
+    });.catch(function(err) {
+      self.postMessage({id: id, type: 'error', message: err.message || String(err)});
+    });
   };
 };;
 `;
@@ -6315,7 +6315,7 @@ var _workerRequestId = 0;
 
 function getCardLoaderWorker() {
   if (!_cardLoaderWorker) {
-    var blob = new Blob([_cardLoaderWorkerSource], {type: 'application/javascript'};);
+    var blob = new Blob([_cardLoaderWorkerSource], {type: 'application/javascript'});
     _cardLoaderWorker = new Worker(URL.createObjectURL(blob));
   };
   return _cardLoaderWorker;
@@ -6335,14 +6335,14 @@ function fetchScryfallCardByCodeNumber(code, number) {
           var processed = [];
           processScryfallCard(e.data.data, processed);
           resolve(processed);
-        }; else {
+        } else {
           reject(new Error(e.data.message || 'Worker error'));
         };
       };
     };;
     worker.addEventListener('message', handler);
-    worker.postMessage({type: 'byCodeNumber', id: id, code: code, number: number};);
-  };);
+    worker.postMessage({type: 'byCodeNumber', id: id, code: code, number: number});
+  });
 };
 
 function fetchScryfallData(cardName, unique) {
@@ -6364,16 +6364,16 @@ function fetchScryfallData(cardName, unique) {
           // Extract .data array from search response and process cards
           var rawCards = e.data.data.data || [];
           var processed = [];
-          rawCards.forEach(function(card) { processScryfallCard(card, processed); };);
+          rawCards.forEach(function(card) { processScryfallCard(card, processed); });
           resolve(processed);
-        }; else {
+        } else {
           reject(new Error(e.data.message || 'Worker error'));
         };
       };
     };;
     worker.addEventListener('message', handler);
-    worker.postMessage({type: 'byName', id: id, url: url};);
-  };);
+    worker.postMessage({type: 'byName', id: id, url: url});
+  });
 };
 
 function fetchScryfallCardByID(scryfallID) {
@@ -6385,14 +6385,14 @@ function fetchScryfallCardByID(scryfallID) {
         worker.removeEventListener('message', handler);
         if (e.data.type === 'result') {
           resolve(e.data.data);
-        }; else {
+        } else {
           reject(new Error(e.data.message || 'Worker error'));
         };
       };
     };;
     worker.addEventListener('message', handler);
-    worker.postMessage({type: 'byID', id: id, id: scryfallID};);
-  };);
+    worker.postMessage({type: 'byID', id: id, id: scryfallID});
+  });
 };
 
 // ==================== DECK LIST FEATURES ====================
@@ -6475,23 +6475,23 @@ item.addEventListener('click', function() {
 var idx = parseInt(this.getAttribute('data-index'));
 deckListGoToCard(idx);
 closeDeckListDropdown();
-};);
+});
 item.addEventListener('mouseenter', function() {
 if (parseInt(this.getAttribute('data-index')) !== deckListIndex) {
 this.style.background = '#4a4a4a';
 };
-};);
+});
 item.addEventListener('mouseleave', function() {
 if (parseInt(this.getAttribute('data-index')) !== deckListIndex) {
 this.style.background = '#3a3a3a';
 };
-};);
+});
 container.appendChild(item);
 };
 
 var currentItem = container.querySelector('[data-index="' + deckListIndex + '"]');
 if (currentItem) {
-currentItem.scrollIntoView({ block: 'nearest' };);
+currentItem.scrollIntoView({ block: 'nearest' });
 };
 };
 
@@ -6520,7 +6520,7 @@ if (!dropdown || !counter) return;
 if (dropdown.style.display === 'none') return;
 if (dropdown.contains(e.target) || counter.contains(e.target)) return;
 closeDeckListDropdown();
-};);
+});
 
 document.addEventListener('keydown', function(e) {
 var searchInput = document.getElementById('deck-list-search');
@@ -6545,14 +6545,14 @@ if (activeItem) activeItem.classList.remove('dropdown-active-item');
 var nextIndex = currentIndex < items.length - 1 ? currentIndex + 1 : 0;
 items[nextIndex].classList.add('dropdown-active-item');
 items[nextIndex].style.background = '#4a4a4a';
-items[nextIndex].scrollIntoView({ block: 'nearest' };);
+items[nextIndex].scrollIntoView({ block: 'nearest' });
 }; else if (e.key === 'ArrowUp') {
 e.preventDefault();
 if (activeItem) activeItem.classList.remove('dropdown-active-item');
 var prevIndex = currentIndex > 0 ? currentIndex - 1 : items.length - 1;
 items[prevIndex].classList.add('dropdown-active-item');
 items[prevIndex].style.background = '#4a4a4a';
-items[prevIndex].scrollIntoView({ block: 'nearest' };);
+items[prevIndex].scrollIntoView({ block: 'nearest' });
 }; else if (e.key === 'Enter') {
 var focusedItem = container.querySelector('.dropdown-active-item');
 if (focusedItem) {
@@ -6564,7 +6564,7 @@ closeDeckListDropdown();
 }; else if (e.key === 'Escape') {
 closeDeckListDropdown();
 };
-};);
+});
 
 function positionDeckNav() {
 	var overlay = document.getElementById('deck-nav-overlay');
@@ -6585,7 +6585,7 @@ function showDeckNav(show) {
 		positionDeckNav();
 		window.addEventListener('scroll', positionDeckNav, true);
 		window.addEventListener('resize', positionDeckNav);
-	}; else {
+	} else {
 		window.removeEventListener('scroll', positionDeckNav, true);
 		window.removeEventListener('resize', positionDeckNav);
 	};
@@ -6605,7 +6605,7 @@ document.addEventListener('keydown', function(e) {
 		e.preventDefault();
 		deckListNext();
 	};
-};);
+});
 
 // Fetch raw Scryfall JSON for a deck list entry (uses worker off-main-thread)
 function _fetchDeckEntryRaw(index) {
@@ -6639,7 +6639,7 @@ function _applyDeckCardToUI(processedCards, targetIndex) {
 
 		// After loading Scryfall defaults, check for saved version on disk and merge it in
 		localDeckLoadSavedCard(targetIndex);
-	};);
+	});
 };
 
 // Start pre-fetching neighbors of the given index (±1, ±2), skipping already-cached/in-flight
@@ -6698,10 +6698,10 @@ function deckListLoadCard(index) {
 		// Cache for future navigation
 		_deckPrefetchCache[index] = raw;
 		_applyDeckCardToUI(raw, index);
-	};).catch(function() {
+	});.catch(function() {
 		delete _deckInFlight[index];
 		notify('No card found for ' + entry.name + ' (' + entry.setCode + ' #' + entry.collectorNumber + ')', 5);
-	};);
+	});
 
 	// Start pre-fetching neighbors in parallel
 	_prefetchNeighbors(index);
@@ -6719,8 +6719,8 @@ function deckListSaveCurrent() {
 	var cardToSave = JSON.parse(JSON.stringify(card));
 	cardToSave.frames.forEach(function(frame) {
 		delete frame.image;
-		frame.masks.forEach(function(mask) { delete mask.image; };);
-	};);
+		frame.masks.forEach(function(mask) { delete mask.image; });
+	});
 
 	if (!cardKeys.includes(saveKey)) {
 		cardKeys.push(saveKey);
@@ -6773,14 +6773,14 @@ async function deckListBatchDownload() {
 
 		// Rebuild frames
 		card.frames.reverse();
-		await card.frames.forEach(function(item) { return addFrame([], item); };);
+		await card.frames.forEach(function(item) { return addFrame([], item); });
 		card.frames.reverse();
 
 		if (card.onload) {
 			await loadScript(card.onload);
 		};
 		if (card.manaSymbols) {
-			card.manaSymbols.forEach(function(item) { loadScript(item); };);
+			card.manaSymbols.forEach(function(item) { loadScript(item); });
 		};
 
 		// Resize canvases if needed
@@ -6790,7 +6790,7 @@ async function deckListBatchDownload() {
 				sizeCanvas(name);
 				canvasesResized = true;
 			};
-		};);
+		});
 
 		if (canvasesResized) {
 			drawTextBuffer();
@@ -6836,4 +6836,4 @@ initDraggableArt();
 	if (pathInput) {
 		pathInput.value = loadDefaultDeckPath();
 	};
-};)();
+});();
