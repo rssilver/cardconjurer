@@ -5320,13 +5320,10 @@ async function localDeckConfirmCreate() {
                         }
                 }
 
-                // Step 2: Ensure the CardConjurer subfolder exists, create if needed
+                // Step 2: Use the base directory as the root for decks to avoid nested CardConjurer folders
                 var ccHandle = baseDirHandle;
-                if (baseDirHandle.name !== 'CardConjurer') {
-                    ccHandle = await baseDirHandle.getDirectoryHandle('CardConjurer', { create: true });
-                }
-
-                // Step 3: Create the deck folder inside CardConjurer using a sanitized name
+                
+                // Step 3: Create the deck folder inside the root using a sanitized name
                 var safeDeckName = sanitizeFolderName(deckName);
                 var dirHandle = await ccHandle.getDirectoryHandle(safeDeckName, { create: true });
 
