@@ -4,7 +4,7 @@ const debugging = params.get('debug') != null;
 if (debugging) {
 	alert('debugging - 4.0');
 	document.querySelectorAll('.debugging').forEach(element => element.classList.remove('hidden'));
-}
+};
 
 //To save the server from being overloaded? Maybe?
 function fixUri(input) {
@@ -12,15 +12,15 @@ function fixUri(input) {
 	var prefix = 'https://card-conjurer.storage.googleapis.com';//'https://raw.githubusercontent.com/ImKyle4815/cardconjurer/remake';
 	if (input.includes(prefix) || input.includes('http') || input.includes('data:image') || window.location.href.includes('localhost')) {
 		return input;
-	} else {
+	}; else {
 		return prefix + input; //input.replace('/img/frames', prefix + '/img/frames');
-	} */
+	}; */
 	return input;
-}
+};
 function setImageUrl(image, source) {
 	image.crossOrigin = 'anonymous';
 	image.src = fixUri(source);
-}
+};
 
 const baseWidth = 1500;
 const baseHeight = 2100;
@@ -29,25 +29,25 @@ const highResScale = 1.34;
 // 	var value = baseWidth;
 // 	if (localStorage.getItem('high-res') == 'true') {
 // 		value *= highResScale;
-// 	}
+// 	};
 // 	return value;
-// }
+// };
 // function getStandardHeight() {
 // 	var value = baseHeight;
 // 	if (localStorage.getItem('high-res') == 'true') {
 // 		value *= highResScale;
-// 	}
+// 	};
 // 	return value;
-// }
+// };
 function getStandardWidth() {
 	return 2010;
-}
+};
 function getStandardHeight() {
 	return 2814;
-}
+};
 
 //card object
-var card = {width:getStandardWidth(), height:getStandardHeight(), marginX:0, marginY:0, frames:[], artSource:fixUri('/img/blank.png'), artX:0, artY:0, artZoom:1, artRotate:0, setSymbolSource:fixUri('/img/blank.png'), setSymbolX:0, setSymbolY:0, setSymbolZoom:1, watermarkSource:fixUri('/img/blank.png'), watermarkX:0, watermarkY:0, watermarkZoom:1, watermarkLeft:'none', watermarkRight:'none', watermarkOpacity:0.4, version:'', manaSymbols:[]};
+var card = {width:getStandardWidth(), height:getStandardHeight(), marginX:0, marginY:0, frames:[], artSource:fixUri('/img/blank.png'), artX:0, artY:0, artZoom:1, artRotate:0, setSymbolSource:fixUri('/img/blank.png'), setSymbolX:0, setSymbolY:0, setSymbolZoom:1, watermarkSource:fixUri('/img/blank.png'), watermarkX:0, watermarkY:0, watermarkZoom:1, watermarkLeft:'none', watermarkRight:'none', watermarkOpacity:0.4, version:'', manaSymbols:[]};;
 //core images/masks
 const black = new Image(); black.crossOrigin = 'anonymous'; black.src = fixUri('/img/black.png');
 const blank = new Image(); blank.crossOrigin = 'anonymous'; blank.src = fixUri('/img/blank.png');
@@ -57,20 +57,20 @@ const corner = new Image(); corner.crossOrigin = 'anonymous'; corner.src = fixUr
 const serial = new Image(); serial.crossOrigin = 'anonymous'; serial.src = fixUri('/img/frames/serial.png');
 //art
 art = new Image(); art.crossOrigin = 'anonymous'; art.src = blank.src;
-art.onerror = function() {if (!this.src.includes('/img/blank.png')) {this.src = fixUri('/img/blank.png');}}
+art.onerror = function() {if (!this.src.includes('/img/blank.png')) {this.src = fixUri('/img/blank.png');};}
 art.onload = artEdited;
 //set symbol
 setSymbol = new Image(); setSymbol.crossOrigin = 'anonymous'; setSymbol.src = blank.src;
 setSymbol.onerror = function() {
 	if (this.src.includes('gatherer.wizards.com')) {
 		notify('<a target="_blank" href="http' + this.src.split('http')[2] + '">Loading the set symbol from Gatherer failed. Please check this link to see if it exists. If it does, it may be necessary to manually download and upload the image.</a>', 5);
-	}
-	if (!this.src.includes('/img/blank.png')) {this.src = fixUri('/img/blank.png');}
-}
+	};
+	if (!this.src.includes('/img/blank.png')) {this.src = fixUri('/img/blank.png');};
+};
 setSymbol.onload = setSymbolEdited;
 //watermark
 watermark = new Image(); watermark.crossOrigin = 'anonymous'; watermark.src = blank.src;
-watermark.onerror = function() {if (!this.src.includes('/img/blank.png')) {this.src = fixUri('/img/blank.png');}}
+watermark.onerror = function() {if (!this.src.includes('/img/blank.png')) {this.src = fixUri('/img/blank.png');};}
 watermark.onload = watermarkEdited;
 //preview canvas
 var previewCanvas = document.querySelector('#previewCanvas');
@@ -82,7 +82,7 @@ var selectedFrame = null;
 var selectedFrameIndex = 0;
 var selectedMaskIndex = 0;
 var selectedTextIndex = 0;
-var replacementMasks = {};
+var replacementMasks = {};;
 var customCount = 0;
 var lastFrameClick = null;
 var lastMaskClick = null;
@@ -96,7 +96,7 @@ var savedTextXPosition = 0;
 var savedTextXPosition2 = 0;
 var savedRollYPosition = null;
 var savedFont = null;
-var savedTextContents = {};
+var savedTextContents = {};;
 //for misc
 var date = new Date();
 card.infoYear = date.getFullYear();
@@ -105,14 +105,14 @@ document.querySelector("#info-year").value = card.infoYear;
 
 var loadedVersions = [];
 //Card Object managament
-async function resetCardIrregularities({canvas = [getStandardWidth(), getStandardHeight(), 0, 0], resetOthers = true} = {}) {
+async function resetCardIrregularities({canvas = [getStandardWidth(), getStandardHeight(), 0, 0], resetOthers = true}; = {}) {
 	//misc details
 	card.margins = false;
-	card.bottomInfoTranslate = {x:0, y:0};
+	card.bottomInfoTranslate = {x:0, y:0};;
 	card.bottomInfoRotate = 0;
 	card.bottomInfoZoom = 1;
 	card.bottomInfoColor = 'white';
-	replacementMasks = {};
+	replacementMasks = {};;
 	//rotation
 	if (card.landscape) {
 		// previewContext.scale(card.width/card.height, card.height/card.width);
@@ -120,7 +120,7 @@ async function resetCardIrregularities({canvas = [getStandardWidth(), getStandar
 		// previewContext.translate(0, -card.width / 2);
 		previewContext.setTransform(1, 0, 0, 1, 0, 0);
 		card.landscape = false;
-	}
+	};
 	//card size
 	card.width = canvas[0];
 	card.height = canvas[1];
@@ -130,8 +130,8 @@ async function resetCardIrregularities({canvas = [getStandardWidth(), getStandar
 	canvasList.forEach(name => {
 		if (window[name + 'Canvas'].width != card.width * (1 + card.marginX) || window[name + 'Canvas'].height != card.height * (1 + card.marginY)) {
 			sizeCanvas(name);
-		}
-	});
+		};
+	};);
 	if (resetOthers) {
 		setBottomInfoStyle();		
 		//onload
@@ -139,37 +139,37 @@ async function resetCardIrregularities({canvas = [getStandardWidth(), getStandar
 		
 		card.hideBottomInfoBorder = false;
 		card.showsFlavorBar = true;
-	}
-}
+	};
+};
 async function setBottomInfoStyle() {
 	if (document.querySelector('#enableNewCollectorStyle').checked) {
 			await loadBottomInfo({
-				midLeft: {text:'{elemidinfo-set} \u2022 {elemidinfo-language}  {savex}{fontbelerenbsc}{fontsize' + scaleHeight(0.001) + '}{upinline' + scaleHeight(0.0005) + '}\uFFEE{savex2}{elemidinfo-artist}', x:0.0647, y:0.9548, width:0.8707, height:0.0171, oneLine:true, font:'gothammedium', size:0.0171, color:card.bottomInfoColor, outlineWidth:0.003},
-				topLeft: {text:'{elemidinfo-rarity} {kerning3}{elemidinfo-number}{kerning0}', x:0.0647, y:0.9377, width:0.8707, height:0.0171, oneLine:true, font:'gothammedium', size:0.0171, color:card.bottomInfoColor, outlineWidth:0.003},
-				note: {text:'{loadx}{elemidinfo-note}', x:0.0647, y:0.9377, width:0.8707, height:0.0171, oneLine:true, font:'gothammedium', size:0.0171, color:card.bottomInfoColor, outlineWidth:0.003},
-				bottomLeft: {text:'NOT FOR SALE', x:0.0647, y:0.9719, width:0.8707, height:0.0143, oneLine:true, font:'gothammedium', size:0.0143, color:card.bottomInfoColor, outlineWidth:0.003},
-				wizards: {name:'wizards', text:'{ptshift0,0.0172}\u2122 & \u00a9 {elemidinfo-year} Wizards of the Coast', x:0.0647, y:0.9377, width:0.8707, height:0.0167, oneLine:true, font:'mplantin', size:0.0162, color:card.bottomInfoColor, align:'right', outlineWidth:0.003},
-				bottomRight: {text:'{ptshift0,0.0172}CardConjurer.com', x:0.0647, y:0.9548, width:0.8707, height:0.0143, oneLine:true, font:'mplantin', size:0.0143, color:card.bottomInfoColor, align:'right', outlineWidth:0.003}
-			});
-		} else {
+				midLeft: {text:'{elemidinfo-set}; \u2022 {elemidinfo-language}  {savex}{fontbelerenbsc}{fontsize' + scaleHeight(0.001) + '}{upinline' + scaleHeight(0.0005) + '}\uFFEE{savex2}{elemidinfo-artist}', x:0.0647, y:0.9548, width:0.8707, height:0.0171, oneLine:true, font:'gothammedium', size:0.0171, color:card.bottomInfoColor, outlineWidth:0.003},
+				topLeft: {text:'{elemidinfo-rarity}; {kerning3}{elemidinfo-number}{kerning0}', x:0.0647, y:0.9377, width:0.8707, height:0.0171, oneLine:true, font:'gothammedium', size:0.0171, color:card.bottomInfoColor, outlineWidth:0.003},
+				note: {text:'{loadx};{elemidinfo-note}', x:0.0647, y:0.9377, width:0.8707, height:0.0171, oneLine:true, font:'gothammedium', size:0.0171, color:card.bottomInfoColor, outlineWidth:0.003},
+				bottomLeft: {text:'NOT FOR SALE', x:0.0647, y:0.9719, width:0.8707, height:0.0143, oneLine:true, font:'gothammedium', size:0.0143, color:card.bottomInfoColor, outlineWidth:0.003};,
+				wizards: {name:'wizards', text:'{ptshift0,0.0172};\u2122 & \u00a9 {elemidinfo-year} Wizards of the Coast', x:0.0647, y:0.9377, width:0.8707, height:0.0167, oneLine:true, font:'mplantin', size:0.0162, color:card.bottomInfoColor, align:'right', outlineWidth:0.003},
+				bottomRight: {text:'{ptshift0,0.0172};CardConjurer.com', x:0.0647, y:0.9548, width:0.8707, height:0.0143, oneLine:true, font:'mplantin', size:0.0143, color:card.bottomInfoColor, align:'right', outlineWidth:0.003}
+			};);
+		}; else {
 			await loadBottomInfo({
-				midLeft: {text:'{elemidinfo-set} \u2022 {elemidinfo-language}  {savex}{fontbelerenbsc}{fontsize' + scaleHeight(0.001) + '}{upinline' + scaleHeight(0.0005) + '}\uFFEE{savex2}{elemidinfo-artist}', x:0.0647, y:0.9548, width:0.8707, height:0.0171, oneLine:true, font:'gothammedium', size:0.0171, color: card.bottomInfoColor, outlineWidth:0.003},
-				topLeft: {text:'{elemidinfo-number}', x:0.0647, y:0.9377, width:0.8707, height:0.0171, oneLine:true, font:'gothammedium', size:0.0171, color:card.bottomInfoColor, outlineWidth:0.003},
-				note: {text:'{loadx2}{elemidinfo-note}', x:0.0647, y:0.9377, width:0.8707, height:0.0171, oneLine:true, font:'gothammedium', size:0.0171, color:card.bottomInfoColor, outlineWidth:0.003},
-				rarity: {text:'{loadx}{elemidinfo-rarity}', x:0.0647, y:0.9377, width:0.8707, height:0.0171, oneLine:true, font:'gothammedium', size:0.0171, color:card.bottomInfoColor, outlineWidth:0.003},
-				bottomLeft: {text:'NOT FOR SALE', x:0.0647, y:0.9719, width:0.8707, height:0.0143, oneLine:true, font:'gothammedium', size:0.0143, color:card.bottomInfoColor, outlineWidth:0.003},
-				wizards: {name:'wizards', text:'{ptshift0,0.0172}\u2122 & \u00a9 {elemidinfo-year} Wizards of the Coast', x:0.0647, y:0.9377, width:0.8707, height:0.0167, oneLine:true, font:'mplantin', size:0.0162, color:card.bottomInfoColor, align:'right', outlineWidth:0.003},
-				bottomRight: {text:'{ptshift0,0.0172}CardConjurer.com', x:0.0647, y:0.9548, width:0.8707, height:0.0143, oneLine:true, font:'mplantin', size:0.0143, color:card.bottomInfoColor, align:'right', outlineWidth:0.003}
-			});
-		}
-}
+				midLeft: {text:'{elemidinfo-set}; \u2022 {elemidinfo-language}  {savex}{fontbelerenbsc}{fontsize' + scaleHeight(0.001) + '}{upinline' + scaleHeight(0.0005) + '}\uFFEE{savex2}{elemidinfo-artist}', x:0.0647, y:0.9548, width:0.8707, height:0.0171, oneLine:true, font:'gothammedium', size:0.0171, color: card.bottomInfoColor, outlineWidth:0.003},
+				topLeft: {text:'{elemidinfo-number};', x:0.0647, y:0.9377, width:0.8707, height:0.0171, oneLine:true, font:'gothammedium', size:0.0171, color:card.bottomInfoColor, outlineWidth:0.003},
+				note: {text:'{loadx2};{elemidinfo-note}', x:0.0647, y:0.9377, width:0.8707, height:0.0171, oneLine:true, font:'gothammedium', size:0.0171, color:card.bottomInfoColor, outlineWidth:0.003},
+				rarity: {text:'{loadx};{elemidinfo-rarity}', x:0.0647, y:0.9377, width:0.8707, height:0.0171, oneLine:true, font:'gothammedium', size:0.0171, color:card.bottomInfoColor, outlineWidth:0.003},
+				bottomLeft: {text:'NOT FOR SALE', x:0.0647, y:0.9719, width:0.8707, height:0.0143, oneLine:true, font:'gothammedium', size:0.0143, color:card.bottomInfoColor, outlineWidth:0.003};,
+				wizards: {name:'wizards', text:'{ptshift0,0.0172};\u2122 & \u00a9 {elemidinfo-year} Wizards of the Coast', x:0.0647, y:0.9377, width:0.8707, height:0.0167, oneLine:true, font:'mplantin', size:0.0162, color:card.bottomInfoColor, align:'right', outlineWidth:0.003},
+				bottomRight: {text:'{ptshift0,0.0172};CardConjurer.com', x:0.0647, y:0.9548, width:0.8707, height:0.0143, oneLine:true, font:'mplantin', size:0.0143, color:card.bottomInfoColor, align:'right', outlineWidth:0.003}
+			};);
+		};
+};
 //Canvas management
 function sizeCanvas(name, width = Math.round(card.width * (1 + 2 * card.marginX)), height = Math.round(card.height * (1 + 2 * card.marginY))) {
 	if (!window[name + 'Canvas']) {
 		window[name + 'Canvas'] = document.createElement('canvas');
 		window[name + 'Context'] = window[name + 'Canvas'].getContext('2d');
 		canvasList[canvasList.length] = name;
-	}
+	};
 	window[name + 'Canvas'].width = width;
 	window[name + 'Canvas'].height = height;
 	if (name == 'line') { //force true to view all canvases - must restore to name == 'line' for proper kerning adjustments
@@ -179,8 +179,8 @@ function sizeCanvas(name, width = Math.round(card.width * (1 + 2 * card.marginX)
 		label.appendChild(window[name + 'Canvas']);
 		label.classList = 'fake-hidden'; //Comment this out to view canvases
 		document.body.appendChild(label);
-	}
-}
+	};
+};
 //create main canvases
 sizeCanvas('card');
 sizeCanvas('frame');
@@ -196,81 +196,81 @@ sizeCanvas('prePT');
 //Scaling
 function scaleX(input) {
 	return Math.round((input + card.marginX) * card.width);
-}
+};
 function scaleWidth(input) {
 	return Math.round(input * card.width);
-}
+};
 function scaleY(input) {
 	return Math.round((input + card.marginY) * card.height);
-}
+};
 function scaleHeight(input) {
 	return Math.round(input * card.height);
-}
+};
 //Other nifty functions
 function getElementIndex(element) {
 	return Array.prototype.indexOf.call(element.parentElement.children, element);
-}
+};
 function getCardName() {
 	if (card.text == undefined || card.text.title == undefined) {
 		return 'unnamed';
-	}
+	};
 	var imageName = card.text.title.text || 'unnamed';
 	if (card.text.nickname) {
 		imageName += ' (' + card.text.nickname.text + ')';
-	}
-	return imageName.replace(/\{[^}]+\}/g, '');
-}
+	};
+	return imageName.replace(/\{[^};]+\}/g, '');
+};
 function getInlineCardName() {
 	if (card.text == undefined || card.text.title == undefined) {
 		return 'unnamed';
-	}
+	};
 	var imageName = card.text.title.text || 'unnamed';
 	if (card.text.nickname) {
 		imageName = card.text.nickname.text;
-	}
-	return imageName.replace(/\{[^}]+\}/g, '');
-}
+	};
+	return imageName.replace(/\{[^};]+\}/g, '');
+};
 //UI
 function toggleCollapse(event) {
 	event.target.closest('.collapsible').classList.toggle('collapsed');
-}
-function toggleCreatorTabs(event, target) {
+};
+window.toggleCreatorTabs = function(event, target) {
 	Array.from(document.querySelector('#creator-menu-sections').children).forEach(element => element.classList.add('hidden'));
 	document.querySelector('#creator-menu-' + target).classList.remove('hidden');
 	selectSelectable(event);
-}
+};
 function selectSelectable(event) {
 	var eventTarget = event.target.closest('.selectable');
 	Array.from(eventTarget.parentElement.children).forEach(element => element.classList.remove('selected'));
 	eventTarget.classList.add('selected');
-}
+};
 function dragStart(event) {
 	Array.from(document.querySelectorAll('.dragging')).forEach(element => element.classList.remove('dragging'));
 	event.target.closest('.draggable').classList.add('dragging');
-}
+};
 function dragEnd(event) {
 	Array.from(document.querySelectorAll('.dragging')).forEach(element => element.classList.remove('dragging'));
-}
+};
 function touchMove(event) {
 	if (event.target.nodeName != 'H4') {
 		event.preventDefault();
-	}
+	};
 	var clientX = event.touches[0].clientX;
 	var clientY = event.touches[0].clientY;
 	Array.from(document.querySelector('.dragging').parentElement.children).forEach(element => {
 		var elementBounds = element.getBoundingClientRect();
 		if (clientY > elementBounds.top && clientY < elementBounds.bottom) {
 			dragOver(element, false);
-		}
-	})
-}
+		};
+	};)
+};
 function dragOver(event, drag=true) {
 	var eventTarget;
 	if (drag) {
 		eventTarget = event.target.closest('.draggable');
-	} else {
+	}; else {
 		eventTarget = event;
-	}
+	};
 	var movingElement = document.querySelector('.dragging');
 	if (document.querySelector('.dragging') && !eventTarget.classList.contains('dragging') && eventTarget.parentElement == movingElement.parentElement) {
 		var parentElement = eventTarget.parentElement;
@@ -284,17 +284,17 @@ function dragOver(event, drag=true) {
 				if(movingElementPassed) {
 					elements.appendChild(element.cloneNode(true));
 					elements.appendChild(movingElement.cloneNode(true));
-				} else {
+				}; else {
 					elements.appendChild(movingElement.cloneNode(true));
 					elements.appendChild(element.cloneNode(true));
-				}
-			} else if(element != movingElement) {
+				};
+			}; else if(element != movingElement) {
 				elements.appendChild(element.cloneNode(true));
-			} else {
+			}; else {
 				movingElementOldIndex = index;
 				movingElementPassed = true;
-			}
-		});
+			};
+		};);
 		Array.from(elements.children).forEach(element => {
 			element.ondragstart = dragStart;
 			element.ontouchstart = dragStart;
@@ -304,7 +304,7 @@ function dragOver(event, drag=true) {
 			element.ontouchmove = touchMove;
 			element.onclick = frameElementClicked;
 			element.children[3].onclick = removeFrame;
-		})
+		};)
 		parentElement.innerHTML = null;
 		parentElement.appendChild(elements);
 		if (movingElementNewIndex >= 0) {
@@ -312,9 +312,9 @@ function dragOver(event, drag=true) {
 			card.frames.splice(movingElementOldIndex, 1);
 			card.frames.splice(movingElementNewIndex, 0, originalMovingElement);
 			drawFrames();
-		}
-	}
-}
+		};
+	};
+};
 //Set Symbols
 const setSymbolAliases = new Map([
 	["anb", "ana"],
@@ -341,28 +341,28 @@ function loadManaSymbols(matchColor, manaSymbolPaths, size = [1, 1]) {
 		size = manaSymbolPaths || [1,1];
 		manaSymbolPaths = matchColor;
 		matchColor = false;
-	}
+	};
 
 	manaSymbolPaths.forEach(item => {
-		var manaSymbol = {};
+		var manaSymbol = {};;
 		if (typeof item == 'string') {
 			manaSymbol.name = item.split('.')[0];
 			manaSymbol.path = item;
-		} else {
+		}; else {
 			manaSymbol.name = item[0].split('.')[0];
 			manaSymbol.path = item[0];
-		}
+		};
 		if (manaSymbol.name.includes('/')) {
 			manaSymbol.name = manaSymbol.name.split('/');
 			manaSymbol.name = manaSymbol.name[manaSymbol.name.length - 1];
-		}
+		};
 		if (typeof item != 'string') {
 			manaSymbol.back = item[1];
 			manaSymbol.backs = item[2];
 			for (var i = 0; i < item[2]; i ++) {
 				loadManaSymbols([manaSymbol.path.replace(manaSymbol.name, 'back' + i + item[1])])
-			}
-		}
+			};
+		};
 
 		manaSymbol.matchColor = matchColor;
 
@@ -373,18 +373,18 @@ function loadManaSymbols(matchColor, manaSymbolPaths, size = [1, 1]) {
 		var manaSymbolPath = '/img/manaSymbols/' + manaSymbol.path;
 		if (!manaSymbolPath.includes('.png')) {
 			manaSymbolPath += '.svg';
-		}
+		};
 		manaSymbol.image.src = fixUri(manaSymbolPath);
 		mana.set(manaSymbol.name, manaSymbol);
 		// manaSymbols.push(manaSymbol);
-	});
-}
+	};);
+};
 function findManaSymbolIndex(string) {
 	return mana.get(key) || -1;
-}
+};
 function getManaSymbol(key) {
 	return mana.get(key);
-}
+};
 //FRAME TAB
 function drawFrames() {
 	frameContext.clearRect(0, 0, frameCanvas.width, frameCanvas.height);
@@ -397,13 +397,13 @@ function drawFrames() {
 				frameContext.globalCompositeOperation = 'source-over';
 				frameContext.globalAlpha = 1;
 				frameContext.drawImage(prePTCanvas, 0, 0, frameCanvas.width, frameCanvas.height);
-			}
+			};
 			frameContext.globalCompositeOperation = item.mode || 'source-over';
 			frameContext.globalAlpha = item.opacity / 100 || 1;
 			if (item.opacity == 0) {
 				frameContext.globalAlpha = 0;
-			}
-			var bounds = item.bounds || {};
+			};
+			var bounds = item.bounds || {};;
 			var ogBounds = item.ogBounds || bounds;
 			frameX = Math.round(scaleX(bounds.x || 0));
 			frameY = Math.round(scaleY(bounds.y || 0));
@@ -430,32 +430,32 @@ function drawFrames() {
 						existingPixels[  i  ] = existingPixels[  i  ] * (1 - functionalAlpha) + newPixels[  i  ] * functionalAlpha; //RED
 						existingPixels[i + 1] = existingPixels[i + 1] * (1 - functionalAlpha) + newPixels[i + 1] * functionalAlpha; //GREEN
 						existingPixels[i + 2] = existingPixels[i + 2] * (1 - functionalAlpha) + newPixels[i + 2] * functionalAlpha; //BLUE
-					}
-				}
+					};
+				};
 				frameContext.putImageData(existingData, 0, 0);
-			} else {
+			}; else {
 				//mask the image
 				frameMaskingContext.drawImage(item.image, frameX, frameY, frameWidth, frameHeight);
 				//color overlay
-				if (item.colorOverlayCheck) {frameMaskingContext.globalCompositeOperation = 'source-in'; frameMaskingContext.fillStyle = item.colorOverlay; frameMaskingContext.fillRect(0, 0, frameMaskingCanvas.width, frameMaskingCanvas.height);}
+				if (item.colorOverlayCheck) {frameMaskingContext.globalCompositeOperation = 'source-in'; frameMaskingContext.fillStyle = item.colorOverlay; frameMaskingContext.fillRect(0, 0, frameMaskingCanvas.width, frameMaskingCanvas.height);};
 				//HSL adjustments
 				if (item.hslHue || item.hslSaturation || item.hslLightness) {
 					hsl(frameMaskingCanvas, item.hslHue || 0, item.hslSaturation || 0, item.hslLightness || 0);
-				}
+				};
 				//erase mode
-				if (item.erase) {frameContext.globalCompositeOperation = 'destination-out';}
+				if (item.erase) {frameContext.globalCompositeOperation = 'destination-out';};
 				frameContext.drawImage(frameMaskingCanvas, 0, 0, frameCanvas.width, frameCanvas.height);
-			}
-		}
-	});
+			};
+		};
+	};);
 	if (!haveDrawnPrePTCanvas && drawTextBetweenFrames) {
 		haveDrawnPrePTCanvas = true;
 		frameContext.globalCompositeOperation = 'source-over';
 		frameContext.globalAlpha = 1;
 		frameContext.drawImage(prePTCanvas, 0, 0, frameCanvas.width, frameCanvas.height);
-	}
+	};
 	drawCard();
-}
+};
 function loadFramePacks(framePackOptions = []) {
 	document.querySelector('#selectFramePack').innerHTML = null;
 	framePackOptions.forEach(item => {
@@ -463,13 +463,13 @@ function loadFramePacks(framePackOptions = []) {
 		framePackOption.innerHTML = item.name;
 		if (item.value == 'disabled') {
 			framePackOption.disabled = true;
-		} else {
+		}; else {
 			framePackOption.value = item.value;
-		}
+		};
 		document.querySelector('#selectFramePack').appendChild(framePackOption);
-	});
+	};);
 	loadScript("/js/frames/pack" + document.querySelector('#selectFramePack').value + ".js");
-}
+};
 function loadFramePack(frameOptions = availableFrames) {
 	resetDoubleClick();
 	document.querySelector('#frame-picker').innerHTML = null;
@@ -481,24 +481,24 @@ function loadFramePack(frameOptions = availableFrames) {
 		frameOption.appendChild(frameOptionImage);
 		frameOptionImage.onload = function() {
 			this.parentElement.classList.remove('hidden');
-		}
+		};
 		if (!item.noThumb && !item.src.includes('/img/black.png')) {
 			frameOptionImage.src = fixUri(item.src.replace('.png', 'Thumb.png').replace('.svg', 'Thumb.png'));
-		} else {
+		}; else {
 			frameOptionImage.src = fixUri(item.src);
-		}
+		};
 		document.querySelector('#frame-picker').appendChild(frameOption);
 
-	})
+	};)
 	document.querySelector('#mask-picker').innerHTML = '';
 	document.querySelector('#frame-picker').children[0].click();
 	if (localStorage.getItem('autoLoadFrameVersion') == 'true') {
 		document.querySelector('#loadFrameVersion').click();
-	}
-}
+	};
+};
 function autoLoadFrameVersion() {
 	localStorage.setItem('autoLoadFrameVersion', document.querySelector('#autoLoadFrameVersion').checked);
-}
+};
 function frameOptionClicked(event) {
 	const button = doubleClick(event, 'frame');
 	const clickedFrameOption = event.target.closest('.frame-option');
@@ -510,9 +510,9 @@ function frameOptionClicked(event) {
 		selectedFrameIndex = newFrameIndex;
 		if (!availableFrames[selectedFrameIndex].noDefaultMask) {
 			document.querySelector('#mask-picker').innerHTML = '<div class="mask-option" onclick="maskOptionClicked(event)"><img src="' + black.src + '"><p>No Mask</p></div>';
-		} else {
+		}; else {
 			document.querySelector('#mask-picker').innerHTML = '';
-		}
+		};
 		document.querySelector('#selectedPreview').innerHTML = '(Selected: ' + availableFrames[selectedFrameIndex].name + ', No Mask)';
 		if (availableFrames[selectedFrameIndex].masks) {
 			availableFrames[selectedFrameIndex].masks.forEach(item => {
@@ -523,60 +523,60 @@ function frameOptionClicked(event) {
 				maskOption.appendChild(maskOptionImage);
 				maskOptionImage.onload = function() {
 					this.parentElement.classList.remove('hidden');
-				}
+				};
 				maskOptionImage.src = fixUri(item.src.replace('.png', 'Thumb.png').replace('.svg', 'Thumb.png'));
 				const maskOptionLabel = document.createElement('p');
 				maskOptionLabel.innerHTML = item.name;
 				maskOption.appendChild(maskOptionLabel);
 				document.querySelector('#mask-picker').appendChild(maskOption);
-			});
-		}
+			};);
+		};
 		const firstChild = document.querySelector('#mask-picker').firstChild;
 		firstChild.classList.add('selected');
 		firstChild.click();
-	} else if (button) { button.click(); resetDoubleClick(); }
-}
+	}; else if (button) { button.click(); resetDoubleClick(); }
+};
 function maskOptionClicked(event) {
 	var button = doubleClick(event, 'mask');
 	const clickedMaskOption = event.target.closest('.mask-option');
 	(document.querySelector('.mask-option.selected').classList || document.querySelector('body').classList).remove('selected');
 	clickedMaskOption.classList.add('selected');
 	const newMaskIndex = getElementIndex(clickedMaskOption)
-	if (newMaskIndex != selectedMaskIndex) { button = null; }
+	if (newMaskIndex != selectedMaskIndex) { button = null; };
 	selectedMaskIndex = newMaskIndex;
 	var selectedMaskName = 'No Mask'
-	if (selectedMaskIndex > 0) {selectedMaskName = availableFrames[selectedFrameIndex].masks[selectedMaskIndex - 1].name;}
+	if (selectedMaskIndex > 0) {selectedMaskName = availableFrames[selectedFrameIndex].masks[selectedMaskIndex - 1].name;};
 	document.querySelector('#selectedPreview').innerHTML = '(Selected: ' + availableFrames[selectedFrameIndex].name + ', ' + selectedMaskName + ')';
-	if (button) { button.click(); resetDoubleClick(); }
-}
+	if (button) { button.click(); resetDoubleClick(); };
+};
 function resetDoubleClick() {
 	lastFrameClick, lastMaskClick = null, null;
-}
+};
 function doubleClick(event, maskOrFrame) {
 	const currentClick = (new Date()).getTime();
 	var lastClick = null;
 	if (maskOrFrame == 'mask') {
 		lastClick = lastMaskClick;
 		lastMaskClick = currentClick;
-	} else {
+	}; else {
 		lastClick = lastFrameClick + 0;
 		lastFrameClick = currentClick + 0;
-	}
+	};
 	if (lastClick && lastClick + 500 > currentClick) {
 		var buttonID = null;
 		if (event.shiftKey) {
 			buttonID = '#addToRightHalf';
-		} else if (event.ctrlKey) {
+		}; else if (event.ctrlKey) {
 			buttonID = '#addToLeftHalf';
-		} else if (event.altKey) {
+		}; else if (event.altKey) {
 			buttonID = '#addToMiddleThird';
-		} else {
+		}; else {
 			buttonID = '#addToFull';
-		}
+		};
 		return document.querySelector(buttonID);
-	}
+	};
 	return null;
-}
+};
 function cardFrameProperties(colors, manaCost, typeLine, power, style) {
 	var colors = colors.map(color => color.toUpperCase())
 	if ([
@@ -592,7 +592,7 @@ function cardFrameProperties(colors, manaCost, typeLine, power, style) {
 			['U', 'G']
 		].map(arr => JSON.stringify(arr) === JSON.stringify(colors)).includes(true)) {
 		colors.reverse();
-	}
+	};
 
 	var isHybrid = manaCost.includes('/');
 
@@ -601,53 +601,53 @@ function cardFrameProperties(colors, manaCost, typeLine, power, style) {
 		if (typeLine.includes('Land')) {
 			if (colors.length == 0 || colors.length > 2) {
 				rules = 'L';
-			} else {
+			}; else {
 				rules = colors[0] + 'L';
-			}
-		} else {
+			};
+		}; else {
 			if (colors.length == 1) {
 				rules = colors[0];
-			} else if (colors.length >=2) {
+			}; else if (colors.length >=2) {
 				rules = 'M';
-			} else if (typeLine.includes("Artifact")) {
+			}; else if (typeLine.includes("Artifact")) {
 				rules = 'A';
-			} else {
+			}; else {
 				rules = 'C';
-			}
-		}
+			};
+		};
 
-	} else {
+	}; else {
 		if (typeLine.includes('Land')) {
 			if (colors.length == 0) {
 				rules = 'L';
-			} else if (colors.length > 2) {
+			}; else if (colors.length > 2) {
 				rules = 'ML';
-			} else {
+			}; else {
 				rules = colors[0] + 'L';
-			}
-		} else if (colors.length > 2) {
+			};
+		}; else if (colors.length > 2) {
 			if (style == 'Etched' && typeLine.includes('Artifact')) {
 				rules = 'A';
-			} else {
+			}; else {
 				rules = 'M';
-			}
-		} else if (colors.length != 0) {
+			};
+		}; else if (colors.length != 0) {
 			rules = colors[0];
-		} else if (style == 'Borderless' && !typeLine.includes('Artifact')) {
+		}; else if (style == 'Borderless' && !typeLine.includes('Artifact')) {
 			rules = 'C';
-		} else {
+		}; else {
 			rules = 'A';
-		}
-	}
+		};
+	};
 
 	var rulesRight;
 	if (colors.length == 2) {
 		if (typeLine.includes('Land')) {
 			rulesRight = colors[1] + 'L';
-		} else if (style != 'Seventh') {
+		}; else if (style != 'Seventh') {
 			rulesRight = colors[1];
-		}
-	}
+		};
+	};
 
 	var pinline = rules;
 	var pinlineRight = rulesRight;
@@ -655,95 +655,95 @@ function cardFrameProperties(colors, manaCost, typeLine, power, style) {
 	if (style == 'Seventh' && typeLine.includes('Land') && colors.length >= 2) {
 		pinline = 'L';
 		pinlineRight = null;
-	}
+	};
 
 	var typeTitle;
 	if (colors.length >= 2) {
 		if (isHybrid || typeLine.includes('Land')) {
 			if (colors.length >= 3) {
 				typeTitle = 'M';
-			} else {
+			}; else {
 				typeTitle = 'L';
-			}
-		} else {
+			};
+		}; else {
 			typeTitle = 'M';
-		}
-	} else if (typeLine.includes('Land')) {
+		};
+	}; else if (typeLine.includes('Land')) {
 		if (colors.length == 0) {
 			typeTitle = 'L';
-		} else if (style == 'Etched') {
+		}; else if (style == 'Etched') {
 			if (colors.length > 2) {
 				typeTitle = 'M';
-			} else if (colors.length == 1) {
+			}; else if (colors.length == 1) {
 				typeTitle = colors[0];
-			} else {
+			}; else {
 				typeTitle = 'L';
-			}
-		} else {
+			};
+		}; else {
 			typeTitle = colors[0] + 'L';
-		}
-	} else if (colors.length == 1) {
+		};
+	}; else if (colors.length == 1) {
 		typeTitle = colors[0];
-	} else if (style == 'Borderless' && !typeLine.includes('Artifact')) {
+	}; else if (style == 'Borderless' && !typeLine.includes('Artifact')) {
 		typeTitle = 'C';
-	} else {
+	}; else {
 		typeTitle = 'A';
-	}
+	};
 
 	var pt;
 	if (power) {
 		if (typeLine.includes('Vehicle')) {
 			pt = 'V';
-		} else if (typeTitle == 'L') {
+		}; else if (typeTitle == 'L') {
 			pt = 'C';
-		} else {
+		}; else {
 			pt = typeTitle;
-		}
-	}
+		};
+	};
 
 	var frame;
 	if (style == 'Seventh') {
 		if (typeLine.includes('Land')) {
 			frame = 'L'
-		} else {
+		}; else {
 			frame = pinline;
-		}
-	} else if (typeLine.includes('Land')) {
+		};
+	}; else if (typeLine.includes('Land')) {
 		if (style == 'Etched') {
 			if (colors.length > 2) {
 				frame = 'M';
-			} else if (colors.length > 0) {
+			}; else if (colors.length > 0) {
 				frame = colors[0];
-			} else {
+			}; else {
 				frame = 'L';
-			}
-		} else {
+			};
+		}; else {
 			frame = 'L';
-		}
-	} else if (typeLine.includes('Vehicle')) {
+		};
+	}; else if (typeLine.includes('Vehicle')) {
 		frame = 'V';
-	} else if (typeLine.includes('Artifact')) {
+	}; else if (typeLine.includes('Artifact')) {
 		frame = 'A';
-	} else if (colors.length > 2) {
+	}; else if (colors.length > 2) {
 		frame = 'M';
-	} else if (colors.length == 2) {
+	}; else if (colors.length == 2) {
 		if (isHybrid || style == 'Etched') {
 			frame = colors[0];
-		} else {
+		}; else {
 			frame = 'M';
-		}
-	} else if (colors.length == 1) {
+		};
+	}; else if (colors.length == 1) {
 		frame = colors[0];
-	} else {
+	}; else {
 		frame = 'L';
-	}
+	};
 
 	var frameRight;
 	if (!(typeLine.includes('Vehicle') || typeLine.includes('Artifact'))) {
 		if (colors.length == 2 && (isHybrid || style == 'Etched')) {
 			frameRight = colors[1];
-		}
-	}
+		};
+	};
 
 	return {
 		'pinline': pinline,
@@ -754,23 +754,23 @@ function cardFrameProperties(colors, manaCost, typeLine, power, style) {
 		'pt': pt,
 		'frame': frame,
 		'frameRight': frameRight
-	}
-}
+	};
+};
 var autoFramePack;
 function autoFrame() {
 	var frame = document.querySelector('#autoFrame').value;
-	if (frame == 'false') { autoFramePack = null; return; }
+	if (frame == 'false') { autoFramePack = null; return; };
 
 	var colors = [];
 	if (card.text.type.text.toLowerCase().includes('land')) {
 		var rules = card.text.rules.text;
-		var flavorIndex = rules.indexOf('{flavor}');
+		var flavorIndex = rules.indexOf('{flavor};');
 		if (flavorIndex == -1) {
-			flavorIndex = rules.indexOf('{oldflavor}');
-		}
+			flavorIndex = rules.indexOf('{oldflavor};');
+		};
 		if (flavorIndex != -1) {
 			rules = rules.substring(0, flavorIndex);
-		}
+		};
 
 		var lines = rules.split('\n');
 
@@ -780,104 +780,104 @@ function autoFrame() {
 			if (addIndex == -1) {
 				addIndex = line.toLowerCase().indexOf(' add');
 				length = 4;
-			}
+			};
 			if (addIndex != -1) {
 				var upToAdd = line.substring(addIndex+length).toLowerCase();
               	['W', 'U', 'B', 'R', 'G'].forEach(function (color) {
-					if (upToAdd.includes('{' + color.toLowerCase() + '}')) {
+					if (upToAdd.includes('{' + color.toLowerCase() + '};')) {
                   		colors.push(color);
-                	}
-                });
-			}
-		});
+                	};
+                };);
+			};
+		};);
 
 		if (!colors.includes('W') && (rules.toLowerCase().includes('plains') || card.text.type.text.toLowerCase().includes('plains'))) {
 			colors.push('W');
-		}
+		};
 		if (!colors.includes('U') && (rules.toLowerCase().includes('island') || card.text.type.text.toLowerCase().includes('island'))) {
 			colors.push('U');
-		}
+		};
 		if (!colors.includes('B') && (rules.toLowerCase().includes('swamp') || card.text.type.text.toLowerCase().includes('swamp'))) {
 			colors.push('B');
-		}
+		};
 		if (!colors.includes('R') && (rules.toLowerCase().includes('mountain') || card.text.type.text.toLowerCase().includes('mountain'))) {
 			colors.push('R');
-		}
+		};
 		if (!colors.includes('G') && (rules.toLowerCase().includes('forest') || card.text.type.text.toLowerCase().includes('forest'))) {
 			colors.push('G');
-		}
+		};
 
 		if (rules.toLowerCase().includes('search') && colors.length == 0) {
 			// TODO: This doesn't match Bog Wreckage
 			if (rules.includes('into your hand') || (rules.includes('tapped') && !(rules.toLowerCase().includes('enters the battlefield tapped')) && !(rules.toLowerCase().includes('untap')))) {
 				colors = [];
-			} else if (colors.length == 0) {
+			}; else if (colors.length == 0) {
 				colors = ['W', 'U', 'B', 'R', 'G'];
-			}
-		}
+			};
+		};
 
 		if (rules.includes('any color') || rules.includes('any one color') || rules.includes('choose a color') || rules.includes('any combination of colors')) {
 			colors = ['W', 'U', 'B', 'R', 'G'];
-		}
+		};
 
 
-	} else {
+	}; else {
 		colors = [...new Set(card.text.mana.text.toUpperCase().split('').filter(char => ['W', 'U', 'B', 'R', 'G'].includes(char)))];
-	}
+	};
 
 	var group;
 	if (frame == 'M15Regular-1') {
 		autoM15Frame(colors, card.text.mana.text, card.text.type.text, card.text.pt.text);
 		group = 'Standard-3';
-	} else if (frame == 'M15RegularNew') {
+	}; else if (frame == 'M15RegularNew') {
 		autoM15NewFrame(colors, card.text.mana.text, card.text.type.text, card.text.pt.text);
 		group = 'Accurate';
-	} else if (frame == 'M15Eighth') {
+	}; else if (frame == 'M15Eighth') {
 		autoM15EighthFrame(colors, card.text.mana.text, card.text.type.text, card.text.pt.text);
 		group = 'Custom';
-	} else if (frame == 'M15EighthUB') {
+	}; else if (frame == 'M15EighthUB') {
 		autoM15EighthUBFrame(colors, card.text.mana.text, card.text.type.text, card.text.pt.text);
 		group = 'Custom';
-	} else if (frame == 'UB') {
+	}; else if (frame == 'UB') {
 		autoUBFrame(colors, card.text.mana.text, card.text.type.text, card.text.pt.text);
 		group = 'Showcase-5';
-	} else if (frame == 'UBNew') {
+	}; else if (frame == 'UBNew') {
 		autoUBNewFrame(colors, card.text.mana.text, card.text.type.text, card.text.pt.text);
 		group = 'Accurate';
-	} else if (frame == 'FullArtNew') {
+	}; else if (frame == 'FullArtNew') {
 		autoFullArtNewFrame(colors, card.text.mana.text, card.text.type.text, card.text.pt.text);
 		group = 'Accurate';
-	} else if (frame == 'Circuit') {
+	}; else if (frame == 'Circuit') {
 		autoCircuitFrame(colors, card.text.mana.text, card.text.type.text, card.text.pt.text);
 		group = 'Custom';
-	} else if (frame == 'Etched') {
+	}; else if (frame == 'Etched') {
 		group = 'Showcase-5';
 		autoEtchedFrame(colors, card.text.mana.text, card.text.type.text, card.text.pt.text);
-	} else if (frame == 'Praetors') {
+	}; else if (frame == 'Praetors') {
 		group = 'Showcase-5';
 		autoPhyrexianFrame(colors, card.text.mana.text, card.text.type.text, card.text.pt.text);
-	} else if (frame == 'Seventh') {
+	}; else if (frame == 'Seventh') {
 		group = 'Misc-2';
 		autoSeventhEditionFrame(colors, card.text.mana.text, card.text.type.text, card.text.pt.text);
-	} else if (frame == 'M15BoxTopper') {
+	}; else if (frame == 'M15BoxTopper') {
 		group = 'Showcase-5';
 		autoExtendedArtFrame(colors, card.text.mana.text, card.text.type.text, card.text.pt.text, false);
-	} else if (frame == 'M15ExtendedArtShort') {
+	}; else if (frame == 'M15ExtendedArtShort') {
 		group = 'Showcase-5';
 		autoExtendedArtFrame(colors, card.text.mana.text, card.text.type.text, card.text.pt.text, true);
-	} else if (frame == '8th') {
+	}; else if (frame == '8th') {
 		group = 'Misc-2';
 		auto8thEditionFrame(colors, card.text.mana.text, card.text.type.text, card.text.pt.text, false);
-	} else if (frame == 'Borderless') {
+	}; else if (frame == 'Borderless') {
 		group = 'Showcase-5';
 		autoBorderlessFrame(colors, card.text.mana.text, card.text.type.text, card.text.pt.text);
-	}
+	};
 
 	if (autoFramePack != frame) {
 		loadScript('/js/frames/pack' + frame + '.js');
 		autoFramePack = frame;
-	}
-}
+	};
+};
 async function autoUBFrame(colors, mana_cost, type_line, power) {
 	var frames = card.frames.filter(frame => frame.name.includes('Extension') || frame.name.includes('Gray Holo Stamp') || frame.name.includes('Gold Holo Stamp'));
 
@@ -892,48 +892,48 @@ async function autoUBFrame(colors, mana_cost, type_line, power) {
 	if (type_line.toLowerCase().includes('legendary')) {
 		if (properties.pinlineRight) {
 			frames.push(makeUBFrameByLetter(properties.pinlineRight, 'Crown', true));
-		}
+		};
 		frames.push(makeUBFrameByLetter(properties.pinline, "Crown", false));
 		frames.push(makeUBFrameByLetter(properties.pinline, "Crown Border Cover", false));
-	}
+	};
 	if (properties.pinlineRight) {
 		frames.push(makeUBFrameByLetter(properties.pinlineRight, 'Stamp', true));
-	}
+	};
 	frames.push(makeUBFrameByLetter(properties.pinline, "Stamp", false));
 	if (properties.pt) {
 		frames.push(makeUBFrameByLetter(properties.pt, 'PT', false));
-	}
+	};
 	if (properties.pinlineRight) {
 		frames.push(makeUBFrameByLetter(properties.pinlineRight, 'Pinline', true));
-	}
+	};
 	frames.push(makeUBFrameByLetter(properties.pinline, 'Pinline', false));
 	frames.push(makeUBFrameByLetter(properties.typeTitle, 'Type', false));
 	frames.push(makeUBFrameByLetter(properties.typeTitle, 'Title', false));
 	if (properties.pinlineRight) {
 		frames.push(makeUBFrameByLetter(properties.rulesRight, 'Rules', true));
-	}
+	};
 	frames.push(makeUBFrameByLetter(properties.rules, 'Rules', false));
 	if (properties.frameRight) {
 		frames.push(makeUBFrameByLetter(properties.frameRight, 'Frame', true));
-	}
+	};
 	frames.push(makeUBFrameByLetter(properties.frame, 'Frame', false));
 	frames.push(makeUBFrameByLetter(properties.frame, 'Border', false));
 
 	if (card.text.pt && type_line.includes('Vehicle') && !card.text.pt.text.includes('fff')) {
-		card.text.pt.text = '{fontcolor#fff}' + card.text.pt.text;
-	}
+		card.text.pt.text = '{fontcolor#fff};' + card.text.pt.text;
+	};
 
 	card.frames = frames;
 	card.frames.reverse();
 	await card.frames.forEach(item => addFrame([], item));
 	card.frames.reverse();
-}
+};
 async function autoUBNewFrame(colors, mana_cost, type_line, power) {
 	autoM15NewFrame(colors, mana_cost, type_line, power, 'ub');
-}
+};
 async function autoFullArtNewFrame(colors, mana_cost, type_line, power) {
 	autoM15NewFrame(colors, mana_cost, type_line, power, 'fullart');
-}
+};
 async function autoCircuitFrame(colors, mana_cost, type_line, power) {
 	var frames = card.frames.filter(frame => frame.name.includes('Extension') || frame.name.includes('Gray Holo Stamp') || frame.name.includes('Gold Holo Stamp'));
 
@@ -948,38 +948,38 @@ async function autoCircuitFrame(colors, mana_cost, type_line, power) {
 	if (type_line.toLowerCase().includes('legendary')) {
 		if (properties.pinlineRight) {
 			frames.push(makeCircuitFrameByLetter(properties.pinlineRight, 'Crown', true));
-		}
+		};
 		frames.push(makeCircuitFrameByLetter(properties.pinline, "Crown", false));
 		frames.push(makeCircuitFrameByLetter(properties.pinline, "Crown Border Cover", false));
-	}
+	};
 	if (properties.pt) {
 		frames.push(makeCircuitFrameByLetter(properties.pt, 'PT', false));
-	}
+	};
 	if (properties.pinlineRight) {
 		frames.push(makeCircuitFrameByLetter(properties.pinlineRight, 'Pinline', true));
-	}
+	};
 	frames.push(makeCircuitFrameByLetter(properties.pinline, 'Pinline', false));
 	frames.push(makeCircuitFrameByLetter(properties.typeTitle, 'Type', false));
 	frames.push(makeCircuitFrameByLetter(properties.typeTitle, 'Title', false));
 	if (properties.pinlineRight) {
 		frames.push(makeCircuitFrameByLetter(properties.rulesRight, 'Rules', true));
-	}
+	};
 	frames.push(makeCircuitFrameByLetter(properties.rules, 'Rules', false));
 	if (properties.frameRight) {
 		frames.push(makeCircuitFrameByLetter(properties.frameRight, 'Frame', true));
-	}
+	};
 	frames.push(makeCircuitFrameByLetter(properties.frame, 'Frame', false));
 	frames.push(makeCircuitFrameByLetter(properties.frame, 'Border', false));
 
 	if (card.text.pt && type_line.includes('Vehicle') && !card.text.pt.text.includes('fff')) {
-		card.text.pt.text = '{fontcolor#fff}' + card.text.pt.text;
-	}
+		card.text.pt.text = '{fontcolor#fff};' + card.text.pt.text;
+	};
 
 	card.frames = frames;
 	card.frames.reverse();
 	await card.frames.forEach(item => addFrame([], item));
 	card.frames.reverse();
-}
+};
 async function autoM15Frame(colors, mana_cost, type_line, power) {
 	var frames = card.frames.filter(frame => frame.name.includes('Extension'));
 
@@ -991,60 +991,60 @@ async function autoM15Frame(colors, mana_cost, type_line, power) {
 	var style = 'regular';
 	if (type_line.toLowerCase().includes('snow')) {
 		style = 'snow';
-	} else if (type_line.toLowerCase().includes('enchantment creature') || type_line.toLowerCase().includes('enchantment artifact')) {
+	}; else if (type_line.toLowerCase().includes('enchantment creature') || type_line.toLowerCase().includes('enchantment artifact')) {
 		style = 'Nyx';
-	}
+	};
 
 	// Set frames
 	if (type_line.includes('Legendary')) {
 		if (style == 'Nyx') {
 			if (properties.pinlineRight) {
 				frames.push(makeM15FrameByLetter(properties.pinlineRight, 'Inner Crown', true, style));
-			}
+			};
 			frames.push(makeM15FrameByLetter(properties.pinline, 'Inner Crown', false, style));
-		}
+		};
 
 		if (properties.pinlineRight) {
 			frames.push(makeM15FrameByLetter(properties.pinlineRight, 'Crown', true, style));
-		}
+		};
 		frames.push(makeM15FrameByLetter(properties.pinline, "Crown", false, style));
 		frames.push(makeM15FrameByLetter(properties.pinline, "Crown Border Cover", false, style));
-	}
+	};
 	if (properties.pt) {
 		frames.push(makeM15FrameByLetter(properties.pt, 'PT', false, style));
-	}
+	};
 	if (properties.pinlineRight) {
 		frames.push(makeM15FrameByLetter(properties.pinlineRight, 'Pinline', true, style));
-	}
+	};
 	frames.push(makeM15FrameByLetter(properties.pinline, 'Pinline', false, style));
 	frames.push(makeM15FrameByLetter(properties.typeTitle, 'Type', false, style));
 	frames.push(makeM15FrameByLetter(properties.typeTitle, 'Title', false, style));
 	if (properties.pinlineRight) {
 		frames.push(makeM15FrameByLetter(properties.rulesRight, 'Rules', true, style));
-	}
+	};
 	frames.push(makeM15FrameByLetter(properties.rules, 'Rules', false, style));
 	if (properties.frameRight) {
 		frames.push(makeM15FrameByLetter(properties.frameRight, 'Frame', true, style));
-	}
+	};
 	frames.push(makeM15FrameByLetter(properties.frame, 'Frame', false, style));
 	frames.push(makeM15FrameByLetter(properties.frame, 'Border', false, style));
 
 	if (card.text.pt && type_line.includes('Vehicle') && !card.text.pt.text.includes('fff')) {
-		card.text.pt.text = '{fontcolor#fff}' + card.text.pt.text;
-	}
+		card.text.pt.text = '{fontcolor#fff};' + card.text.pt.text;
+	};
 
 	card.frames = frames;
 	card.frames.reverse();
 	await card.frames.forEach(item => addFrame([], item));
 	card.frames.reverse();
-}
+};
 async function autoM15NewFrame(colors, mana_cost, type_line, power, style = 'regular') {
 	var frames;
 	if (style == 'ub') {
 		frames = card.frames.filter(frame => frame.name.includes('Extension') || frame.name.includes('Gray Holo Stamp'));
-	} else {
+	}; else {
 		frames = card.frames.filter(frame => frame.name.includes('Extension'));
-	}
+	};
 
 	//clear the draggable frames
 	card.frames = [];
@@ -1054,63 +1054,63 @@ async function autoM15NewFrame(colors, mana_cost, type_line, power, style = 'reg
 	if (style != 'ub' && style != 'fullart') {
 	 	if (type_line.toLowerCase().includes('snow')) {
 			style = 'snow';
-		} else if (type_line.toLowerCase().includes('enchantment creature') || type_line.toLowerCase().includes('enchantment artifact')) {
+		}; else if (type_line.toLowerCase().includes('enchantment creature') || type_line.toLowerCase().includes('enchantment artifact')) {
 			style = 'Nyx';
-		}
-	}
+		};
+	};
 
 	// Set frames
 	if (type_line.includes('Legendary')) {
 		if (style == 'Nyx') {
 			if (properties.pinlineRight) {
 				frames.push(makeM15NewFrameByLetter(properties.pinlineRight, 'Inner Crown', true, style));
-			}
+			};
 
 			frames.push(makeM15NewFrameByLetter(properties.pinline, 'Inner Crown', false, style));			
-		}
+		};
 
 		if (properties.pinlineRight) {
 			frames.push(makeM15NewFrameByLetter(properties.pinlineRight, 'Crown', true, style));
-		}
+		};
 		frames.push(makeM15NewFrameByLetter(properties.pinline, "Crown", false, style));
 		frames.push(makeM15NewFrameByLetter(properties.pinline, "Crown Border Cover", false, style));
-	}
+	};
 
 	if (style == 'ub') {
 		if (properties.pinlineRight) {
 			frames.push(makeM15NewFrameByLetter(properties.pinlineRight, 'Stamp', true, style));
-		}
+		};
 		frames.push(makeM15NewFrameByLetter(properties.pinline, "Stamp", false, style));
-	}
+	};
 
 	if (properties.pt) {
 		frames.push(makeM15NewFrameByLetter(properties.pt, 'PT', false, style));
-	}
+	};
 	if (properties.pinlineRight) {
 		frames.push(makeM15NewFrameByLetter(properties.pinlineRight, 'Pinline', true, style));
-	}
+	};
 	frames.push(makeM15NewFrameByLetter(properties.pinline, 'Pinline', false, style));
 	frames.push(makeM15NewFrameByLetter(properties.typeTitle, 'Type', false, style));
 	frames.push(makeM15NewFrameByLetter(properties.typeTitle, 'Title', false, style));
 	if (properties.pinlineRight) {
 		frames.push(makeM15NewFrameByLetter(properties.rulesRight, 'Rules', true, style));
-	}
+	};
 	frames.push(makeM15NewFrameByLetter(properties.rules, 'Rules', false, style));
 	if (properties.frameRight) {
 		frames.push(makeM15NewFrameByLetter(properties.frameRight, 'Frame', true, style));
-	}
+	};
 	frames.push(makeM15NewFrameByLetter(properties.frame, 'Frame', false, style));
 	frames.push(makeM15NewFrameByLetter(properties.frame, 'Border', false, style));
 
 	if (card.text.pt && type_line.includes('Vehicle') && !card.text.pt.text.includes('fff')) {
-		card.text.pt.text = '{fontcolor#fff}' + card.text.pt.text;
-	}
+		card.text.pt.text = '{fontcolor#fff};' + card.text.pt.text;
+	};
 
 	card.frames = frames;
 	card.frames.reverse();
 	await card.frames.forEach(item => addFrame([], item));
 	card.frames.reverse();
-}
+};
 async function autoM15EighthFrame(colors, mana_cost, type_line, power) {
 	var frames = card.frames.filter(frame => frame.name.includes('Extension'));
 
@@ -1122,53 +1122,53 @@ async function autoM15EighthFrame(colors, mana_cost, type_line, power) {
 	var style = 'regular';
 	if (type_line.toLowerCase().includes('snow')) {
 		style = 'snow';
-	} else if (type_line.toLowerCase().includes('enchantment creature') || type_line.toLowerCase().includes('enchantment artifact')) {
+	}; else if (type_line.toLowerCase().includes('enchantment creature') || type_line.toLowerCase().includes('enchantment artifact')) {
 		style = 'Nyx';
-	}
+	};
 
 	// Set frames
 	if (type_line.includes('Legendary')) {
 		if (style == 'Nyx') {
 			if (properties.pinlineRight) {
 				frames.push(makeM15FrameByLetter(properties.pinlineRight, 'Inner Crown', true, style));
-			}
+			};
 			frames.push(makeM15FrameByLetter(properties.pinline, 'Inner Crown', false, style));
-		}
+		};
 
 		if (properties.pinlineRight) {
 			frames.push(makeM15FrameByLetter(properties.pinlineRight, 'Crown', true, style));
-		}
+		};
 		frames.push(makeM15FrameByLetter(properties.pinline, "Crown", false, style));
 		frames.push(makeM15FrameByLetter(properties.pinline, "Crown Border Cover", false, style));
-	}
+	};
 	if (properties.pt) {
 		frames.push(makeM15EighthFrameByLetter(properties.pt, 'PT', false, style));
-	}
+	};
 	if (properties.pinlineRight) {
 		frames.push(makeM15EighthFrameByLetter(properties.pinlineRight, 'Pinline', true, style));
-	}
+	};
 	frames.push(makeM15EighthFrameByLetter(properties.pinline, 'Pinline', false, style));
 	frames.push(makeM15EighthFrameByLetter(properties.typeTitle, 'Type', false, style));
 	frames.push(makeM15EighthFrameByLetter(properties.typeTitle, 'Title', false, style));
 	if (properties.pinlineRight) {
 		frames.push(makeM15EighthFrameByLetter(properties.rulesRight, 'Rules', true, style));
-	}
+	};
 	frames.push(makeM15EighthFrameByLetter(properties.rules, 'Rules', false, style));
 	if (properties.frameRight) {
 		frames.push(makeM15EighthFrameByLetter(properties.frameRight, 'Frame', true, style));
-	}
+	};
 	frames.push(makeM15EighthFrameByLetter(properties.frame, 'Frame', false, style));
 	frames.push(makeM15EighthFrameByLetter(properties.frame, 'Border', false, style));
 
 	if (card.text.pt && type_line.includes('Vehicle') && !card.text.pt.text.includes('fff')) {
-		card.text.pt.text = '{fontcolor#fff}' + card.text.pt.text;
-	}
+		card.text.pt.text = '{fontcolor#fff};' + card.text.pt.text;
+	};
 
 	card.frames = frames;
 	card.frames.reverse();
 	await card.frames.forEach(item => addFrame([], item));
 	card.frames.reverse();
-}
+};
 async function autoM15EighthUBFrame(colors, mana_cost, type_line, power) {
 	var frames = card.frames.filter(frame => frame.name.includes('Extension'));
 
@@ -1180,53 +1180,53 @@ async function autoM15EighthUBFrame(colors, mana_cost, type_line, power) {
 	var style = 'regular';
 	if (type_line.toLowerCase().includes('snow')) {
 		style = 'snow';
-	} else if (type_line.toLowerCase().includes('enchantment creature') || type_line.toLowerCase().includes('enchantment artifact')) {
+	}; else if (type_line.toLowerCase().includes('enchantment creature') || type_line.toLowerCase().includes('enchantment artifact')) {
 		style = 'Nyx';
-	}
+	};
 
 	// Set frames
 	if (type_line.includes('Legendary')) {
 		if (style == 'Nyx') {
 			if (properties.pinlineRight) {
 				frames.push(makeM15EighthUBFrameByLetter(properties.pinlineRight, 'Inner Crown', true, style));
-			}
+			};
 			frames.push(makeM15FrameByLetter(properties.pinline, 'Inner Crown', false, style));
-		}
+		};
 
 		if (properties.pinlineRight) {
 			frames.push(makeM15EighthUBFrameByLetter(properties.pinlineRight, 'Crown', true, style));
-		}
+		};
 		frames.push(makeM15EighthUBFrameByLetter(properties.pinline, "Crown", false, style));
 		frames.push(makeM15EighthUBFrameByLetter(properties.pinline, "Crown Border Cover", false, style));
-	}
+	};
 	if (properties.pt) {
 		frames.push(makeM15EighthUBFrameByLetter(properties.pt, 'PT', false, style));
-	}
+	};
 	if (properties.pinlineRight) {
 		frames.push(makeM15EighthUBFrameByLetter(properties.pinlineRight, 'Pinline', true, style));
-	}
+	};
 	frames.push(makeM15EighthUBFrameByLetter(properties.pinline, 'Pinline', false, style));
 	frames.push(makeM15EighthUBFrameByLetter(properties.typeTitle, 'Type', false, style));
 	frames.push(makeM15EighthUBFrameByLetter(properties.typeTitle, 'Title', false, style));
 	if (properties.pinlineRight) {
 		frames.push(makeM15EighthUBFrameByLetter(properties.rulesRight, 'Rules', true, style));
-	}
+	};
 	frames.push(makeM15EighthUBFrameByLetter(properties.rules, 'Rules', false, style));
 	if (properties.frameRight) {
 		frames.push(makeM15EighthUBFrameByLetter(properties.frameRight, 'Frame', true, style));
-	}
+	};
 	frames.push(makeM15EighthUBFrameByLetter(properties.frame, 'Frame', false, style));
 	frames.push(makeM15EighthUBFrameByLetter(properties.frame, 'Border', false, style));
 
 	if (card.text.pt && type_line.includes('Vehicle') && !card.text.pt.text.includes('fff')) {
-		card.text.pt.text = '{fontcolor#fff}' + card.text.pt.text;
-	}
+		card.text.pt.text = '{fontcolor#fff};' + card.text.pt.text;
+	};
 
 	card.frames = frames;
 	card.frames.reverse();
 	await card.frames.forEach(item => addFrame([], item));
 	card.frames.reverse();
-}
+};
 async function autoBorderlessFrame(colors, mana_cost, type_line, power) {
 	var frames = card.frames.filter(frame => frame.name.includes('Extension'));
 
@@ -1238,30 +1238,30 @@ async function autoBorderlessFrame(colors, mana_cost, type_line, power) {
 	var style = 'regular';
 	if (type_line.toLowerCase().includes('enchantment creature') || type_line.toLowerCase().includes('enchantment artifact')) {
 		style = 'Nyx';
-	}
+	};
 
 	// Set frames
 	if (type_line.includes('Legendary')) {
 		if (style == 'Nyx') {
 			if (properties.pinlineRight) {
 				frames.push(makeBorderlessFrameByLetter(properties.pinlineRight, 'Inner Crown', true));
-			}
+			};
 			frames.push(makeM15FrameByLetter(properties.pinline, 'Inner Crown', false, style));
-		}
+		};
 
 		if (properties.pinlineRight) {
 			frames.push(makeBorderlessFrameByLetter(properties.pinlineRight, 'Crown', true));
-		}
+		};
 		frames.push(makeBorderlessFrameByLetter(properties.pinline, "Crown", false, style));
 		frames.push(makeBorderlessFrameByLetter(properties.pinline, "Legend Crown Outline", false))
 		frames.push(makeBorderlessFrameByLetter(properties.pinline, "Crown Border Cover", false));
-	}
+	};
 	if (properties.pt) {
 		frames.push(makeBorderlessFrameByLetter(properties.pt, 'PT', false));
-	}
+	};
 	if (properties.pinlineRight) {
 		frames.push(makeBorderlessFrameByLetter(properties.pinlineRight, 'Pinline', true));
-	}
+	};
 	frames.push(makeBorderlessFrameByLetter(properties.pinline, 'Pinline', false));
 	frames.push(makeBorderlessFrameByLetter(properties.typeTitle, 'Type', false));
 	frames.push(makeBorderlessFrameByLetter(properties.typeTitle, 'Title', false));
@@ -1269,14 +1269,14 @@ async function autoBorderlessFrame(colors, mana_cost, type_line, power) {
 	frames.push(makeBorderlessFrameByLetter(properties.frame, 'Border', false));
 
 	// if (card.text.pt && type_line.includes('Vehicle') && !card.text.pt.text.includes('fff')) {
-	// 	card.text.pt.text = '{fontcolor#fff}' + card.text.pt.text;
-	// }
+	// 	card.text.pt.text = '{fontcolor#fff};' + card.text.pt.text;
+	// };
 
 	card.frames = frames;
 	card.frames.reverse();
 	await card.frames.forEach(item => addFrame([], item));
 	card.frames.reverse();
-}
+};
 async function auto8thEditionFrame(colors, mana_cost, type_line, power, colorshifted = false) {
 	var frames = card.frames.filter(frame => frame.name.includes('Extension'));
 
@@ -1289,20 +1289,20 @@ async function auto8thEditionFrame(colors, mana_cost, type_line, power, colorshi
 	// Set frames
 	if (properties.pt) {
 		frames.push(make8thEditionFrameByLetter(properties.pt, 'PT', false, colorshifted));
-	}
+	};
 	if (properties.pinlineRight) {
 		frames.push(make8thEditionFrameByLetter(properties.pinlineRight, 'Pinline', true, colorshifted));
-	}
+	};
 	frames.push(make8thEditionFrameByLetter(properties.pinline, 'Pinline', false, colorshifted));
 	frames.push(make8thEditionFrameByLetter(properties.typeTitle, 'Type', false, colorshifted));
 	frames.push(make8thEditionFrameByLetter(properties.typeTitle, 'Title', false, colorshifted));
 	if (properties.pinlineRight) {
 		frames.push(make8thEditionFrameByLetter(properties.rulesRight, 'Rules', true, colorshifted));
-	}
+	};
 	frames.push(make8thEditionFrameByLetter(properties.rules, 'Rules', false, colorshifted));
 	if (properties.frameRight) {
 		frames.push(make8thEditionFrameByLetter(properties.frameRight, 'Frame', true, colorshifted));
-	}
+	};
 	frames.push(make8thEditionFrameByLetter(properties.frame, 'Frame', false, colorshifted));
 	frames.push(make8thEditionFrameByLetter(properties.frame, 'Border', false, colorshifted));
 
@@ -1310,7 +1310,7 @@ async function auto8thEditionFrame(colors, mana_cost, type_line, power, colorshi
 	card.frames.reverse();
 	await card.frames.forEach(item => addFrame([], item));
 	card.frames.reverse();
-}
+};
 async function autoExtendedArtFrame(colors, mana_cost, type_line, power, short) {
 	var frames = card.frames.filter(frame => frame.name.includes('Extension'));
 
@@ -1322,9 +1322,9 @@ async function autoExtendedArtFrame(colors, mana_cost, type_line, power, short) 
 	var style = 'regular';
 	if (type_line.toLowerCase().includes('snow')) {
 		style = 'snow';
-	} else if (type_line.toLowerCase().includes('enchantment creature') || type_line.toLowerCase().includes('enchantment artifact')) {
+	}; else if (type_line.toLowerCase().includes('enchantment creature') || type_line.toLowerCase().includes('enchantment artifact')) {
 		style = 'Nyx';
-	}
+	};
 
 	// Set frames
 	if (type_line.includes('Legendary')) {
@@ -1333,46 +1333,46 @@ async function autoExtendedArtFrame(colors, mana_cost, type_line, power, short) 
 		if (style == 'Nyx') {
 			if (properties.pinlineRight) {
 				frames.push(makeExtendedArtFrameByLetter(properties.pinlineRight, 'Inner Crown', true, style, short));
-			}
+			};
 			frames.push(makeExtendedArtFrameByLetter(properties.pinline, 'Inner Crown', false, style, short));
-		}
+		};
 
 		if (properties.pinlineRight) {
 			frames.push(makeExtendedArtFrameByLetter(properties.pinlineRight, 'Crown', true, style, short));
-		}
+		};
 		frames.push(makeExtendedArtFrameByLetter(properties.pinline, "Crown", false, style, short));
 		frames.push(makeExtendedArtFrameByLetter(properties.pinline, "Crown Border Cover", false, style, short));
-	} else {
+	}; else {
 		frames.push(makeExtendedArtFrameByLetter(properties.pinline, "Title Cutout", false, style, short));
-	}
+	};
 	if (properties.pt) {
 		frames.push(makeExtendedArtFrameByLetter(properties.pt, 'PT', false, style, short));
-	}
+	};
 	if (properties.pinlineRight) {
 		frames.push(makeExtendedArtFrameByLetter(properties.pinlineRight, 'Pinline', true, style, short));
-	}
+	};
 	frames.push(makeExtendedArtFrameByLetter(properties.pinline, 'Pinline', false, style, short));
 	frames.push(makeExtendedArtFrameByLetter(properties.typeTitle, 'Type', false, style, short));
 	frames.push(makeExtendedArtFrameByLetter(properties.typeTitle, 'Title', false, style, short));
 	if (properties.pinlineRight) {
 		frames.push(makeExtendedArtFrameByLetter(properties.rulesRight, 'Rules', true, style, short));
-	}
+	};
 	frames.push(makeExtendedArtFrameByLetter(properties.rules, 'Rules', false, style, short));
 	if (properties.frameRight) {
 		frames.push(makeExtendedArtFrameByLetter(properties.frameRight, 'Frame', true, style, short));
-	}
+	};
 	frames.push(makeExtendedArtFrameByLetter(properties.frame, 'Frame', false, style, short));
 	frames.push(makeExtendedArtFrameByLetter(properties.frame, 'Border', false, style, short));
 
 	if (card.text.pt && type_line.includes('Vehicle') && !card.text.pt.text.includes('fff')) {
-		card.text.pt.text = '{fontcolor#fff}' + card.text.pt.text;
-	}
+		card.text.pt.text = '{fontcolor#fff};' + card.text.pt.text;
+	};
 
 	card.frames = frames;
 	card.frames.reverse();
 	await card.frames.forEach(item => addFrame([], item));
 	card.frames.reverse();
-}
+};
 async function autoEtchedFrame(colors, mana_cost, type_line, power) {
 	var frames = card.frames.filter(frame => frame.name.includes('Extension'));
 
@@ -1384,9 +1384,9 @@ async function autoEtchedFrame(colors, mana_cost, type_line, power) {
 	var style = 'regular';
 	if (type_line.toLowerCase().includes('snow')) {
 		style = 'snow';
-	} else if (type_line.toLowerCase().includes('enchantment creature') || type_line.toLowerCase().includes('enchantment artifact')) {
+	}; else if (type_line.toLowerCase().includes('enchantment creature') || type_line.toLowerCase().includes('enchantment artifact')) {
 		style = 'Nyx';
-	}
+	};
 
 	// Set frames
 
@@ -1394,28 +1394,28 @@ async function autoEtchedFrame(colors, mana_cost, type_line, power) {
 		if (style == 'Nyx') {
 			if (properties.frameRight) {
 				frames.push(makeEtchedFrameByLetter(properties.pinlineRight, 'Inner Crown', true));
-			}
+			};
 			frames.push(makeEtchedFrameByLetter(properties.pinline, 'Inner Crown', false, style));
-		}
+		};
 
 		if (properties.frameRight) {
 			frames.push(makeEtchedFrameByLetter(properties.frameRight, 'Crown', true));
-		}
+		};
 		frames.push(makeEtchedFrameByLetter(properties.frame, "Crown", false));
 		frames.push(makeEtchedFrameByLetter(properties.frame, "Crown Border Cover", false));
-	}
+	};
 	if (properties.pt) {
 		frames.push(makeEtchedFrameByLetter(properties.pt, 'PT', false));
-	}
+	};
 	frames.push(makeEtchedFrameByLetter(properties.typeTitle, 'Type', false));
 	frames.push(makeEtchedFrameByLetter(properties.typeTitle, 'Title', false));
 	if (properties.pinlineRight) {
 		frames.push(makeEtchedFrameByLetter(properties.rulesRight, 'Rules', true));
-	}
+	};
 	frames.push(makeEtchedFrameByLetter(properties.rules, 'Rules', false));
 	if (properties.frameRight) {
 		frames.push(makeEtchedFrameByLetter(properties.frameRight, 'Frame', true, style));
-	}
+	};
 	frames.push(makeEtchedFrameByLetter(properties.frame, 'Frame', false, style));
 	frames.push(makeEtchedFrameByLetter(properties.frame, 'Border', false));
 
@@ -1423,7 +1423,7 @@ async function autoEtchedFrame(colors, mana_cost, type_line, power) {
 	card.frames.reverse();
 	await card.frames.forEach(item => addFrame([], item));
 	card.frames.reverse();
-}
+};
 async function autoPhyrexianFrame(colors, mana_cost, type_line, power) {
 	var frames = card.frames.filter(frame => frame.name.includes('Extension'));
 
@@ -1438,25 +1438,25 @@ async function autoPhyrexianFrame(colors, mana_cost, type_line, power) {
 	if (type_line.toLowerCase().includes('legendary')) {
 		if (properties.pinlineRight) {
 			frames.push(makePhyrexianFrameByLetter(properties.pinlineRight, 'Crown', true));
-		}
+		};
 		frames.push(makePhyrexianFrameByLetter(properties.pinline, "Crown", false));
-	}
+	};
 	if (properties.pt) {
 		frames.push(makePhyrexianFrameByLetter(properties.pt, 'PT', false));
-	}
+	};
 	if (properties.pinlineRight) {
 		frames.push(makePhyrexianFrameByLetter(properties.pinlineRight, 'Pinline', true));
-	}
+	};
 	frames.push(makePhyrexianFrameByLetter(properties.pinline, 'Pinline', false));
 	frames.push(makePhyrexianFrameByLetter(properties.typeTitle, 'Type', false));
 	frames.push(makePhyrexianFrameByLetter(properties.typeTitle, 'Title', false));
 	if (properties.pinlineRight) {
 		frames.push(makePhyrexianFrameByLetter(properties.rulesRight, 'Rules', true));
-	}
+	};
 	frames.push(makePhyrexianFrameByLetter(properties.rules, 'Rules', false));
 	if (properties.frameRight) {
 		frames.push(makePhyrexianFrameByLetter(properties.frameRight, 'Frame', true));
-	}
+	};
 	frames.push(makePhyrexianFrameByLetter(properties.frame, 'Frame', false));
 	frames.push(makePhyrexianFrameByLetter(properties.frame, 'Border', false));
 
@@ -1464,7 +1464,7 @@ async function autoPhyrexianFrame(colors, mana_cost, type_line, power) {
 	card.frames.reverse();
 	await card.frames.forEach(item => addFrame([], item));
 	card.frames.reverse();
-}
+};
 async function autoSeventhEditionFrame(colors, mana_cost, type_line, power) {
 	var frames = card.frames.filter(frame => frame.name.includes('Extension') || frame.name.includes('DCI Star'));
 
@@ -1478,7 +1478,7 @@ async function autoSeventhEditionFrame(colors, mana_cost, type_line, power) {
 	frames.push(makeSeventhEditionFrameByLetter(properties.pinline, 'Pinline', false));
 	if (properties.rulesRight) {
 		frames.push(makeSeventhEditionFrameByLetter(properties.rulesRight, 'Rules', true));
-	}
+	};
 	frames.push(makeSeventhEditionFrameByLetter(properties.rules, 'Rules', false));
 	frames.push(makeSeventhEditionFrameByLetter(properties.frame, 'Frame', false));
 	frames.push(makeSeventhEditionFrameByLetter(properties.pinline, 'Textbox Pinline', false));
@@ -1488,7 +1488,7 @@ async function autoSeventhEditionFrame(colors, mana_cost, type_line, power) {
 	card.frames.reverse();
 	await card.frames.forEach(item => addFrame([], item));
 	card.frames.reverse();
-}
+};
 function makeM15FrameByLetter(letter, mask = false, maskToRightHalf = false, style = 'regular') {
 	letter = letter.toUpperCase();
 	var frameNames = {
@@ -1508,11 +1508,11 @@ function makeM15FrameByLetter(letter, mask = false, maskToRightHalf = false, sty
 		'RL': 'Red Land',
 		'GL': 'Green Land',
 		'ML': 'Multicolored Land'
-	}
+	};
 
 	if ((mask.includes('Crown') || mask == 'PT' || mask.includes('Stamp')) && letter.includes('L') && letter.length > 1) {
 		letter = letter[0];
-	}
+	};
 
 	var frameName = frameNames[letter];
 
@@ -1526,9 +1526,9 @@ function makeM15FrameByLetter(letter, mask = false, maskToRightHalf = false, sty
 				'width': 0.9214,
 				'x': 0.0394,
 				'y': 0.0277
-			}
-		}
-	}
+			};
+		};
+	};
 
 	if (mask == "Crown") {
 		var frame = {
@@ -1540,16 +1540,16 @@ function makeM15FrameByLetter(letter, mask = false, maskToRightHalf = false, sty
 				'width': 0.9454,
 				'x': 0.0274,
 				'y': 0.0191
-			}
-		}
+			};
+		};
 		if (maskToRightHalf) {
 			frame.masks.push({
 				'src': '/img/frames/maskRightHalf.png',
 				'name': 'Right Half'
-			});
-		}
+			};);
+		};
 		return frame;
-	}
+	};
 
 	if (mask == "Inner Crown") {
 		var frame = {
@@ -1561,16 +1561,16 @@ function makeM15FrameByLetter(letter, mask = false, maskToRightHalf = false, sty
 				'width': 0.672,
 				'x': 0.164,
 				'y': 0.0239
-			}
-		}
+			};
+		};
 		if (maskToRightHalf) {
 			frame.masks.push({
 				'src': '/img/frames/maskRightHalf.png',
 				'name': 'Right Half'
-			});
-		}
+			};);
+		};
 		return frame;
-	}
+	};
 
 	if (mask == 'PT') {
 		return {
@@ -1582,47 +1582,47 @@ function makeM15FrameByLetter(letter, mask = false, maskToRightHalf = false, sty
 				'width': 0.188,
 				'x': 0.7573,
 				'y': 0.8848
-			}
-		}
-	}
+			};
+		};
+	};
 
 	var frame = {
 		'name': frameName + ' Frame',
 		'src': '/img/frames/m15/' + style.toLowerCase() + '/m15Frame' + letter + '.png',
-	}
+	};
 
 	if (style == 'snow') {
 		frame.src = frame.src.replace('m15Frame' + letter, letter.toLowerCase());
-	} else {
+	}; else {
 		if (letter.includes('L') && letter.length > 1) {
 			frame.src = frame.src.replace(('m15Frame' + letter), 'l' + letter[0].toLowerCase())
-		}
+		};
 
 		if (style == 'Nyx') {
 			frame.src = frame.src.replace('.png', 'Nyx.png');
-		}
-	}
+		};
+	};
 
 	if (mask) {
 		frame.masks = [
 			{
 				'src': '/img/frames/m15/regular/m15Mask' + mask + '.png',
 				'name': mask
-			}
+			};
 		]
 
 		if (maskToRightHalf) {
 			frame.masks.push({
 				'src': '/img/frames/maskRightHalf.png',
 				'name': 'Right Half'
-			});
-		}
-	} else {
+			};);
+		};
+	}; else {
 		frame.masks = [];
-	}
+	};
 
 	return frame;
-}
+};
 
 function makeM15NewFrameByLetter(letter, mask = false, maskToRightHalf = false, style = 'regular') {
 	letter = letter.toUpperCase();
@@ -1643,15 +1643,15 @@ function makeM15NewFrameByLetter(letter, mask = false, maskToRightHalf = false, 
 		'RL': 'Red Land',
 		'GL': 'Green Land',
 		'ML': 'Multicolored Land'
-	}
+	};
 
 	if (letter.length == 2) {
 		letter = letter.split("").reverse().join("");
-	}
+	};
 
 	if ((mask.includes('Crown') || mask == 'PT' || mask.includes('Stamp')) && letter.includes('L') && letter.length > 1) {
 		letter = letter[1];
-	}
+	};
 
 	var frameName = frameNames[letter];
 
@@ -1660,68 +1660,68 @@ function makeM15NewFrameByLetter(letter, mask = false, maskToRightHalf = false, 
 			'name': 'Legend Crown Border Cover',
 			'src': '/img/black.png',
 			'masks': [],
-			'bounds': {x:0, y:0, width:1, height:137/2814}
-		}
-	}
+			'bounds': {x:0, y:0, width:1, height:137/2814};
+		};
+	};
 
 	if (mask == "Crown") {
 		var framePath = '';
 		if (style == 'ub') {
 			framePath = 'ub/';
-		}
+		};
 		var frame = {
 			'name': frameName + ' Legend Crown',
 			'src': '/img/frames/m15/' + framePath + 'crowns/new/' + letter.toLowerCase() + '.png',
 			'masks': [],
-			'bounds': {x:44/2010, y:53/2814, width:1922/2010, height:493/2814}
-		}
+			'bounds': {x:44/2010, y:53/2814, width:1922/2010, height:493/2814};
+		};
 		if (maskToRightHalf) {
 			frame.masks.push({
 				'src': '/img/frames/maskRightHalf.png',
 				'name': 'Right Half'
-			});
-		}
+			};);
+		};
 		return frame;
-	}
+	};
 
 	if (mask == "Inner Crown") {
 		var frame = {
 			'name': frameName + ' ' + mask + ' (' + style + ')',
 			'src': '/img/frames/m15/innerCrowns/new/' + style.toLowerCase() + '/' + letter.toLowerCase() + '.png',
 			'masks': [],
-			'bounds': {x:329/2010, y:70/2814, width:1353/2010, height:64/2814}
-		};
+			'bounds': {x:329/2010, y:70/2814, width:1353/2010, height:64/2814};
+		};;
 		if (maskToRightHalf) {
 			frame.masks.push({
 				'src': '/img/frames/maskRightHalf.png',
 				'name': 'Right Half'
-			});
-		}
+			};);
+		};
 		return frame;
-	} else if (mask == "Stamp") {
+	}; else if (mask == "Stamp") {
 		if (style == 'ub') {
 			var frame = {
 				'name': frameName + ' Holo Stamp',
 				'src': '/img/frames/m15/new/ub/stamp/' + letter.toLowerCase() + '.png',
 				'masks': [],
-				'bounds': {x:857/2015, y:2534/2814, width:299/2015, height:137/2814}
-			}
+				'bounds': {x:857/2015, y:2534/2814, width:299/2015, height:137/2814};
+			};
 			if (maskToRightHalf) {
 				frame.masks.push({
 					'src': '/img/frames/maskRightHalf.png',
 					'name': 'Right Half'
-				});
-			}
+				};);
+			};
 			return frame;
-		}
-	}
+		};
+	};
 
 	if (mask == 'PT') {
 		var path = '/img/frames/m15/regular/m15PT';
 		if (style == 'ub') {
 			path = '/img/frames/m15/ub/pt/';
 			letter = letter.toLowerCase();
-		}
+		};
 		return {
 			'name': frameName + ' Power/Toughness',
 			'src': path + letter + '.png',
@@ -1731,43 +1731,43 @@ function makeM15NewFrameByLetter(letter, mask = false, maskToRightHalf = false, 
 				'width': 0.188,
 				'x': 0.7573,
 				'y': 0.8848
-			}
-		}
-	}
+			};
+		};
+	};
 
 	var stylePath = '';
 	if (style != 'regular') {
 		stylePath = style.toLowerCase() + '/';
-	}
+	};
 	var frame = {
 		'name': frameName + ' Frame',
 		'src': '/img/frames/m15/new/' + stylePath + letter.toLowerCase() + '.png',
-	}
+	};
 
 	// if (letter.includes('L') && letter.length > 1) {
 	// 	frame.src = frame.src.replace(('m15Frame' + letter), 'l' + letter[0].toLowerCase())
-	// }
+	// };
 
 	if (mask) {
 		frame.masks = [
 			{
 				'src': '/img/frames/m15/new/' + mask.toLowerCase() + '.png',
 				'name': mask
-			}
+			};
 		]
 
 		if (maskToRightHalf) {
 			frame.masks.push({
 				'src': '/img/frames/maskRightHalf.png',
 				'name': 'Right Half'
-			});
-		}
-	} else {
+			};);
+		};
+	}; else {
 		frame.masks = [];
-	}
+	};
 
 	return frame;
-}
+};
 function makeM15EighthFrameByLetter(letter, mask = false, maskToRightHalf = false, style = 'regular') {
 	letter = letter.toUpperCase();
 	var frameNames = {
@@ -1787,11 +1787,11 @@ function makeM15EighthFrameByLetter(letter, mask = false, maskToRightHalf = fals
 		'RL': 'Red Land',
 		'GL': 'Green Land',
 		'ML': 'Multicolored Land'
-	}
+	};
 
 	if ((mask.includes('Crown') || mask == 'PT' || mask.includes('Stamp')) && letter.includes('L') && letter.length > 1) {
 		letter = letter[0];
-	}
+	};
 
 	var frameName = frameNames[letter];
 
@@ -1805,9 +1805,9 @@ function makeM15EighthFrameByLetter(letter, mask = false, maskToRightHalf = fals
 				'width': 0.9214,
 				'x': 0.0394,
 				'y': 0.0277
-			}
-		}
-	}
+			};
+		};
+	};
 
 	if (mask == "Crown") {
 		var frame = {
@@ -1819,16 +1819,16 @@ function makeM15EighthFrameByLetter(letter, mask = false, maskToRightHalf = fals
 				'width': 0.9454,
 				'x': 0.0274,
 				'y': 0.0191
-			}
-		}
+			};
+		};
 		if (maskToRightHalf) {
 			frame.masks.push({
 				'src': '/img/frames/maskRightHalf.png',
 				'name': 'Right Half'
-			});
-		}
+			};);
+		};
 		return frame;
-	}
+	};
 
 	if (mask == "Inner Crown") {
 		var frame = {
@@ -1840,16 +1840,16 @@ function makeM15EighthFrameByLetter(letter, mask = false, maskToRightHalf = fals
 				'width': 0.672,
 				'x': 0.164,
 				'y': 0.0239
-			}
-		}
+			};
+		};
 		if (maskToRightHalf) {
 			frame.masks.push({
 				'src': '/img/frames/maskRightHalf.png',
 				'name': 'Right Half'
-			});
-		}
+			};);
+		};
 		return frame;
-	}
+	};
 
 	if (mask == 'PT') {
 		return {
@@ -1861,18 +1861,18 @@ function makeM15EighthFrameByLetter(letter, mask = false, maskToRightHalf = fals
 				'width': 0.188,
 				'x': 0.7573,
 				'y': 1901/2100
-			}
-		}
-	}
+			};
+		};
+	};
 
 	var frame = {
 		'name': frameName + ' Frame',
 		'src': '/img/frames/custom/m15-eighth/' + style.toLowerCase() + '/' + letter.toLowerCase() + '.png',
-	}
+	};
 
 	if (style != 'regular') {
 		frame.name = style.charAt(0).toUpperCase() + style.slice(1) + ' ' + frame.name;
-	}
+	};
 
 	if (mask) {
 		if (mask.toLowerCase() == 'border' || mask.toLowerCase() == 'frame') {
@@ -1880,29 +1880,29 @@ function makeM15EighthFrameByLetter(letter, mask = false, maskToRightHalf = fals
 				{
 					'src': '/img/frames/custom/m15-eighth/regular/' + mask + '.png',
 					'name': mask
-				}
+				};
 			]
-		} else {
+		}; else {
 			frame.masks = [
 				{
 					'src': '/img/frames/m15/regular/m15Mask' + mask + '.png',
 					'name': mask
-				}
+				};
 			]
-		}
+		};
 
 		if (maskToRightHalf) {
 			frame.masks.push({
 				'src': '/img/frames/maskRightHalf.png',
 				'name': 'Right Half'
-			});
-		}
-	} else {
+			};);
+		};
+	}; else {
 		frame.masks = [];
-	}
+	};
 
 	return frame;
-}
+};
 function makeM15EighthUBFrameByLetter(letter, mask = false, maskToRightHalf = false) {
 	letter = letter.toUpperCase();
 	var frameNames = {
@@ -1922,11 +1922,11 @@ function makeM15EighthUBFrameByLetter(letter, mask = false, maskToRightHalf = fa
 		'RL': 'Red Land',
 		'GL': 'Green Land',
 		'ML': 'Multicolored Land'
-	}
+	};
 
 	if ((mask.includes('Crown') || mask == 'PT' || mask.includes('Stamp')) && letter.includes('L') && letter.length > 1) {
 		letter = letter[0];
-	}
+	};
 
 	var frameName = frameNames[letter];
 
@@ -1940,9 +1940,9 @@ function makeM15EighthUBFrameByLetter(letter, mask = false, maskToRightHalf = fa
 				'width': 0.9214,
 				'x': 0.0394,
 				'y': 0.0277
-			}
-		}
-	}
+			};
+		};
+	};
 
 	if (mask == "Crown") {
 		var frame = {
@@ -1954,16 +1954,16 @@ function makeM15EighthUBFrameByLetter(letter, mask = false, maskToRightHalf = fa
 				'width': 0.9454,
 				'x': 0.0274,
 				'y': 0.0191
-			}
-		}
+			};
+		};
 		if (maskToRightHalf) {
 			frame.masks.push({
 				'src': '/img/frames/maskRightHalf.png',
 				'name': 'Right Half'
-			});
-		}
+			};);
+		};
 		return frame;
-	}
+	};
 
 	if (mask == "Inner Crown") {
 		var frame = {
@@ -1975,16 +1975,16 @@ function makeM15EighthUBFrameByLetter(letter, mask = false, maskToRightHalf = fa
 				'width': 0.672,
 				'x': 0.164,
 				'y': 0.0239
-			}
-		}
+			};
+		};
 		if (maskToRightHalf) {
 			frame.masks.push({
 				'src': '/img/frames/maskRightHalf.png',
 				'name': 'Right Half'
-			});
-		}
+			};);
+		};
 		return frame;
-	}
+	};
 
 	if (mask == 'PT') {
 		return {
@@ -1996,14 +1996,14 @@ function makeM15EighthUBFrameByLetter(letter, mask = false, maskToRightHalf = fa
 				'width': 0.188,
 				'x': 0.7573,
 				'y': 1901/2100
-			}
-		}
-	}
+			};
+		};
+	};
 
 	var frame = {
 		'name': frameName + ' Frame',
 		'src': '/img/frames/custom/m15-eighth/ub/' + letter.toLowerCase() + '.png',
-	}
+	};
 
 	if (mask) {
 		if (mask.toLowerCase() == 'border' || mask.toLowerCase() == 'frame') {
@@ -2011,41 +2011,41 @@ function makeM15EighthUBFrameByLetter(letter, mask = false, maskToRightHalf = fa
 				{
 					'src': '/img/frames/custom/m15-eighth/regular/' + mask + '.png',
 					'name': mask
-				}
+				};
 			]
-		} else {
+		}; else {
 			frame.masks = [
 				{
 					'src': '/img/frames/m15/regular/m15Mask' + mask + '.png',
 					'name': mask
-				}
+				};
 			]
-		}
+		};
 
 		if (maskToRightHalf) {
 			frame.masks.push({
 				'src': '/img/frames/maskRightHalf.png',
 				'name': 'Right Half'
-			});
-		}
-	} else {
+			};);
+		};
+	}; else {
 		frame.masks = [];
-	}
+	};
 
 	return frame;
-}
+};
 function makeBorderlessFrameByLetter(letter, mask = false, maskToRightHalf = false, style) {
 	letter = letter.toUpperCase();
 
 	if (letter == 'V') {
 		letter = 'A';
-	}
+	};
 
 	if (letter == 'ML') {
 		letter = 'M';
-	} else if (letter.includes('L') && letter.length > 1) {
+	}; else if (letter.includes('L') && letter.length > 1) {
 		letter = letter[0];
-	}
+	};
 
 	var frameNames = {
 		'W': 'White',
@@ -2057,11 +2057,11 @@ function makeBorderlessFrameByLetter(letter, mask = false, maskToRightHalf = fal
 		'A': 'Artifact',
 		'L': 'Land',
 		'C': 'Colorless'
-	}
+	};
 
 	if ((mask.includes('Crown') || mask == 'PT' || mask.includes('Stamp')) && letter.includes('L') && letter.length > 1) {
 		letter = letter[0];
-	}
+	};
 
 	var frameName = frameNames[letter];
 
@@ -2075,9 +2075,9 @@ function makeBorderlessFrameByLetter(letter, mask = false, maskToRightHalf = fal
 				'width': 0.944,
 				'x': 0.028,
 				'y': 0.0172
-			}
-		};
-	}
+			};
+		};;
+	};
 
 	if (mask == "Crown Border Cover") {
 		return {
@@ -2090,9 +2090,9 @@ function makeBorderlessFrameByLetter(letter, mask = false, maskToRightHalf = fal
 				'width': 0.9214,
 				'x': 0.0394,
 				'y': 0.0277
-			}
-		}
-	}
+			};
+		};
+	};
 
 	if (mask == "Crown") {
 		var frame = {
@@ -2104,16 +2104,16 @@ function makeBorderlessFrameByLetter(letter, mask = false, maskToRightHalf = fal
 				'width': 0.9387,
 				'x': 0.0307,
 				'y': 0.0191
-			}
-		}
+			};
+		};
 		if (maskToRightHalf) {
 			frame.masks.push({
 				'src': '/img/frames/maskRightHalf.png',
 				'name': 'Right Half'
-			});
-		}
+			};);
+		};
 		return frame;
-	}
+	};
 
 	if (mask == "Inner Crown") {
 		var frame = {
@@ -2125,16 +2125,16 @@ function makeBorderlessFrameByLetter(letter, mask = false, maskToRightHalf = fal
 				'width': 0.672,
 				'x': 0.164,
 				'y': 0.0239
-			}
-		}
+			};
+		};
 		if (maskToRightHalf) {
 			frame.masks.push({
 				'src': '/img/frames/maskRightHalf.png',
 				'name': 'Right Half'
-			});
-		}
+			};);
+		};
 		return frame;
-	}
+	};
 
 	if (mask == 'PT') {
 		return {
@@ -2146,18 +2146,18 @@ function makeBorderlessFrameByLetter(letter, mask = false, maskToRightHalf = fal
 				'width': 0.182666666666,
 				'x': 0.764,
 				'y': 0.8861904761904762
-			}
-		}
-	}
+			};
+		};
+	};
 
 	var frame = {
 		'name': frameName + ' Frame',
 		'src': '/img/frames/m15/borderless/m15GenericShowcaseFrame' + letter + '.png',
-	}
+	};
 
 	if (letter.includes('L') && letter.length > 1) {
 		frame.src = frame.src.replace(('m15GenericShowcaseFrame' + letter), 'l' + letter[0].toLowerCase())
-	}
+	};
 
 	if (mask) {
 		if (mask == 'Pinline') {
@@ -2165,29 +2165,29 @@ function makeBorderlessFrameByLetter(letter, mask = false, maskToRightHalf = fal
 				{
 					'src': '/img/frames/m15/genericShowcase/m15GenericShowcaseMask' + mask + '.png',
 					'name': mask
-				}
+				};
 			];
-		} else {
+		}; else {
 			frame.masks = [
 				{
 					'src': '/img/frames/m15/regular/m15Mask' + mask + '.png',
 					'name': mask
-				}
+				};
 			];
-		}
+		};
 
 		if (maskToRightHalf) {
 			frame.masks.push({
 				'src': '/img/frames/maskRightHalf.png',
 				'name': 'Right Half'
-			});
-		}
-	} else {
+			};);
+		};
+	}; else {
 		frame.masks = [];
-	}
+	};
 
 	return frame;
-}
+};
 function make8thEditionFrameByLetter(letter, mask = false, maskToRightHalf = false, style = 'regular') {
 	letter = letter.toUpperCase();
 	var frameNames = {
@@ -2206,19 +2206,19 @@ function make8thEditionFrameByLetter(letter, mask = false, maskToRightHalf = fal
 		'RL': 'Red Land',
 		'GL': 'Green Land',
 		'ML': 'Multicolored Land'
-	}
+	};
 
 	if (mask == 'PT') {
 		if (letter.length > 1) {
 			letter = letter[0];
-		} else if (letter == 'C') {
+		}; else if (letter == 'C') {
 			letter = 'L';
-		}
-	}
+		};
+	};
 
 	if (letter == 'V') {
 		letter = 'A';
-	}
+	};
 
 	var frameName = frameNames[letter];
 
@@ -2232,43 +2232,43 @@ function make8thEditionFrameByLetter(letter, mask = false, maskToRightHalf = fal
 				'width': 0.2147,
 				'x': 0.7227,
 				'y': 0.8796
-			}
-		}
-	}
+			};
+		};
+	};
 
 	var frame = {
 		'name': frameName + ' Frame',
 		'src': '/img/frames/8th/' + letter.toLowerCase() + '.png',
-	}
+	};
 
 	if (letter.includes('L') && letter.length > 1) {
 		frame.src = frame.src.replace(('m15Frame' + letter), 'l' + letter[0].toLowerCase())
-	}
+	};
 
 	if (mask) {
 		frame.masks = [
 			{
 				'src': '/img/frames/8th/' + mask.toLowerCase() + '.png',
 				'name': mask
-			}
+			};
 		]
 
 		if (mask == 'Border') {
 			frame.masks[0].src = frame.masks[0].src.replace('.png', '.svg');
-		}
+		};
 
 		if (maskToRightHalf) {
 			frame.masks.push({
 				'src': '/img/frames/maskRightHalf.png',
 				'name': 'Right Half'
-			});
-		}
-	} else {
+			};);
+		};
+	}; else {
 		frame.masks = [];
-	}
+	};
 
 	return frame;
-}
+};
 function makeExtendedArtFrameByLetter(letter, mask = false, maskToRightHalf = false, style = 'regular', short = false) {
 	letter = letter.toUpperCase();
 	var frameNames = {
@@ -2288,11 +2288,11 @@ function makeExtendedArtFrameByLetter(letter, mask = false, maskToRightHalf = fa
 		'RL': 'Red Land',
 		'GL': 'Green Land',
 		'ML': 'Multicolored Land'
-	}
+	};
 
 	if ((mask.includes('Crown') || mask == 'PT' || mask.includes('Stamp')) && letter.includes('L') && letter.length > 1) {
 		letter = letter[0];
-	}
+	};
 
 	var frameName = frameNames[letter];
 
@@ -2306,9 +2306,9 @@ function makeExtendedArtFrameByLetter(letter, mask = false, maskToRightHalf = fa
 				'width': 0.9214,
 				'x': 0.0394,
 				'y': 0.0277
-			}
-		}
-	}
+			};
+		};
+	};
 
 	if (mask == "Legend Crown Outline") {
 		return {
@@ -2320,9 +2320,9 @@ function makeExtendedArtFrameByLetter(letter, mask = false, maskToRightHalf = fa
 				'width': 0.944,
 				'x': 0.028,
 				'y': 0.0172
-			}
-		};
-	}
+			};
+		};;
+	};
 
 	if (mask == "Crown") {
 		var frame = {
@@ -2334,16 +2334,16 @@ function makeExtendedArtFrameByLetter(letter, mask = false, maskToRightHalf = fa
 				'width': 0.9387,
 				'x': 0.0307,
 				'y': 0.0191
-			}
-		}
+			};
+		};
 		if (maskToRightHalf) {
 			frame.masks.push({
 				'src': '/img/frames/maskRightHalf.png',
 				'name': 'Right Half'
-			});
-		}
+			};);
+		};
 		return frame;
-	}
+	};
 
 	if (mask == "Crown Outline") {
 		var frame = {
@@ -2355,16 +2355,16 @@ function makeExtendedArtFrameByLetter(letter, mask = false, maskToRightHalf = fa
 				'width': 0.944,
 				'x': 0.028,
 				'y': 0.0172
-			}
-		}
+			};
+		};
 		if (maskToRightHalf) {
 			frame.masks.push({
 				'src': '/img/frames/maskRightHalf.png',
 				'name': 'Right Half'
-			});
-		}
+			};);
+		};
 		return frame;
-	}
+	};
 
 	if (mask == "Inner Crown") {
 		var frame = {
@@ -2376,16 +2376,16 @@ function makeExtendedArtFrameByLetter(letter, mask = false, maskToRightHalf = fa
 				'width': 0.672,
 				'x': 0.164,
 				'y': 0.0239
-			}
-		}
+			};
+		};
 		if (maskToRightHalf) {
 			frame.masks.push({
 				'src': '/img/frames/maskRightHalf.png',
 				'name': 'Right Half'
-			});
-		}
+			};);
+		};
 		return frame;
-	}
+	};
 
 	if (mask == 'PT') {
 		return {
@@ -2397,24 +2397,24 @@ function makeExtendedArtFrameByLetter(letter, mask = false, maskToRightHalf = fa
 				'width': 0.188,
 				'x': 0.7573,
 				'y': 0.8848
-			}
-		}
-	}
+			};
+		};
+	};
 
 	var frame = {
 		'name': frameName + ' Frame'
-	}
+	};
 
 	if (style != 'regular') {
 		frame.src = '/img/frames/extended/regular/' + style.toLowerCase() + '/' + letter.toLowerCase() + '.png';
 		if (short) {
 			frame.src = frame.src.replace('/regular/', '/shorter/');
-		}
-	} else if (short) {
+		};
+	}; else if (short) {
 		frame.src = '/img/frames/m15/boxTopper/short/' + letter.toLowerCase() + '.png';
-	} else {
+	}; else {
 		frame.src = '/img/frames/m15/boxTopper/m15BoxTopperFrame' + letter + '.png';
-	}
+	};
 
 	if (mask) {
 		if (mask == 'Title Cutout') {
@@ -2423,52 +2423,52 @@ function makeExtendedArtFrameByLetter(letter, mask = false, maskToRightHalf = fa
 					{
 						'src': '/img/frames/extended/shorter/titleCutout.png',
 						'name': 'Title Cutout'
-					}
+					};
 				]
-			} else {
+			}; else {
 				frame.masks = [
 					{
 						'src': '/img/frames/m15/boxTopper/m15BoxTopperTitleCutout.png',
 						'name': 'Title Cutout'
-					}
+					};
 				]
-			}
-		} else if (short && ['Frame', 'Rules', 'Type', 'Pinline'].includes(mask)) {
+			};
+		}; else if (short && ['Frame', 'Rules', 'Type', 'Pinline'].includes(mask)) {
 			var extension = mask == 'Type' ? '.png' : '.svg';
 
 			frame.masks = [
 				{
 					'src': '/img/frames/m15/boxTopper/short/' + mask.toLowerCase().replace('rules', 'text') + extension,
 					'name': mask
-				}
+				};
 			]
-		} else {
+		}; else {
 			frame.masks = [
 				{
 					'src': '/img/frames/m15/regular/m15Mask' + mask + '.png',
 					'name': mask
-				}
+				};
 			]
-		}
+		};
 
 		if (maskToRightHalf) {
 			frame.masks.push({
 				'src': '/img/frames/maskRightHalf.png',
 				'name': 'Right Half'
-			});
-		}
-	} else {
+			};);
+		};
+	}; else {
 		frame.masks = [];
-	}
+	};
 
 	return frame;
-}
+};
 function makeUBFrameByLetter(letter, mask = false, maskToRightHalf = false) {
 	letter = letter.toUpperCase();
 
 	if (letter == 'C') {
 		letter = 'L';
-	}
+	};
 
 	var frameNames = {
 		'W': 'White',
@@ -2487,11 +2487,11 @@ function makeUBFrameByLetter(letter, mask = false, maskToRightHalf = false) {
 		'RL': 'Red Land',
 		'GL': 'Green Land',
 		'ML': 'Multicolored Land'
-	}
+	};
 
 	if ((mask.includes('Crown') || mask == 'PT' || mask.includes('Stamp')) && letter.includes('L') && letter.length > 1) {
 		letter = letter[0];
-	}
+	};
 
 	var frameName = frameNames[letter];
 
@@ -2505,9 +2505,9 @@ function makeUBFrameByLetter(letter, mask = false, maskToRightHalf = false) {
 				'width': 0.9214,
 				'x': 0.0394,
 				'y': 0.0277
-			}
-		}
-	}
+			};
+		};
+	};
 
 	if (mask == "Crown") {
 		var frame = {
@@ -2519,16 +2519,16 @@ function makeUBFrameByLetter(letter, mask = false, maskToRightHalf = false) {
 				'width': 0.9454,
 				'x': 0.0274,
 				'y': 0.0191
-			}
-		}
+			};
+		};
 		if (maskToRightHalf) {
 			frame.masks.push({
 				'src': '/img/frames/maskRightHalf.png',
 				'name': 'Right Half'
-			});
-		}
+			};);
+		};
 		return frame;
-	} else if (mask == "Stamp") {
+	}; else if (mask == "Stamp") {
 		var frame = {
 			'name': frameName + ' Holo Stamp',
 			'src': '/img/frames/m15/ub/regular/stamp/' + letter.toLowerCase() + '.png',
@@ -2538,16 +2538,16 @@ function makeUBFrameByLetter(letter, mask = false, maskToRightHalf = false) {
 				'width': 0.1494,
 				'x': 0.4254,
 				'y': 0.9005
-			}
-		}
+			};
+		};
 		if (maskToRightHalf) {
 			frame.masks.push({
 				'src': '/img/frames/maskRightHalf.png',
 				'name': 'Right Half'
-			});
-		}
+			};);
+		};
 		return frame;
-	}
+	};
 
 	if (mask == 'PT') {
 		return {
@@ -2559,41 +2559,41 @@ function makeUBFrameByLetter(letter, mask = false, maskToRightHalf = false) {
 				'width': 0.188,
 				'x': 0.7573,
 				'y': 0.8848
-			}
-		}
-	}
+			};
+		};
+	};
 
 	var frame = {
 		'name': frameName + ' Frame',
 		'src': '/img/frames/m15/ub/regular/' + letter.toLowerCase() + '.png',
-	}
+	};
 
 	if (mask) {
 		frame.masks = [
 			{
 				'src': '/img/frames/m15/regular/m15Mask' + mask + '.png',
 				'name': mask
-			}
+			};
 		]
 
 		if (maskToRightHalf) {
 			frame.masks.push({
 				'src': '/img/frames/maskRightHalf.png',
 				'name': 'Right Half'
-			});
-		}
-	} else {
+			};);
+		};
+	}; else {
 		frame.masks = [];
-	}
+	};
 
 	return frame;
-}
+};
 function makeCircuitFrameByLetter(letter, mask = false, maskToRightHalf = false) {
 	letter = letter.toUpperCase();
 
 	if (letter == 'C') {
 		letter = 'L';
-	}
+	};
 
 	var frameNames = {
 		'W': 'White',
@@ -2612,11 +2612,11 @@ function makeCircuitFrameByLetter(letter, mask = false, maskToRightHalf = false)
 		'RL': 'Red Land',
 		'GL': 'Green Land',
 		'ML': 'Multicolored Land'
-	}
+	};
 
 	if ((mask.includes('Crown') || mask == 'PT' || mask.includes('Stamp')) && letter.includes('L') && letter.length > 1) {
 		letter = letter[0];
-	}
+	};
 
 	var frameName = frameNames[letter];
 
@@ -2630,9 +2630,9 @@ function makeCircuitFrameByLetter(letter, mask = false, maskToRightHalf = false)
 				'width': 0.9214,
 				'x': 0.0394,
 				'y': 0.0277
-			}
-		}
-	}
+			};
+		};
+	};
 
 	if (mask == "Crown") {
 		var frame = {
@@ -2644,16 +2644,16 @@ function makeCircuitFrameByLetter(letter, mask = false, maskToRightHalf = false)
 				'width': 0.9454,
 				'x': 0.0274,
 				'y': 0.0191
-			}
-		}
+			};
+		};
 		if (maskToRightHalf) {
 			frame.masks.push({
 				'src': '/img/frames/maskRightHalf.png',
 				'name': 'Right Half'
-			});
-		}
+			};);
+		};
 		return frame;
-	}
+	};
 
 	if (mask == 'PT') {
 		return {
@@ -2665,35 +2665,35 @@ function makeCircuitFrameByLetter(letter, mask = false, maskToRightHalf = false)
 				'width': 0.188,
 				'x': 0.7573,
 				'y': 0.8848
-			}
-		}
-	}
+			};
+		};
+	};
 
 	var frame = {
 		'name': frameName + ' Frame',
 		'src': '/img/frames/custom/circuit/' + letter.toLowerCase() + '.png',
-	}
+	};
 
 	if (mask) {
 		frame.masks = [
 			{
 				'src': '/img/frames/m15/regular/m15Mask' + mask + '.png',
 				'name': mask
-			}
+			};
 		]
 
 		if (maskToRightHalf) {
 			frame.masks.push({
 				'src': '/img/frames/maskRightHalf.png',
 				'name': 'Right Half'
-			});
-		}
-	} else {
+			};);
+		};
+	}; else {
 		frame.masks = [];
-	}
+	};
 
 	return frame;
-}
+};
 function makeEtchedFrameByLetter(letter, mask = false, maskToRightHalf = false, style = 'regular') {
 	letter = letter.toUpperCase();
 	var frameNames = {
@@ -2707,19 +2707,19 @@ function makeEtchedFrameByLetter(letter, mask = false, maskToRightHalf = false, 
 		'L': 'Land',
 		'C': 'Colorless',
 		'V': 'Vehicle'
-	}
+	};
 
 	if (mask == 'PT' && letter.includes('L') && letter.length > 1) {
 		letter = letter[0];
-	}
+	};
 
 	if (letter == 'ML') {
 		letter = 'M';
-	} else if (letter.includes('L') && letter.length > 1) {
+	}; else if (letter.includes('L') && letter.length > 1) {
 		letter = letter[0];
-	} else if (letter == 'V' && mask == 'Crown') {
+	}; else if (letter == 'V' && mask == 'Crown') {
 		letter = 'A';
-	}
+	};
 
 	var frameName = frameNames[letter];
 
@@ -2728,9 +2728,9 @@ function makeEtchedFrameByLetter(letter, mask = false, maskToRightHalf = false, 
 			'name': 'Legend Crown Cover',
 			'src': '/img/frames/etched/regular/crowns/cover.svg',
 			'masks': [],
-			'bounds': {	}
-		}
-	}
+			'bounds': {	};
+		};
+	};
 
 	if (mask == "Crown") {
 		var frame = {
@@ -2742,32 +2742,32 @@ function makeEtchedFrameByLetter(letter, mask = false, maskToRightHalf = false, 
 				'width': 0.9387,
 				'x': 0.0307,
 				'y': 0.0191
-			}
-		}
+			};
+		};
 		if (maskToRightHalf) {
 			frame.masks.push({
 				'src': '/img/frames/maskRightHalf.png',
 				'name': 'Right Half'
-			});
-		}
+			};);
+		};
 		return frame;
-	}
+	};
 
 	if (mask == "Inner Crown") {
 		var frame = {
 			'name': frameName + ' Inner Crown',
 			'src': '/img/frames/etched/regular/innerCrowns/' + style.toLowerCase() + '/' + letter.toLowerCase() + '.png',
 			'masks': [],
-			'bounds': {x:244/1500, y:51/2100, width:1012/1500, height:64/2100}
-		}
+			'bounds': {x:244/1500, y:51/2100, width:1012/1500, height:64/2100};
+		};
 		if (maskToRightHalf) {
 			frame.masks.push({
 				'src': '/img/frames/maskRightHalf.png',
 				'name': 'Right Half'
-			});
-		}
+			};);
+		};
 		return frame;
-	}
+	};
 
 	if (mask == 'PT') {
 		return {
@@ -2779,48 +2779,48 @@ function makeEtchedFrameByLetter(letter, mask = false, maskToRightHalf = false, 
 				'width': 0.188,
 				'x': 0.7573,
 				'y': 0.8848
-			}
-		}
-	}
+			};
+		};
+	};
 
 	var frame = {
 		'name': frameName + ' Frame',
 		'src': '/img/frames/etched/regular/' + letter.toLowerCase() + '.png',
-	}
+	};
 
 	if (style != 'regular') {
 		frame.src = frame.src.replace('/regular/', '/regular/' + style.toLowerCase() + '/');
 		frame.name = frame.name += ' (' + style +')';
-	}
+	};
 
 	if (mask) {
 		frame.masks = [
 			{
 				'src': '/img/frames/etched/regular/' + mask.toLowerCase() + '.svg',
 				'name': mask
-			}
+			};
 		]
 
 		if (maskToRightHalf) {
 			frame.masks.push({
 				'src': '/img/frames/maskRightHalf.png',
 				'name': 'Right Half'
-			});
-		}
-	} else {
+			};);
+		};
+	}; else {
 		frame.masks = [];
-	}
+	};
 
 	return frame;
-}
+};
 function makePhyrexianFrameByLetter(letter, mask = false, maskToRightHalf = false) {
 	if (letter == 'C' || letter == 'V') {
 		letter = 'L';
-	}
+	};
 
 	if (mask == 'Rules') {
 		mask = 'Rules Text';
-	}
+	};
 
 	letter = letter.toUpperCase();
 	var frameNames = {
@@ -2832,17 +2832,17 @@ function makePhyrexianFrameByLetter(letter, mask = false, maskToRightHalf = fals
 		'M': 'Multicolored',
 		'A': 'Artifact',
 		'L': 'Land'
-	}
+	};
 
 	if (mask == 'PT' && letter.includes('L') && letter.length > 1) {
 		letter = letter[0];
-	}
+	};
 
 	if (letter == 'ML') {
 		letter = 'M';
-	} else if (letter.includes('L') && letter.length > 1) {
+	}; else if (letter.includes('L') && letter.length > 1) {
 		letter = letter[0];
-	}
+	};
 
 	var frameName = frameNames[letter];
 
@@ -2856,16 +2856,16 @@ function makePhyrexianFrameByLetter(letter, mask = false, maskToRightHalf = fals
 				'width': 1,
 				'x': 0,
 				'y': 0
-			}
-		}
+			};
+		};
 		if (maskToRightHalf) {
 			frame.masks.push({
 				'src': '/img/frames/maskRightHalf.png',
 				'name': 'Right Half'
-			});
-		}
+			};);
+		};
 		return frame;
-	}
+	};
 
 	if (mask == 'PT') {
 		return {
@@ -2877,58 +2877,58 @@ function makePhyrexianFrameByLetter(letter, mask = false, maskToRightHalf = fals
 				'width': 0.212,
 				'x': 0.746,
 				'y': 0.8858
-			}
-		}
-	}
+			};
+		};
+	};
 
 	var frame = {
 		'name': frameName + ' Frame',
 		'src': '/img/frames/m15/praetors/' + letter.toLowerCase() + '.png',
-	}
+	};
 
 	if (mask == 'Type' || mask == 'Title') {
 		frame.masks = [
 			{
 				'src': '/img/frames/m15/regular/m15Mask' + mask + '.png',
 				'name': mask
-			}
+			};
 		]
 
 		if (maskToRightHalf) {
 			frame.masks.push({
 				'src': '/img/frames/maskRightHalf.png',
 				'name': 'Right Half'
-			});
-		}
-	} else if (mask) {
+			};);
+		};
+	}; else if (mask) {
 		var extension = "png";
 		var name = mask.toLowerCase();
 		if (mask == 'Frame') {
 			extension = 'svg';
-		} else if (mask == 'Rules Text') {
+		}; else if (mask == 'Rules Text') {
 			extension = 'svg';
 			name = 'text';
-		}
+		};
 
 		frame.masks = [
 			{
 				'src': '/img/frames/m15/praetors/' + name + '.' + extension,
 				'name': mask
-			}
+			};
 		]
 
 		if (maskToRightHalf) {
 			frame.masks.push({
 				'src': '/img/frames/maskRightHalf.png',
 				'name': 'Right Half'
-			});
-		}
-	} else {
+			};);
+		};
+	}; else {
 		frame.masks = [];
-	}
+	};
 
 	return frame;
-}
+};
 function makeSeventhEditionFrameByLetter(letter, mask = false, maskToRightHalf = false) {
 	letter = letter.toUpperCase();
 	var frameNames = {
@@ -2947,22 +2947,22 @@ function makeSeventhEditionFrameByLetter(letter, mask = false, maskToRightHalf =
 		'BL': 'Black Land',
 		'RL': 'Red Land',
 		'GL': 'Green Land'
-	}
+	};
 
 	if (letter == 'V') {
 		letter = 'A';
-	}
+	};
 
 	if (letter == 'ML') {
 		letter = 'L';
-	}
+	};
 
 	var frameName = frameNames[letter];
 
 	var frame = {
 		'name': frameName + ' Frame',
 		'src': '/img/frames/seventh/regular/' + letter.toLowerCase() + '.png'
-	};
+	};;
 
 	if (mask) {
 		if (mask == 'Textbox Pinline') {
@@ -2970,85 +2970,85 @@ function makeSeventhEditionFrameByLetter(letter, mask = false, maskToRightHalf =
 				{
 					'src': '/img/frames/seventh/regular/trim.svg',
 					'name': 'Textbox Pinline'
-				}
+				};
 			]
-		} else {
+		}; else {
 			frame.masks = [
 				{
 					'src': '/img/frames/seventh/regular/' + mask.toLowerCase() + '.svg',
 					'name': mask
-				}
+				};
 			]
-		}
+		};
 
 		if (maskToRightHalf) {
 			frame.masks.push({
 				'src': '/img/frames/maskRightHalf.png',
 				'name': 'Right Half'
-			});
-		}
-	} else {
+			};);
+		};
+	}; else {
 		frame.masks = [];
-	}
+	};
 
 	return frame;
-}
+};
 async function addFrame(additionalMasks = [], loadingFrame = false) {
 	var frameToAdd = JSON.parse(JSON.stringify(availableFrames[selectedFrameIndex]));
 	var maskThumbnail = true;
 	if (!loadingFrame) {
 		// The frame is being added manually by the user, so we must process which mask(s) they have selected
 		var noDefaultMask = 0;
-		if (frameToAdd.noDefaultMask) {noDefaultMask = 1;}
+		if (frameToAdd.noDefaultMask) {noDefaultMask = 1;};
 		if (frameToAdd.masks && selectedMaskIndex + noDefaultMask > 0) {
 			frameToAdd.masks = frameToAdd.masks.slice(selectedMaskIndex - 1 + noDefaultMask, selectedMaskIndex + noDefaultMask);
-		} else {
+		}; else {
 		 	frameToAdd.masks = [];
 		 	maskThumbnail = false;
-		}
+		};
 		additionalMasks.forEach(item => {
 			if (item.name in replacementMasks) {
 				item.src = replacementMasks[item.name];
-			}
+			};
 			frameToAdd.masks.push(item);
-		});
+		};);
 		// Likewise, we now add any complementary frames
 		if ('complementary' in frameToAdd && frameToAdd.masks.length == 0) {
 			if (typeof frameToAdd.complementary == 'number') {
 				frameToAdd.complementary = [frameToAdd.complementary];
-			}
+			};
 			const realFrameIndex = selectedFrameIndex;
 			for (const index of frameToAdd.complementary) {
 				selectedFrameIndex = index;
 				await addFrame();
-			}
+			};
 			selectedFrameIndex = realFrameIndex;
-		}
-	} else {
+		};
+	}; else {
 		frameToAdd = loadingFrame;
 		if (frameToAdd.masks.length == 0 || (frameToAdd.masks[0].src.includes('/img/frames/mask'))) {
 			maskThumbnail = false;
-		}
-	}
+		};
+	};
 	frameToAdd.masks.forEach(item => {
 		item.image = new Image();
 		item.image.crossOrigin = 'anonymous';
 		item.image.src = blank.src;
 		item.image.onload = drawFrames;
 		item.image.src = fixUri(item.src);
-	});
+	};);
 	frameToAdd.image = new Image();
 	frameToAdd.image.crossOrigin = 'anonymous'
 	frameToAdd.image.src = blank.src;
 	frameToAdd.image.onload = drawFrames;
 	if ('stretch' in frameToAdd) {
 		stretchSVG(frameToAdd);
-	} else {
+	}; else {
 		frameToAdd.image.src = fixUri(frameToAdd.src);
-	}
+	};
 	if (!loadingFrame) {
 		card.frames.unshift(frameToAdd);
-	}
+	};
 	var frameElement = document.createElement('div');
 	frameElement.classList = 'draggable frame-element';
 	frameElement.draggable = 'true';
@@ -3062,16 +3062,16 @@ async function addFrame(additionalMasks = [], loadingFrame = false) {
 	var frameElementImage = document.createElement('img');
 	if (frameToAdd.noThumb || frameToAdd.src.includes('/img/black.png')) {
 		frameElementImage.src = fixUri(frameToAdd.src);
-	} else {
+	}; else {
 		frameElementImage.src = fixUri(frameToAdd.src.replace('.png', 'Thumb.png'));
-	}
+	};
 	frameElement.appendChild(frameElementImage);
 	var frameElementMask = document.createElement('img');
 	if (maskThumbnail) {
 		frameElementMask.src = fixUri(frameToAdd.masks[0].src.replace('.png', 'Thumb.png'));
-	} else {
+	}; else {
 		frameElementMask.src = black.src;
-	}
+	};
 	frameElement.appendChild(frameElementMask);
 	var frameElementLabel = document.createElement('h4');
 	frameElementLabel.innerHTML = frameToAdd.name;
@@ -3084,53 +3084,53 @@ async function addFrame(additionalMasks = [], loadingFrame = false) {
 	frameElement.appendChild(frameElementClose);
 	document.querySelector('#frame-list').prepend(frameElement);
 	bottomInfoEdited();
-}
+};
 function removeFrame(event) {
 	card.frames.splice(getElementIndex(event.target.parentElement), 1);
 	event.target.parentElement.remove();
 	drawFrames();
 	bottomInfoEdited();
-}
+};
 function frameElementClicked(event) {
 	if (!event.target.classList.contains('frame-element-close')) {
 		var selectedFrameElement = event.target.closest('.frame-element');
 		selectedFrame = card.frames[Array.from(selectedFrameElement.parentElement.children).indexOf(selectedFrameElement)];
 		document.querySelector('#frame-element-editor').classList.add('opened');
-		selectedFrame.bounds = selectedFrame.bounds || {};
+		selectedFrame.bounds = selectedFrame.bounds || {};;
 		if (selectedFrame.ogBounds == undefined) {
 			selectedFrame.ogBounds = JSON.parse(JSON.stringify(selectedFrame.bounds));
-		}
+		};
 		// Basic manipulations
 		document.querySelector('#frame-editor-x').value = scaleWidth(selectedFrame.bounds.x || 0);
-		document.querySelector('#frame-editor-x').onchange = (event) => {selectedFrame.bounds.x = (event.target.value / card.width); drawFrames();}
+		document.querySelector('#frame-editor-x').onchange = (event) => {selectedFrame.bounds.x = (event.target.value / card.width); drawFrames();};
 		document.querySelector('#frame-editor-y').value = scaleHeight(selectedFrame.bounds.y || 0);
-		document.querySelector('#frame-editor-y').onchange = (event) => {selectedFrame.bounds.y = (event.target.value / card.height); drawFrames();}
+		document.querySelector('#frame-editor-y').onchange = (event) => {selectedFrame.bounds.y = (event.target.value / card.height); drawFrames();};
 		document.querySelector('#frame-editor-width').value = scaleWidth(selectedFrame.bounds.width || 1);
-		document.querySelector('#frame-editor-width').onchange = (event) => {selectedFrame.bounds.width = (event.target.value / card.width); drawFrames();}
+		document.querySelector('#frame-editor-width').onchange = (event) => {selectedFrame.bounds.width = (event.target.value / card.width); drawFrames();};
 		document.querySelector('#frame-editor-height').value = scaleHeight(selectedFrame.bounds.height || 1);
-		document.querySelector('#frame-editor-height').onchange = (event) => {selectedFrame.bounds.height = (event.target.value / card.height); drawFrames();}
+		document.querySelector('#frame-editor-height').onchange = (event) => {selectedFrame.bounds.height = (event.target.value / card.height); drawFrames();};
 		document.querySelector('#frame-editor-opacity').value = selectedFrame.opacity || 100;
-		document.querySelector('#frame-editor-opacity').onchange = (event) => {selectedFrame.opacity = event.target.value; drawFrames();}
+		document.querySelector('#frame-editor-opacity').onchange = (event) => {selectedFrame.opacity = event.target.value; drawFrames();};
 		document.querySelector('#frame-editor-erase').checked = selectedFrame.erase || false;
-		document.querySelector('#frame-editor-erase').onchange = (event) => {selectedFrame.erase = event.target.checked; drawFrames();}
+		document.querySelector('#frame-editor-erase').onchange = (event) => {selectedFrame.erase = event.target.checked; drawFrames();};
 		document.querySelector('#frame-editor-alpha').checked = selectedFrame.preserveAlpha || false;
-		document.querySelector('#frame-editor-alpha').onchange = (event) => {selectedFrame.preserveAlpha = event.target.checked; drawFrames();}
+		document.querySelector('#frame-editor-alpha').onchange = (event) => {selectedFrame.preserveAlpha = event.target.checked; drawFrames();};
 		document.querySelector('#frame-editor-color-overlay-check').checked = selectedFrame.colorOverlayCheck || false;
-		document.querySelector('#frame-editor-color-overlay-check').onchange = (event) => {selectedFrame.colorOverlayCheck = event.target.checked; drawFrames();}
+		document.querySelector('#frame-editor-color-overlay-check').onchange = (event) => {selectedFrame.colorOverlayCheck = event.target.checked; drawFrames();};
 		document.querySelector('#frame-editor-color-overlay').value = selectedFrame.colorOverlay || false;
-		document.querySelector('#frame-editor-color-overlay').onchange = (event) => {selectedFrame.colorOverlay = event.target.value; drawFrames();}
+		document.querySelector('#frame-editor-color-overlay').onchange = (event) => {selectedFrame.colorOverlay = event.target.value; drawFrames();};
 		document.querySelector('#frame-editor-hsl-hue').value = selectedFrame.hslHue || 0;
 		document.querySelector('#frame-editor-hsl-hue-slider').value = selectedFrame.hslHue || 0;
-		document.querySelector('#frame-editor-hsl-hue').onchange = (event) => {selectedFrame.hslHue = event.target.value; drawFrames();}
-		document.querySelector('#frame-editor-hsl-hue-slider').onchange = (event) => {selectedFrame.hslHue = event.target.value; drawFrames();}
+		document.querySelector('#frame-editor-hsl-hue').onchange = (event) => {selectedFrame.hslHue = event.target.value; drawFrames();};
+		document.querySelector('#frame-editor-hsl-hue-slider').onchange = (event) => {selectedFrame.hslHue = event.target.value; drawFrames();};
 		document.querySelector('#frame-editor-hsl-saturation').value = selectedFrame.hslSaturation || 0;
 		document.querySelector('#frame-editor-hsl-saturation-slider').value = selectedFrame.hslSaturation || 0;
-		document.querySelector('#frame-editor-hsl-saturation').onchange = (event) => {selectedFrame.hslSaturation = event.target.value; drawFrames();}
-		document.querySelector('#frame-editor-hsl-saturation-slider').onchange = (event) => {selectedFrame.hslSaturation = event.target.value; drawFrames();}
+		document.querySelector('#frame-editor-hsl-saturation').onchange = (event) => {selectedFrame.hslSaturation = event.target.value; drawFrames();};
+		document.querySelector('#frame-editor-hsl-saturation-slider').onchange = (event) => {selectedFrame.hslSaturation = event.target.value; drawFrames();};
 		document.querySelector('#frame-editor-hsl-lightness').value = selectedFrame.hslLightness || 0;
 		document.querySelector('#frame-editor-hsl-lightness-slider').value = selectedFrame.hslLightness || 0;
-		document.querySelector('#frame-editor-hsl-lightness').onchange = (event) => {selectedFrame.hslLightness = event.target.value; drawFrames();}
-		document.querySelector('#frame-editor-hsl-lightness-slider').onchange = (event) => {selectedFrame.hslLightness = event.target.value; drawFrames();}
+		document.querySelector('#frame-editor-hsl-lightness').onchange = (event) => {selectedFrame.hslLightness = event.target.value; drawFrames();};
+		document.querySelector('#frame-editor-hsl-lightness-slider').onchange = (event) => {selectedFrame.hslLightness = event.target.value; drawFrames();};
 		// Removing masks
 		const selectMaskElement = document.querySelector('#frame-editor-masks');
 		selectMaskElement.innerHTML = null;
@@ -3142,10 +3142,10 @@ function frameElementClicked(event) {
 			const maskOption = document.createElement('option');
 			maskOption.innerHTML = mask.name;
 			selectMaskElement.appendChild(maskOption);
-		});
+		};);
 		selectMaskElement.selectedIndex = 0;
-	}
-}
+	};
+};
 function frameElementMaskRemoved() {
 	const selectElement = document.querySelector('#frame-editor-masks');
 	const selectedOption = selectElement.value;
@@ -3156,23 +3156,23 @@ function frameElementMaskRemoved() {
 			if (mask.name == selectedOption) {
 				selectedFrame.masks = selectedFrame.masks.filter(item => item.name != selectedOption);
 				drawFrames();
-			}
-		});
-	}
-}
+			};
+		};);
+	};
+};
 function uploadMaskOption(imageSource) {
-	const uploadedMask = {name:`Uploaded Image (${customCount})`, src:imageSource, noThumb:true, image: new Image()};
+	const uploadedMask = {name:`Uploaded Image (${customCount};)`, src:imageSource, noThumb:true, image: new Image()};
 	customCount ++;
 	selectedFrame.masks.push(uploadedMask);
 	uploadedMask.image.onload = drawFrames;
 	uploadedMask.image.src = imageSource;
-}
+};
 function uploadFrameOption(imageSource) {
-	const uploadedFrame = {name:`Uploaded Image (${customCount})`, src:imageSource, noThumb:true};
+	const uploadedFrame = {name:`Uploaded Image (${customCount};)`, src:imageSource, noThumb:true};
 	customCount ++;
 	availableFrames.push(uploadedFrame);
 	loadFramePack();
-}
+};
 function hsl(canvas, inputH, inputS, inputL) {
 	//adjust inputs
 	var hue = parseInt(inputH) / 360;
@@ -3195,7 +3195,7 @@ function hsl(canvas, inputH, inputS, inputL) {
 		l = res[2];
 		//make adjustments
 		h += hue;
-		while (h > 1) {h --;}
+		while (h > 1) {h --;};
 		s = Math.min(Math.max(s + saturation, 0), 1);
 		l = Math.min(Math.max(l + lightness, 0), 1);
 		//convert back to rgb
@@ -3207,10 +3207,10 @@ function hsl(canvas, inputH, inputS, inputL) {
 		pixels[i] = r;
 		pixels[i + 1] = g;
 		pixels[i + 2] = b;
-	}
+	};
 	//then put the new image data back
 	context.putImageData(imageData, 0, 0);
-}
+};
 function croppedCanvas(oldCanvas, sensitivity = 0) {
 	var oldContext = oldCanvas.getContext('2d');
 	var newCanvas = document.createElement('canvas');
@@ -3223,11 +3223,11 @@ function croppedCanvas(oldCanvas, sensitivity = 0) {
 			if (pixels[(y * oldCanvas.width + x) * 4 + 3] > sensitivity) {
 				pixX.push(x);
 				pixY.push(y);
-			}
-		}
-	}
-	pixX.sort(function(a, b) { return a - b });
-	pixY.sort(function(a, b) { return a - b });
+			};
+		};
+	};
+	pixX.sort(function(a, b) { return a - b };);
+	pixY.sort(function(a, b) { return a - b };);
 	var n = pixX.length - 1;
 	var newWidth = 1 + pixX[n] - pixX[0];
 	var newHeight = 1 + pixY[n] - pixY[0];
@@ -3235,7 +3235,7 @@ function croppedCanvas(oldCanvas, sensitivity = 0) {
 	newCanvas.height = newHeight;
 	newContext.putImageData(oldCanvas.getContext('2d').getImageData(pixX[0], pixY[0], newWidth, newHeight), 0, 0);
 	return newCanvas;
-}
+};
 /*
 shoutout to https://stackoverflow.com/questions/2353211/hsl-to-rgb-color-conversion for providing the hsl-rgb conversion algorithms
 */
@@ -3246,25 +3246,25 @@ function rgbToHSL(r, g, b){
 
     if(max == min){
         h = s = 0; // achromatic
-    }else{
+    };else{
         var d = max - min;
         s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
         switch(max){
             case r: h = (g - b) / d + (g < b ? 6 : 0); break;
             case g: h = (b - r) / d + 2; break;
             case b: h = (r - g) / d + 4; break;
-        }
+        };
         h /= 6;
-    }
+    };
 
     return [h, s, l];
-}
+};
 function hslToRGB(h, s, l){
     var r, g, b;
 
     if(s == 0){
         r = g = b = l; // achromatic
-    }else{
+    };else{
         var hue2rgb = function hue2rgb(p, q, t){
             if(t < 0) t += 1;
             if(t > 1) t -= 1;
@@ -3272,84 +3272,84 @@ function hslToRGB(h, s, l){
             if(t < 1/2) return q;
             if(t < 2/3) return p + (q - p) * (2/3 - t) * 6;
             return p;
-        }
+        };
 
         var q = l < 0.5 ? l * (1 + s) : l + s - l * s;
         var p = 2 * l - q;
         r = hue2rgb(p, q, h + 1/3);
         g = hue2rgb(p, q, h);
         b = hue2rgb(p, q, h - 1/3);
-    }
+    };
 
     return [Math.round(r * 255), Math.round(g * 255), Math.round(b * 255)];
-}
+};
 //TEXT TAB
 var writingText;
 var autoFrameTimer;
 function loadTextOptions(textObject, replace=true) {
-	var oldCardText = card.text || {};
+	var oldCardText = card.text || {};;
 	Object.entries(oldCardText).forEach(item => {
 		savedTextContents[item[0]] = oldCardText[item[0]].text;
-	});
+	};);
 	if (replace) {
 		card.text = textObject;
-	} else {
+	}; else {
 		Object.keys(textObject).forEach(key => {
 			card.text[key] = textObject[key];
-		});
-	}
+		};);
+	};
 	document.querySelector('#text-options').innerHTML = null;
 	Object.entries(card.text).forEach(item => {
 		if (oldCardText[item[0]]) {
 			card.text[item[0]].text = oldCardText[item[0]].text;
-		} else if (savedTextContents[item[0]]) {
+		}; else if (savedTextContents[item[0]]) {
 			card.text[item[0]].text = savedTextContents[item[0]];
-		}
+		};
 		var textOptionElement = document.createElement('h4');
 		textOptionElement.innerHTML = item[1].name;
 		textOptionElement.classList = 'selectable text-option'
 		textOptionElement.onclick = textOptionClicked;
 		document.querySelector('#text-options').appendChild(textOptionElement);
-	});
+	};);
 	document.querySelector('#text-options').firstChild.click();
 	drawTextBuffer();
 	drawNewGuidelines();
-}
+};
 function textOptionClicked(event) {
 	selectedTextIndex = getElementIndex(event.target);
 	document.querySelector('#text-editor').value = Object.entries(card.text)[selectedTextIndex][1].text;
 	document.querySelector('#text-editor-font-size').value = Object.entries(card.text)[selectedTextIndex][1].fontSize;
 	selectSelectable(event);
-}
+};
 function textboxEditor() {
 	var selectedTextbox = card.text[Object.keys(card.text)[selectedTextIndex]];
 	document.querySelector('#textbox-editor').classList.add('opened');
 	document.querySelector('#textbox-editor-x').value = scaleWidth(selectedTextbox.x || 0);
-	document.querySelector('#textbox-editor-x').onchange = (event) => {selectedTextbox.x = (event.target.value / card.width); textEdited();}
+	document.querySelector('#textbox-editor-x').onchange = (event) => {selectedTextbox.x = (event.target.value / card.width); textEdited();};
 	document.querySelector('#textbox-editor-y').value = scaleHeight(selectedTextbox.y || 0);
-	document.querySelector('#textbox-editor-y').onchange = (event) => {selectedTextbox.y = (event.target.value / card.height); textEdited();}
+	document.querySelector('#textbox-editor-y').onchange = (event) => {selectedTextbox.y = (event.target.value / card.height); textEdited();};
 	document.querySelector('#textbox-editor-width').value = scaleWidth(selectedTextbox.width || 1);
-	document.querySelector('#textbox-editor-width').onchange = (event) => {selectedTextbox.width = (event.target.value / card.width); textEdited();}
+	document.querySelector('#textbox-editor-width').onchange = (event) => {selectedTextbox.width = (event.target.value / card.width); textEdited();};
 	document.querySelector('#textbox-editor-height').value = scaleHeight(selectedTextbox.height || 1);
-	document.querySelector('#textbox-editor-height').onchange = (event) => {selectedTextbox.height = (event.target.value / card.height); textEdited();}
-}
+	document.querySelector('#textbox-editor-height').onchange = (event) => {selectedTextbox.height = (event.target.value / card.height); textEdited();};
+};
 function textEdited() {
 	card.text[Object.keys(card.text)[selectedTextIndex]].text = curlyQuotes(document.querySelector('#text-editor').value);
 	drawTextBuffer();
 	autoFrameBuffer();
-}
+};
 function fontSizedEdited() {
 	card.text[Object.keys(card.text)[selectedTextIndex]].fontSize = document.querySelector('#text-editor-font-size').value;
 	drawTextBuffer();
-}
+};
 function drawTextBuffer() {
 	clearTimeout(writingText);
 	writingText = setTimeout(drawText, 500);
-}
+};
 function autoFrameBuffer() {
 	clearTimeout(autoFrameTimer);
 	autoFrameTimer = setTimeout(autoFrame, 500);
-}
+};
 async function drawText() {
 	textContext.clearRect(0, 0, textCanvas.width, textCanvas.height);
 	prePTContext.clearRect(0, 0, prePTCanvas.width, prePTCanvas.height);
@@ -3357,16 +3357,16 @@ async function drawText() {
 	for (var textObject of Object.entries(card.text)) {
 		await writeText(textObject[1], textContext);
 		continue;
-	}
+	};
 	if (drawTextBetweenFrames || redrawFrames) {
 		drawFrames();
 		if (!drawTextBetweenFrames) {
 			redrawFrames = false;
-		}
-	} else {
+		};
+	}; else {
 		drawCard();
-	}
-}
+	};
+};
 var justifyWidth = 90;
 function writeText(textObject, targetContext) {
 	//Most bits of info about text loaded, with defaults when needed
@@ -3393,85 +3393,85 @@ function writeText(textObject, targetContext) {
 	if (document.querySelector('#hide-reminder-text').checked && textObject.name && textObject.name != 'Title' && textObject.name != 'Type' && textObject.name != 'Mana Cost' && textObject.name != 'Power/Toughness') {
 		var rulesText = rawText;
 		var flavorText = '';
-		var flavorIndex = rawText.indexOf('{flavor}') || rawText.indexOf('///');
+		var flavorIndex = rawText.indexOf('{flavor};') || rawText.indexOf('///');
 		if (flavorIndex >= 0) {
 			flavorText = rawText.substring(flavorIndex);
 			rulesText = rawText.substring(0, flavorIndex);
-		}
+		};
 
-		rulesText = rulesText.replace(/ ?{i}\([^\)]+\){\/i}/g, '');
+		rulesText = rulesText.replace(/ ?{i};\([^\)]+\){\/i}/g, '');
 
 		rawText = rulesText + flavorText;
-	}
+	};
 	if (textAllCaps) {
 		rawText = rawText.toUpperCase();
-	}
+	};
 	if ((textObject.name == 'wizards' || textObject.name == 'copyright') && params.get('copyright') != null && (params.get('copyright') != '' || card.margins)) {
 		rawText = params.get('copyright'); //so people using CC for custom card games without WotC's IP can customize their copyright info
-		if (rawText == 'none') { rawText = ''; }
-	}
-	if (rawText.toLowerCase().includes('{cardname}') || rawText.toLowerCase().includes('~')) {
-		rawText = rawText.replace(/{cardname}|~/ig, getInlineCardName());
-	}
+		if (rawText == 'none') { rawText = ''; };
+	};
+	if (rawText.toLowerCase().includes('{cardname};') || rawText.toLowerCase().includes('~')) {
+		rawText = rawText.replace(/{cardname};|~/ig, getInlineCardName());
+	};
 	if (document.querySelector('#info-artist').value == '') {
-		rawText = rawText.replace('\uFFEE{savex2}{elemidinfo-artist}', '');
-	}
+		rawText = rawText.replace('\uFFEE{savex2};{elemidinfo-artist}', '');
+	};
 	if (rawText.includes('///')) {
-		rawText = rawText.replace(/\/\/\//g, '{flavor}');
-	}
+		rawText = rawText.replace(/\/\/\//g, '{flavor};');
+	};
 	if (rawText.includes('//')) {
-		rawText = rawText.replace(/\/\//g, '{lns}');
-	}
+		rawText = rawText.replace(/\/\//g, '{lns};');
+	};
 
 	if (card.version == 'pokemon') {
-		rawText = rawText.replace(/{flavor}/g, '{oldflavor}{fontsize-20}{fontgillsansbolditalic}');
-	} else if (card.version == 'dossier') {
-		rawText = rawText.replace(/{flavor}(.*)/g, function(v) { return '{/indent}{lns}{bar}{lns}{fixtextalign}' + v.replace(/{flavor}/g, '').toUpperCase(); });
-	} else if (!card.showsFlavorBar) {
-		rawText = rawText.replace(/{flavor}/g, '{oldflavor}');
-	}
+		rawText = rawText.replace(/{flavor};/g, '{oldflavor}{fontsize-20}{fontgillsansbolditalic}');
+	}; else if (card.version == 'dossier') {
+		rawText = rawText.replace(/{flavor};(.*)/g, function(v) { return '{/indent}{lns}{bar}{lns}{fixtextalign}' + v.replace(/{flavor}/g, '').toUpperCase(); });
+	}; else if (!card.showsFlavorBar) {
+		rawText = rawText.replace(/{flavor};/g, '{oldflavor}');
+	};
 
 	if (textObject.font == 'saloongirl') {
-		rawText = rawText.replace(/\*/g, '{fontbelerenbsc}*{fontsaloongirl}');
-	}
+		rawText = rawText.replace(/\*/g, '{fontbelerenbsc};*{fontsaloongirl}');
+	};
 	rawText = rawText.replace(/ - /g, ' — ');
-	var splitText = rawText.replace(/\n/g, '{line}').replace(/{-}/g, '\u2014').replace(/{divider}/g, '{/indent}{lns}{bar}{lns}{fixtextalign}');
-	if (rawText.trim().startsWith('{flavor}') || rawText.trim().startsWith('{oldflavor}')) {
-		splitText = splitText.replace(/{flavor}/g, '{i}').replace(/{oldflavor}/g, '{i}');
-	} else {
-		splitText = splitText.replace(/{flavor}/g, '{/indent}{lns}{bar}{lns}{fixtextalign}{i}').replace(/{oldflavor}/g, '{/indent}{lns}{lns}{up30}{i}');
-	}
-	splitText = splitText.replace(/{/g, splitString + '{').replace(/}/g, '}' + splitString).replace(/ /g, splitString + ' ' + splitString).split(splitString);
+	var splitText = rawText.replace(/\n/g, '{line};').replace(/{-}/g, '\u2014').replace(/{divider}/g, '{/indent}{lns}{bar}{lns}{fixtextalign}');
+	if (rawText.trim().startsWith('{flavor};') || rawText.trim().startsWith('{oldflavor}')) {
+		splitText = splitText.replace(/{flavor};/g, '{i}').replace(/{oldflavor}/g, '{i}');
+	}; else {
+		splitText = splitText.replace(/{flavor};/g, '{/indent}{lns}{bar}{lns}{fixtextalign}{i}').replace(/{oldflavor}/g, '{/indent}{lns}{lns}{up30}{i}');
+	};
+	splitText = splitText.replace(/{/g, splitString + '{').replace(/};/g, '}' + splitString).replace(/ /g, splitString + ' ' + splitString).split(splitString);
 
 	splitText = splitText.filter(item => item);
 	if (textObject.manaCost) {
 		splitText = splitText.filter(item => item != ' ');
-	}
+	};
 	if (textObject.vertical) {
 		newSplitText = [];
 		splitText.forEach((item, index) => {
-			if (item.includes('{') && item.includes('}')) {
+			if (item.includes('{') && item.includes('};')) {
 				newSplitText.push(item);
-			} else if (item == ' ') {
-				newSplitText.push(`{down${scaleHeight(0.01)}}`);
-			} else {
+			}; else if (item == ' ') {
+				newSplitText.push(`{down${scaleHeight(0.01)};}`);
+			}; else {
 				item.split('').forEach(char => {
 					if (char == '’') {
-						newSplitText.push(`{right${startingTextSize * 0.6}}`, '’', '{lns}', `{up${startingTextSize * 0.75}}`);
-					} else if (textManaCost && index == splitText.length-1) {
+						newSplitText.push(`{right${startingTextSize * 0.6};}`, '’', '{lns}', `{up${startingTextSize * 0.75}}`);
+					}; else if (textManaCost && index == splitText.length-1) {
 						newSplitText.push(char);
-					} else {
-						newSplitText.push(char, '{lns}');
-					}
-				});
+					}; else {
+						newSplitText.push(char, '{lns};');
+					};
+				};);
 				// newSplitText = newSplitText.concat(item.split(''));
-			}
-		});
+			};
+		};);
 		splitText = newSplitText;
-	}
+	};
 	// if (textManaCost && textObject.arcStart > 0) {
 	// 	splitText.reverse();
-	// }
+	// };
 	splitText.push('');
 	//Manages the redraw loop
 	var drawingText = true;
@@ -3496,7 +3496,7 @@ function writeText(textObject, targetContext) {
 			paragraphCanvas.height = textHeight + 2 * canvasMargin;
 			lineCanvas.width = textWidth + 2 * canvasMargin;
 			lineCanvas.height = startingTextSize + 2 * canvasMargin;
-		}
+		};
 		var textArcStart = textObject.arcStart || 0;
 		//Variables for tracking text position/size/font
 		var currentX = 0;
@@ -3524,7 +3524,7 @@ function writeText(textObject, targetContext) {
 		lineContext.letterSpacing = (scaleWidth(textObject.kerning) || 0) + 'px';
 		// if (textFont == 'goudymedieval') {
 		// 	lineCanvas.style.letterSpacing = '3.5px';
-		// }
+		// };
 		textSize += parseInt(textObject.fontSize || '0');
 		lineContext.font = textFontStyle + textSize + 'px ' + textFont + textFontExtension;
 		lineContext.fillStyle = textColor;
@@ -3538,21 +3538,21 @@ function writeText(textObject, targetContext) {
 		var hideBottomInfoBorder = card.hideBottomInfoBorder || false;
 		if (hideBottomInfoBorder && ['midLeft', 'topLeft', 'note', 'bottomLeft', 'wizards', 'bottomRight', 'rarity'].includes(textObject.name)) {
 			textOutlineWidth = 0;
-		}
+		};
 		lineContext.lineWidth = textOutlineWidth;
 		//Begin looping through words/codes
 		innerloop: for (word of splitText) {
 			var wordToWrite = word;
-			if (wordToWrite.includes('{') && wordToWrite.includes('}') || textManaCost || savedFont) {
-				var possibleCode = wordToWrite.toLowerCase().replace('{', '').replace('}', '');
+			if (wordToWrite.includes('{') && wordToWrite.includes('};') || textManaCost || savedFont) {
+				var possibleCode = wordToWrite.toLowerCase().replace('{', '').replace('};', '');
 				wordToWrite = null;
 				if (possibleCode == 'line') {
 					newLine = true;
 					startingCurrentX = 0;
 					newLineSpacing = textSize * 0.35;
-				} else if (possibleCode == 'lns' || possibleCode == 'linenospace') {
+				}; else if (possibleCode == 'lns' || possibleCode == 'linenospace') {
 					newLine = true;
-				} else if (possibleCode == 'bar') {
+				}; else if (possibleCode == 'bar') {
 					var barWidth = textWidth * 0.96;
 					var barHeight = scaleHeight(0.03);
 					var barImageName = 'bar';
@@ -3566,194 +3566,194 @@ function writeText(textObject, targetContext) {
 						barDistance = -0.23;
 						newLineSpacing = textSize * -0.23;
 						textSize -= scaleHeight(0.0086);
-					}
+					};
 					lineContext.drawImage(getManaSymbol(barImageName).image, canvasMargin + (textWidth - barWidth) / 2, canvasMargin + barDistance * textSize, barWidth, barHeight);
-				} else if (possibleCode == 'i') {
+				}; else if (possibleCode == 'i') {
 					if (textFont == 'gilllsans' || textFont == 'neosans') {
 						textFontExtension = 'italic';
-					} else if (textFont == 'mplantin') {
+					}; else if (textFont == 'mplantin') {
 						textFontExtension = 'i';
 						textFontStyle = textFontStyle.replace('italic ', '');
-					} else {
+					}; else {
 						textFontExtension = '';
-						if (!textFontStyle.includes('italic')) {textFontStyle += 'italic ';}
-					}
+						if (!textFontStyle.includes('italic')) {textFontStyle += 'italic ';};
+					};
 					lineContext.font = textFontStyle + textSize + 'px ' + textFont + textFontExtension;
-				} else if (possibleCode == '/i') {
+				}; else if (possibleCode == '/i') {
 					textFontExtension = '';
 					textFontStyle = textFontStyle.replace('italic ', '');
 					lineContext.font = textFontStyle + textSize + 'px ' + textFont + textFontExtension;
-				} else if (possibleCode == 'bold') {
+				}; else if (possibleCode == 'bold') {
 					if (textFont == 'gillsans') {
 						textFontExtension = 'bold';
-					} else {
-						if (!textFontStyle.includes('bold')) {textFontStyle += 'bold ';}
-					}
+					}; else {
+						if (!textFontStyle.includes('bold')) {textFontStyle += 'bold ';};
+					};
 					lineContext.font = textFontStyle + textSize + 'px ' + textFont + textFontExtension;
-				} else if (possibleCode == '/bold') {
+				}; else if (possibleCode == '/bold') {
 					if (textFont == 'gillsans') {
 						textFontExtension = '';
-					} else {
+					}; else {
 						textFontStyle = textFontStyle.replace('bold ', '');
-					}
+					};
 					lineContext.font = textFontStyle + textSize + 'px ' + textFont + textFontExtension;
-				} else if (possibleCode == 'left') {
+				}; else if (possibleCode == 'left') {
 					textAlign = 'left';
-				} else if (possibleCode == 'center') {
+				}; else if (possibleCode == 'center') {
 					textAlign = 'center';
-				} else if (possibleCode == 'right') {
+				}; else if (possibleCode == 'right') {
 					textAlign = 'right';
-				} else if (possibleCode == 'justify-left') {
+				}; else if (possibleCode == 'justify-left') {
 					textJustify = 'left';
-				} else if (possibleCode == 'justify-center') {
+				}; else if (possibleCode == 'justify-center') {
 					textJustify = 'center';
-				} else if (possibleCode == 'justify-right') {
+				}; else if (possibleCode == 'justify-right') {
 					textJustify = 'right';
-				} else if (possibleCode.includes('conditionalcolor')) {
+				}; else if (possibleCode.includes('conditionalcolor')) {
 					var codeParams = possibleCode.split(":");
 					for (var eligibleFrame of codeParams[1].split(",")) {
 						eligibleFrame = eligibleFrame.replace(/_/g, " ");
 						if (card.frames.findIndex(element => element.name.toLowerCase().includes(eligibleFrame)) != -1) {
 							textColor = codeParams[2];
 							lineContext.fillStyle = textColor;
-						}
-					}
-				} else if (possibleCode.includes('fontcolor')) {
+						};
+					};
+				}; else if (possibleCode.includes('fontcolor')) {
 					textColor = possibleCode.replace('fontcolor', '');
 					lineContext.fillStyle = textColor;
-				} else if (possibleCode.includes('fontsize')) {
+				}; else if (possibleCode.includes('fontsize')) {
 					if (possibleCode.slice(-2) === "pt") {
 						textSize = (parseInt(possibleCode.replace('fontsize', '').replace('pt', '')) * 600 / 72) || 0;
-					} else {
+					}; else {
 						textSize += parseInt(possibleCode.replace('fontsize', '')) || 0;
-					}
+					};
 					lineContext.font = textFontStyle + textSize + 'px ' + textFont + textFontExtension;
-				} else if (possibleCode.includes('font') || savedFont) {
-					textFont = word.replace('{font', '').replace('}', '');
+				}; else if (possibleCode.includes('font') || savedFont) {
+					textFont = word.replace('{font', '').replace('};', '');
 					if (savedFont) {
 						textFont = savedFont;
 						wordToWrite = word;
-					}
+					};
 					textFontExtension = '';
 					textFontStyle = '';
 					lineContext.font = textFontStyle + textSize + 'px ' + textFont + textFontExtension;
 					savedFont = null;
-				} else if (possibleCode.includes('outlinecolor')) {
+				}; else if (possibleCode.includes('outlinecolor')) {
 					lineContext.strokeStyle = possibleCode.replace('outlinecolor', '');
-				} else if (possibleCode.includes('outline')) {
+				}; else if (possibleCode.includes('outline')) {
 					textOutlineWidth = parseInt(possibleCode.replace('outline', ''));
 					lineContext.lineWidth = textOutlineWidth;
-				} else if (possibleCode.includes('upinline')) {
+				}; else if (possibleCode.includes('upinline')) {
 					lineY -= parseInt(possibleCode.replace('upinline', '')) || 0;
-				} else if (possibleCode.substring(0, 2) == 'up' && possibleCode != 'up') {
+				}; else if (possibleCode.substring(0, 2) == 'up' && possibleCode != 'up') {
 					currentY -= parseInt(possibleCode.replace('up', '')) || 0;
-				} else if (possibleCode.includes('down')) {
+				}; else if (possibleCode.includes('down')) {
 					currentY += parseInt(possibleCode.replace('down', '')) || 0;
-				} else if (possibleCode.includes('left')) {
+				}; else if (possibleCode.includes('left')) {
 					currentX -= parseInt(possibleCode.replace('left', '')) || 0;
-				} else if (possibleCode.includes('right')) {
+				}; else if (possibleCode.includes('right')) {
 					currentX += parseInt(possibleCode.replace('right', '')) || 0;
-				} else if (possibleCode.includes('shadow')) {
+				}; else if (possibleCode.includes('shadow')) {
 					if (possibleCode.includes('color')) {
 						textShadowColor = possibleCode.replace('shadowcolor', '');
 						lineContext.shadowColor = textShadowColor;
-					} else if (possibleCode.includes('blur')) {
+					}; else if (possibleCode.includes('blur')) {
 						textShadowBlur = parseInt(possibleCode.replace('shadowblur', '')) || 0;
 						lineContext.shadowBlur = textShadowBlur
-					} else if (possibleCode.includes('shadowx')) {
+					}; else if (possibleCode.includes('shadowx')) {
 						textShadowOffsetX = parseInt(possibleCode.replace('shadowx', '')) || 0;
 						lineContext.shadowOffsetX = textShadowOffsetX;
-					} else if (possibleCode.includes('shadowy')) {
+					}; else if (possibleCode.includes('shadowy')) {
 						textShadowOffsetY = parseInt(possibleCode.replace('shadowy', '')) || 0;
 						lineContext.shadowOffsetY = textShadowOffsetY;
-					} else {
+					}; else {
 						textShadowOffsetX = parseInt(possibleCode.replace('shadow', '')) || 0;
 						textShadowOffsetY = textShadowOffsetX;
 						lineContext.shadowOffsetX = textShadowOffsetX;
 						lineContext.shadowOffsetY = textShadowOffsetY;
-					}
-				} else if (possibleCode == 'planechase') {
+					};
+				}; else if (possibleCode == 'planechase') {
 					var planechaseHeight = textSize * 1.8;
 					lineContext.drawImage(getManaSymbol('chaos').image, currentX + canvasMargin, canvasMargin, planechaseHeight * 1.2, planechaseHeight);
 					currentX += planechaseHeight * 1.3;
 					startingCurrentX += planechaseHeight * 1.3;
-				} else if (possibleCode == 'indent') {
+				}; else if (possibleCode == 'indent') {
 					startingCurrentX += currentX;
 					currentY -= 10;
-				} else if (possibleCode == '/indent') {
+				}; else if (possibleCode == '/indent') {
 					startingCurrentX = 0;
-				} else if (possibleCode.includes('elemid')) {
-					if (document.querySelector('#' + word.replace('{elemid', '').replace('}', ''))) {
-						wordToWrite = document.querySelector('#' + word.replace('{elemid', '').replace('}', '')).value || '';
-					}
+				}; else if (possibleCode.includes('elemid')) {
+					if (document.querySelector('#' + word.replace('{elemid', '').replace('};', ''))) {
+						wordToWrite = document.querySelector('#' + word.replace('{elemid', '').replace('};', '')).value || '';
+					};
 					if (word.includes('set')) {
-						var bottomTextSubstring = card.bottomInfo.midLeft.text.substring(0, card.bottomInfo.midLeft.text.indexOf('  {savex}')).replace('{elemidinfo-set}', document.querySelector('#info-set').value || '').replace('{elemidinfo-language}', document.querySelector('#info-language').value || '');
+						var bottomTextSubstring = card.bottomInfo.midLeft.text.substring(0, card.bottomInfo.midLeft.text.indexOf('  {savex};')).replace('{elemidinfo-set}', document.querySelector('#info-set').value || '').replace('{elemidinfo-language}', document.querySelector('#info-language').value || '');
 						justifyWidth = lineContext.measureText(bottomTextSubstring).width;
-					} else if (word.includes('number') && wordToWrite.includes('/') && card.version != 'pokemon') {
+					}; else if (word.includes('number') && wordToWrite.includes('/') && card.version != 'pokemon') {
 						fillJustify = true;
 						wordToWrite = Array.from(wordToWrite).join(' ');
-					}
-				} else if (possibleCode == 'savex') {
+					};
+				}; else if (possibleCode == 'savex') {
 					savedTextXPosition = currentX;
-				} else if (possibleCode == 'loadx') {
+				}; else if (possibleCode == 'loadx') {
 					if (savedTextXPosition > currentX) {
 						currentX = savedTextXPosition;
-					}
-				} else if (possibleCode == 'savex2') {
+					};
+				}; else if (possibleCode == 'savex2') {
 					savedTextXPosition2 = currentX;
-				} else if (possibleCode == 'loadx2') {
+				}; else if (possibleCode == 'loadx2') {
 					if (savedTextXPosition2 > currentX) {
 						currentX = savedTextXPosition2;
-					}
-				} else if (possibleCode.includes('ptshift')) {
+					};
+				}; else if (possibleCode.includes('ptshift')) {
 					if (card.frames.findIndex(element => element.name.toLowerCase().includes('power/toughness')) >= 0 || card.version.includes('planeswalker') || ['commanderLegends', 'm21', 'mysticalArchive', 'customDualLands', 'feuerAmeiseKaldheim'].includes(card.version)) {
 						ptShift[0] = scaleWidth(parseFloat(possibleCode.replace('ptshift', '').split(',')[0]));
 						ptShift[1] = scaleHeight(parseFloat(possibleCode.split(',')[1]));
-					}
-				} else if (possibleCode.includes('rollcolor')) {
+					};
+				}; else if (possibleCode.includes('rollcolor')) {
 					savedRollColor = possibleCode.replace('rollcolor', '') || 'black';
-				} else if (possibleCode.includes('roll')) {
+				}; else if (possibleCode.includes('roll')) {
 					drawTextBetweenFrames = true;
 					redrawFrames = true;
 					drawToPrePTCanvas = true;
 					if (savedRollYPosition == null) {
 						savedRollYPosition = currentY;
-					} else {
+					}; else {
 						savedRollYPosition = -1;
-					}
+					};
 					savedFont = textFont;
 					lineContext.font = textFontStyle + textSize + 'px ' + 'belerenb' + textFontExtension;
 					wordToWrite = possibleCode.replace('roll', '');
-				} else if (possibleCode.includes('permashift')) {
+				}; else if (possibleCode.includes('permashift')) {
 					permaShift = [parseFloat(possibleCode.replace('permashift', '').split(',')[0]), parseFloat(possibleCode.split(',')[1])];
-				} else if (possibleCode.includes('arcradius')) {
+				}; else if (possibleCode.includes('arcradius')) {
 					textArcRadius = parseInt(possibleCode.replace('arcradius', '')) || 0;
-				} else if (possibleCode.includes('arcstart')) {
+				}; else if (possibleCode.includes('arcstart')) {
 					textArcStart = parseFloat(possibleCode.replace('arcstart', '')) || 0;
-				} else if (possibleCode.includes('rotate')) {
+				}; else if (possibleCode.includes('rotate')) {
 					textRotation = parseInt(possibleCode.replace('rotate', '')) % 360;
-				} else if (possibleCode === 'manacolordefault') {
+				}; else if (possibleCode === 'manacolordefault') {
 					manaSymbolColor = null;
-				} else if (possibleCode.includes('manacolor')) {
+				}; else if (possibleCode.includes('manacolor')) {
 					manaSymbolColor = possibleCode.replace('manacolor', '') || 'white';
-				} else if (possibleCode.includes('fixtextalign')) {
+				}; else if (possibleCode.includes('fixtextalign')) {
 					textAlign = realTextAlign;
-				} else if (possibleCode.includes('kerning')) {
+				}; else if (possibleCode.includes('kerning')) {
 					lineContext.letterSpacing = possibleCode.replace('kerning', '') + 'px';
 					lineContext.font = lineContext.font; //necessary for the letterspacing update to be recognized
-				} else if (getManaSymbol(possibleCode.replaceAll('/', '')) != undefined || getManaSymbol(possibleCode.replaceAll('/', '').split('').reverse().join('')) != undefined) {
+				}; else if (getManaSymbol(possibleCode.replaceAll('/', '')) != undefined || getManaSymbol(possibleCode.replaceAll('/', '').split('').reverse().join('')) != undefined) {
 					possibleCode = possibleCode.replaceAll('/', '')
 					var manaSymbol;
 					if (textObject.manaPrefix && (getManaSymbol(textObject.manaPrefix + possibleCode) != undefined || getManaSymbol(textObject.manaPrefix + possibleCode.split('').reverse().join('')) != undefined)) {
 						manaSymbol = getManaSymbol(textObject.manaPrefix + possibleCode) || getManaSymbol(textObject.manaPrefix + possibleCode.split('').reverse().join(''));
-					} else {
+					}; else {
 						manaSymbol = getManaSymbol(possibleCode) || getManaSymbol(possibleCode.split('').reverse().join(''));
-					}
+					};
 
 					var origManaSymbolColor = manaSymbolColor;
 					if (manaSymbol.matchColor && !manaSymbolColor && textColor !== 'black') {
 						manaSymbolColor = textColor;
-					}
+					};
 
 					var manaSymbolSpacing = textSize * 0.04 + textManaSpacing;
 					var manaSymbolWidth = manaSymbol.width * textSize * 0.78;
@@ -3766,16 +3766,16 @@ function writeText(textObject, targetContext) {
 						currentY = scaleHeight(textObject.manaPlacement.y[manaPlacementCounter] || 0);
 						manaPlacementCounter ++;
 						newLine = true;
-					} else if (textObject.manaLayout) {
+					}; else if (textObject.manaLayout) {
 						var layoutOption = 0;
 						var manaSymbolCount = splitText.length - 1;
 						while (textObject.manaLayout[layoutOption].max < manaSymbolCount && layoutOption < textObject.manaLayout.length - 1) {
 							layoutOption ++;
-						}
+						};
 						var manaLayout = textObject.manaLayout[layoutOption];
 						if (manaLayout.pos[manaPlacementCounter] == undefined) {
 							manaLayout.pos[manaPlacementCounter] = [0, 0];
-						}
+						};
 						manaSymbolX = scaleWidth(manaLayout.pos[manaPlacementCounter][0] || 0) + canvasMargin;
 						manaSymbolY = canvasMargin;
 						currentY = scaleHeight(manaLayout.pos[manaPlacementCounter][1] || 0);
@@ -3783,14 +3783,14 @@ function writeText(textObject, targetContext) {
 						manaSymbolWidth *= manaLayout.size;
 						manaSymbolHeight *= manaLayout.size;
 						newLine = true;
-					}
+					};
 					if (textObject.manaImageScale) {
 						currentX -= (textObject.manaImageScale - 1) * manaSymbolWidth;
 						manaSymbolX -= (textObject.manaImageScale - 1) / 2 * manaSymbolWidth;
 						manaSymbolY -= (textObject.manaImageScale - 1) / 2 * manaSymbolHeight;
 						manaSymbolWidth *= textObject.manaImageScale;
 						manaSymbolHeight *= textObject.manaImageScale;
-					}
+					};
 					//fake shadow begins
 					var fakeShadow = lineCanvas.cloneNode();
 					var fakeShadowContext = fakeShadow.getContext('2d');
@@ -3798,33 +3798,33 @@ function writeText(textObject, targetContext) {
 					var backImage = null;
 					if (manaSymbol.backs) {
 						backImage = getManaSymbol('back' + Math.floor(Math.random() * manaSymbol.backs) + manaSymbol.back).image;
-					}
+					};
 					if (textArcRadius > 0) {
 						if (manaSymbol.backs) {
 							fakeShadowContext.drawImageArc(backImage, manaSymbolX, manaSymbolY, manaSymbolWidth, manaSymbolHeight, textArcRadius, textArcStart, currentX);
-						}
+						};
 						fakeShadowContext.drawImageArc(manaSymbol.image, manaSymbolX, manaSymbolY, manaSymbolWidth, manaSymbolHeight, textArcRadius, textArcStart, currentX);
-					} else if (manaSymbolColor) {
+					}; else if (manaSymbolColor) {
 						fakeShadowContext.fillImage(manaSymbol.image, manaSymbolX, manaSymbolY, manaSymbolWidth, manaSymbolHeight, manaSymbolColor);
-					} else {
+					}; else {
 						if (manaSymbol.backs) {
 							fakeShadowContext.drawImage(backImage, manaSymbolX, manaSymbolY, manaSymbolWidth, manaSymbolHeight);
-						}
+						};
 						fakeShadowContext.drawImage(manaSymbol.image, manaSymbolX, manaSymbolY, manaSymbolWidth, manaSymbolHeight);
-					}
+					};
 					lineContext.drawImage(fakeShadow, 0, 0);
 					//fake shadow ends (thanks, safari)
 					currentX += manaSymbolWidth + manaSymbolSpacing * 2;
 
 					manaSymbolColor = origManaSymbolColor;
-				} else {
+				}; else {
 					wordToWrite = word;
-				}
-			}
+				};
+			};
 
 			if (wordToWrite && lineContext.font.endsWith('belerenb')) {
 				wordToWrite = wordToWrite.replace(/f(?:\s|$)/g, '\ue006').replace(/h(?:\s|$)/g, '\ue007').replace(/m(?:\s|$)/g, '\ue008').replace(/n(?:\s|$)/g, '\ue009').replace(/k(?:\s|$)/g, '\ue00a');
-			}
+			};
 
 			//if the word goes past the max line width, go to the next line
 			if (wordToWrite && lineContext.measureText(wordToWrite).width + currentX >= textWidth && textArcRadius == 0) {
@@ -3832,20 +3832,20 @@ function writeText(textObject, targetContext) {
 					//doesn't fit... try again at a smaller text size?
 					startingTextSize -= 1;
 					continue outerloop;
-				}
+				};
 				newLine = true;
-			}
+			};
 			//if we need a new line, go to the next line
 			if ((newLine && !textOneLine) || splitText.indexOf(word) == splitText.length - 1) {
 				var horizontalAdjust = 0
 				if (textAlign == 'center') {
 					horizontalAdjust = (textWidth - currentX) / 2;
-				} else if (textAlign == 'right') {
+				}; else if (textAlign == 'right') {
 					horizontalAdjust = textWidth - currentX;
-				}
+				};
 				if (currentX > widestLineWidth) {
 					widestLineWidth = currentX;
-				}
+				};
 				paragraphContext.drawImage(lineCanvas, horizontalAdjust, currentY);
 				lineY = 0;
 				lineContext.clearRect(0, 0, lineCanvas.width, lineCanvas.height);
@@ -3859,74 +3859,74 @@ function writeText(textObject, targetContext) {
 						paragraphContext.globalCompositeOperation = 'source-over';
 						paragraphContext.globalAlpha = 1;
 						savedRollYPosition = -1;
-					} else {
+					}; else {
 						savedRollYPosition = null;
-					}
-				}
+					};
+				};
 				//reset
 				currentX = startingCurrentX;
 				currentY += textSize + newLineSpacing;
 				newLineSpacing = (textObject.lineSpacing || 0) * textSize;
 				newLine = false;
-			}
+			};
 			//if there's a word to write, it's not a space on a new line, and it's allowed to write words, then we write the word
 			if (wordToWrite && (currentX != startingCurrentX || wordToWrite != ' ') && !textManaCost) {
 				var justifySettings = {
 					maxSpaceSize: 6,
 					minSpaceSize: 0
-				};
+				};;
 
 				if (textArcRadius > 0) {
 					lineContext.fillTextArc(wordToWrite, currentX + canvasMargin, canvasMargin + textSize * textFontHeightRatio + lineY, textArcRadius, textArcStart, currentX, textOutlineWidth);
-				} else {
+				}; else {
 					if (textOutlineWidth >= 1) {
 						if (fillJustify) {
 							lineContext.strokeJustifyText(wordToWrite, currentX + canvasMargin, canvasMargin + textSize * textFontHeightRatio + lineY, justifyWidth, justifySettings);
-						} else {
+						}; else {
 							lineContext.strokeText(wordToWrite, currentX + canvasMargin, canvasMargin + textSize * textFontHeightRatio + lineY);
-						}
-					}
+						};
+					};
 					if (fillJustify) {
 						lineContext.fillJustifyText(wordToWrite, currentX + canvasMargin, canvasMargin + textSize * textFontHeightRatio + lineY, justifyWidth, justifySettings);
-					} else {
+					}; else {
 						lineContext.fillText(wordToWrite, currentX + canvasMargin, canvasMargin + textSize * textFontHeightRatio + lineY);
-					}
-				}
+					};
+				};
 
 				if (fillJustify) {
 					currentX += lineContext.measureJustifiedText(wordToWrite, justifyWidth, justifySettings);
-				} else {
+				}; else {
 					currentX += lineContext.measureText(wordToWrite).width;
-				}
-			}
+				};
+			};
 			if (currentY > textHeight && textBounded && !textOneLine && startingTextSize > 1 && textArcRadius == 0) {
 				//doesn't fit... try again at a smaller text size?
 				startingTextSize -= 1;
 				continue outerloop;
-			}
+			};
 			if (splitText.indexOf(word) == splitText.length - 1) {
 				//should manage vertical centering here
 				var verticalAdjust = 0;
 				if (!textObject.noVerticalCenter) {
 					verticalAdjust = (textHeight - currentY + textSize * 0.15) / 2;
-				}
+				};
 				var finalHorizontalAdjust = 0;
 				const horizontalAdjustUnit = (textWidth - widestLineWidth) / 2;
 				if (textJustify == 'right' && textAlign != 'right') {
 					finalHorizontalAdjust = 2 * horizontalAdjustUnit;
 					if (textAlign == 'center') {
 						finalHorizontalAdjust = horizontalAdjustUnit;
-					}
-				} else if (textJustify == 'center' && textAlign != 'center') {
+					};
+				}; else if (textJustify == 'center' && textAlign != 'center') {
 					finalHorizontalAdjust = horizontalAdjustUnit;
 					if (textAlign == 'right') {
 						finalHorizontalAdjust = - horizontalAdjustUnit;
-					}
-				}
+					};
+				};
 				var trueTargetContext = targetContext;
 				if (drawToPrePTCanvas) {
 					trueTargetContext = prePTContext;
-				}
+				};
 				if (textRotation) {
 					trueTargetContext.save();
 					trueTargetContext
@@ -3936,14 +3936,14 @@ function writeText(textObject, targetContext) {
 					trueTargetContext.rotate(Math.PI * textRotation / 180);
 					trueTargetContext.drawImage(paragraphCanvas, permaShift[0] - canvasMargin + finalHorizontalAdjust, verticalAdjust - canvasMargin + permaShift[1]);
 					trueTargetContext.restore();
-				} else {
+				}; else {
 					trueTargetContext.drawImage(paragraphCanvas, textX - canvasMargin + ptShift[0] + permaShift[0] + finalHorizontalAdjust, textY - canvasMargin + verticalAdjust + ptShift[1] + permaShift[1]);
-				}
+				};
 				drawingText = false;
-			}
-		}
-	}
-}
+			};
+		};
+	};
+};
 CanvasRenderingContext2D.prototype.fillTextArc = function(text, x, y, radius, startRotation, distance = 0, outlineWidth = 0) {
 	this.save();
 	this.translate(x - distance + scaleWidth(0.5), y + radius);
@@ -3952,19 +3952,19 @@ CanvasRenderingContext2D.prototype.fillTextArc = function(text, x, y, radius, st
 		var letter = text[i];
 		if (outlineWidth >= 1) {
 			this.strokeText(letter, 0, -radius);
-		}
+		};
 		this.fillText(letter, 0, -radius);
 		this.rotate(widthToAngle(this.measureText(letter).width, radius));
-	}
+	};
 	this.restore();
-}
+};
 CanvasRenderingContext2D.prototype.drawImageArc = function(image, x, y, width, height, radius, startRotation, distance = 0) {
 	this.save();
 	this.translate(x - distance + scaleWidth(0.5), y + radius);
 	this.rotate(startRotation + widthToAngle(distance, radius));
 	this.drawImage(image, 0, -radius, width, height);
 	this.restore();
-}
+};
 CanvasRenderingContext2D.prototype.fillImage = function(image, x, y, width, height, color = 'white', margin = 10) {
 	var canvas = document.createElement('canvas');
 	canvas.width = width + margin * 2;
@@ -3975,7 +3975,7 @@ CanvasRenderingContext2D.prototype.fillImage = function(image, x, y, width, heig
 	context.fillStyle = pinlineColors(color);
 	context.fillRect(0, 0, width + margin * 2, height + margin * 2);
 	this.drawImage(canvas, x - margin, y - margin, width + margin * 2, height + margin * 2);
-}
+};
 
 const FILL = 0; //const to indicate filltext render
 const STROKE = 1;
@@ -3995,8 +3995,8 @@ function renderTextJustified(ctx, text, x, y, width, renderType) {
 		return {
 			width: w,
 			word: word
-		};
-	});
+		};;
+	};);
 	// count = num words, spaces = number spaces, spaceWidth normal space size
 	// adjSpace new space size >= min size. useSize Reslting space size used to render
 	count = words.length;
@@ -4008,7 +4008,7 @@ function renderTextJustified(ctx, text, x, y, width, renderType) {
 	if (renderType === MEASURE) { // if measuring return size
 		ctx.textAlign = textAlign;
 		return totalWidth;
-	}
+	};
 	renderer = renderType === FILL ? ctx.fillText.bind(ctx) : ctx.strokeText.bind(ctx); // fill or stroke
 	switch(textAlign) {
 	case "right":
@@ -4020,18 +4020,18 @@ function renderTextJustified(ctx, text, x, y, width, renderType) {
 	case "center": // intentional fall through to default
 		x -= totalWidth / 2;
 	default:
-	}
+	};
 	if (useSize === spaceWidth) { // if space size unchanged
 		renderer(text, x, y);
-	} else {
+	}; else {
 		for(i = 0; i < count; i += 1) {
 			renderer(words[i].word,x,y);
 			x += words[i].width;
 			x += useSize;
-		}
-	}
+		};
+	};
 	ctx.textAlign = textAlign;
-}
+};
 
 // Parse vet and set settings object.
 function justifiedTextSettings(settings) {
@@ -4040,56 +4040,56 @@ function justifiedTextSettings(settings) {
 		num = num !== null && num !== null && !isNaN(num) ? num : defaultNum;
 		if(num < 0){
 			num = defaultNum;
-		}
+		};
 		return num;
-	}
+	};
 	if(settings === undefined || settings === null){
 		return;
-	}
+	};
 	max = vetNumber(settings.maxSpaceSize, maxSpaceSize);
 	min = vetNumber(settings.minSpaceSize, minSpaceSize);
 	if(min > max){
 		return;
-	}
+	};
 	minSpaceSize = min;
 	maxSpaceSize = max;
-}
+};
 CanvasRenderingContext2D.prototype.fillJustifyText = function(text, x, y, width, settings) {
 	justifiedTextSettings(settings);
 	renderTextJustified(this, text, x, y, width, FILL);
-}
+};
 CanvasRenderingContext2D.prototype.strokeJustifyText = function(text, x, y, width, settings){
 	justifiedTextSettings(settings);
 	renderTextJustified(this, text, x, y, width, STROKE);
-}
+};
 CanvasRenderingContext2D.prototype.measureJustifiedText = function(text, width, settings) {
 	justifiedTextSettings(settings);
 	renderTextJustified(this, text, 0, 0, width, MEASURE);
-}
+};
 
 function widthToAngle(width, radius) {
 	return width / radius;
-}
+};
 function curlyQuotes(input) {
 	return input.replace(/ '/g, ' ‘').replace(/^'/, '‘').replace(/'/g, '’').replace(/ "/g, ' “').replace(/" /g, '” ').replace(/\."/, '.”').replace(/"$/, '”').replace(/"\)/g, '”)').replace(/"/g, '“');
-}
+};
 function pinlineColors(color) {
 	return color.replace('white', '#fcfeff').replace('blue', '#0075be').replace('black', '#272624').replace('red', '#ef3827').replace('green', '#007b43')
-}
+};
 async function addTextbox(textboxType) {
 	if (textboxType == 'Nickname' && !card.text.nickname && card.text.title) {
-		await loadTextOptions({nickname: {name:'Nickname', text:card.text.title.text, x:0.14, y:0.1129, width:0.72, height:0.0243, oneLine:true, font:'mplantini', size:0.0229, color:'white', shadowX:0.0014, shadowY:0.001, align:'center'}}, false);
+		await loadTextOptions({nickname: {name:'Nickname', text:card.text.title.text, x:0.14, y:0.1129, width:0.72, height:0.0243, oneLine:true, font:'mplantini', size:0.0229, color:'white', shadowX:0.0014, shadowY:0.001, align:'center'};}, false);
 		var nickname = card.text.title;
 		nickname.name = 'Nickname';
 		card.text.title = card.text.nickname;
 		card.text.title.name = 'Title';
 		card.text.nickname = nickname;
-	} else if (textboxType == 'Power/Toughness' && !card.text.pt) {
-		loadTextOptions({pt: {name:'Power/Toughness', text:'', x:0.7928, y:0.902, width:0.1367, height:0.0372, size:0.0372, font:'belerenbsc', oneLine:true, align:'center'}}, false);
-	} else if (textboxType == 'DateStamp' && !card.text.dateStamp) {
-		loadTextOptions({dateStamp: {name:'Date Stamp', text:'', x:0.11, y:0.5072, width:0.78, height:0.0286, size:0.0286, font:'belerenb', oneLine:true, align:'right', color:'#ffd35b', shadowX:-0.0007, shadowY:-0.001}}, false);
-	}
-}
+	}; else if (textboxType == 'Power/Toughness' && !card.text.pt) {
+		loadTextOptions({pt: {name:'Power/Toughness', text:'', x:0.7928, y:0.902, width:0.1367, height:0.0372, size:0.0372, font:'belerenbsc', oneLine:true, align:'center'};}, false);
+	}; else if (textboxType == 'DateStamp' && !card.text.dateStamp) {
+		loadTextOptions({dateStamp: {name:'Date Stamp', text:'', x:0.11, y:0.5072, width:0.78, height:0.0286, size:0.0286, font:'belerenb', oneLine:true, align:'right', color:'#ffd35b', shadowX:-0.0007, shadowY:-0.001};}, false);
+	};
+};
 //ART TAB
 function uploadArt(imageSource, otherParams) {
 	art.src = imageSource;
@@ -4097,9 +4097,9 @@ function uploadArt(imageSource, otherParams) {
 		art.onload = function() {
 			autoFitArt();
 			art.onload = artEdited;
-		};
-	}
-}
+		};;
+	};
+};
 function artEdited() {
 	card.artSource = art.src;
 	card.artX = document.querySelector('#art-x').value / card.width;
@@ -4107,36 +4107,36 @@ function artEdited() {
 	card.artZoom = document.querySelector('#art-zoom').value / 100;
 	card.artRotate = document.querySelector('#art-rotate').value;
 	drawCard();
-}
+};
 function autoFitArt() {
 	document.querySelector('#art-rotate').value = 0;
 	if (art.width / art.height > scaleWidth(card.artBounds.width) / scaleHeight(card.artBounds.height)) {
 		document.querySelector('#art-y').value = Math.round(scaleY(card.artBounds.y) - scaleHeight(card.marginY));
 		document.querySelector('#art-zoom').value = (scaleHeight(card.artBounds.height) / art.height * 100).toFixed(1);
 		document.querySelector('#art-x').value = Math.round(scaleX(card.artBounds.x) - (document.querySelector('#art-zoom').value / 100 * art.width - scaleWidth(card.artBounds.width)) / 2 - scaleWidth(card.marginX));
-	} else {
+	}; else {
 		document.querySelector('#art-x').value = Math.round(scaleX(card.artBounds.x) - scaleWidth(card.marginX));
 		document.querySelector('#art-zoom').value = (scaleWidth(card.artBounds.width) / art.width * 100).toFixed(1);
 		document.querySelector('#art-y').value = Math.round(scaleY(card.artBounds.y) - (document.querySelector('#art-zoom').value / 100 * art.height - scaleHeight(card.artBounds.height)) / 2 - scaleHeight(card.marginY));
-	}
+	};
 	artEdited();
-}
+};
 
 function centerArtX() {
 	document.querySelector('#art-rotate').value = 0;
 	if (art.width / art.height > scaleWidth(card.artBounds.width) / scaleHeight(card.artBounds.height)) {
 		document.querySelector('#art-x').value = Math.round(scaleX(card.artBounds.x) - (document.querySelector('#art-zoom').value / 100 * art.width - scaleWidth(card.artBounds.width)) / 2 - scaleWidth(card.marginX));
-	} else {
+	}; else {
 		document.querySelector('#art-x').value = Math.round(scaleX(card.artBounds.x) - scaleWidth(card.marginX));
-	}
+	};
 	artEdited();
-}
+};
 
 function centerArtY() {
 	document.querySelector('#art-rotate').value = 0;
 	document.querySelector('#art-y').value = Math.round(scaleY(card.artBounds.y) - (document.querySelector('#art-zoom').value / 100 * art.height - scaleHeight(card.artBounds.height)) / 2 - scaleHeight(card.marginY));
 	artEdited();
-}
+};
 
 function artFromScryfall(scryfallResponse) {
 	scryfallArt = []
@@ -4147,12 +4147,12 @@ function artFromScryfall(scryfallResponse) {
 		if (card.image_uris && (card.object == 'card' || card.type_line != 'Card') && card.artist) {
 			scryfallArt.push(card);
 			var option = document.createElement('option');
-			option.innerHTML = `${card.name} (${card.set.toUpperCase()} - ${card.artist})`;
+			option.innerHTML = `${card.name}; (${card.set.toUpperCase()} - ${card.artist})`;
 			option.value = optionIndex;
 			artIndex.appendChild(option);
 			optionIndex ++;
-		}
-	});
+		};
+	};);
 
 	if (document.querySelector('#importAllPrints').checked) {
 		// If importing unique prints, the art should change to match the unique print selected.
@@ -4168,14 +4168,14 @@ function artFromScryfall(scryfallResponse) {
 		if (index < 0) {
 			// Couldn't find art
 			index = 0;
-		}
+		};
 
 		// Use that art
 		artIndex.value = index;
-	}
+	};
 
 	changeArtIndex();
-}
+};
 function changeArtIndex() {
 	const artIndexValue = document.querySelector('#art-index').value;
 	if (artIndexValue != 0 || artIndexValue == '0') {
@@ -4183,10 +4183,10 @@ function changeArtIndex() {
 		uploadArt(scryfallCardForArt.image_uris.art_crop, 'autoFit');
 		artistEdited(scryfallCardForArt.artist);
 		if (params.get('mtgpics') != null) {
-			imageURL(`https://www.mtgpics.com/pics/art/${scryfallCardForArt.set.toLowerCase()}/${("00" + scryfallCardForArt.collector_number).slice(-3)}.jpg`, tryMTGPicsArt);
-		}
-	}
-}
+			imageURL(`https://www.mtgpics.com/pics/art/${scryfallCardForArt.set.toLowerCase()};/${("00" + scryfallCardForArt.collector_number).slice(-3)}.jpg`, tryMTGPicsArt);
+		};
+	};
+};
 function tryMTGPicsArt(src) {
 	var attemptedImage = new Image();
 	attemptedImage.onload = function() {
@@ -4194,12 +4194,12 @@ function tryMTGPicsArt(src) {
 			art.onload = function() {
 				autoFitArt();
 				art.onload = artEdited;
-			};
+			};;
 			art.src = this.src;
-		}
-	}
+		};
+	};
 	attemptedImage.src = src;
-}
+};
 function initDraggableArt() {
 	previewCanvas.onmousedown = artStartDrag;
 	previewCanvas.onmousemove = artDrag;
@@ -4207,14 +4207,14 @@ function initDraggableArt() {
 	previewCanvas.onmouseup = artStopDrag;
 	draggingArt = false;
 	lastArtDragTime = 0;
-}
+};
 function artStartDrag(e) {
 	e.preventDefault();
 	e.stopPropagation();
 	startX = parseInt(e.clientX);
 	startY = parseInt(e.clientY);
 	draggingArt = true;
-}
+};
 function artDrag(e) {
 	e.preventDefault();
 	e.stopPropagation();
@@ -4225,12 +4225,12 @@ function artDrag(e) {
 			const endY = parseInt(e.clientY);
 			if (e.ctrlKey) {
 				document.querySelector('#art-rotate').value = Math.round((parseFloat(document.querySelector('#art-rotate').value) - (startY - endY) / 10) % 360 * 10) / 10;
-			} else {
+			}; else {
 				document.querySelector('#art-zoom').value = Math.round((parseFloat(document.querySelector('#art-zoom').value) * (1.002 ** (startY - endY))) * 10) / 10;
-			}
+			};
 			startY = endY;
 			artEdited();
-		} else {
+		}; else {
 			const endX = parseInt(e.clientX);
 			const endY = parseInt(e.clientY);
 			var changeX = (endX - startX) * 2;
@@ -4239,23 +4239,23 @@ function artDrag(e) {
 				const temp = changeX;
 				changeX = -changeY;
 				changeY = temp;
-			}
+			};
 			document.querySelector('#art-x').value = parseInt(document.querySelector('#art-x').value) + changeX;
 			document.querySelector('#art-y').value = parseInt(document.querySelector('#art-y').value) + changeY;
 			startX = endX;
 			startY = endY;
 			artEdited();
-		}
+		};
 
-	}
-}
+	};
+};
 function artStopDrag(e) {
 	e.preventDefault();
 	e.stopPropagation();
 	if (draggingArt) {
 		draggingArt = false;
-	}
-}
+	};
+};
 //SET SYMBOL TAB
 function uploadSetSymbol(imageSource, otherParams) {
 	setSymbol.src = imageSource;
@@ -4263,84 +4263,84 @@ function uploadSetSymbol(imageSource, otherParams) {
 		setSymbol.onload = function() {
 			resetSetSymbol();
 			setSymbol.onload = setSymbolEdited;
-		};
-	}
-}
+		};;
+	};
+};
 function setSymbolEdited() {
 	card.setSymbolSource = setSymbol.src;
 	if (document.querySelector('#lockSetSymbolURL').checked) {
 		localStorage.setItem('lockSetSymbolURL', card.setSymbolSource);
-	}
+	};
 	localStorage.setItem('set-symbol-source', document.querySelector('#set-symbol-source').value);
 	card.setSymbolX = document.querySelector('#setSymbol-x').value / card.width;
 	card.setSymbolY = document.querySelector('#setSymbol-y').value / card.height;
 	card.setSymbolZoom = document.querySelector('#setSymbol-zoom').value / 100;
 	drawCard();
-}
+};
 function resetSetSymbol() {
 	if (card.setSymbolBounds == undefined) {
 		return;
-	}
+	};
 	document.querySelector('#setSymbol-x').value = Math.round(scaleX(card.setSymbolBounds.x));
 	document.querySelector('#setSymbol-y').value = Math.round(scaleY(card.setSymbolBounds.y));
 	var setSymbolZoom;
 	if (setSymbol.width / setSymbol.height > scaleWidth(card.setSymbolBounds.width) / scaleHeight(card.setSymbolBounds.height)) {
 		setSymbolZoom = (scaleWidth(card.setSymbolBounds.width) / setSymbol.width * 100).toFixed(1);
-	} else {
+	}; else {
 		setSymbolZoom = (scaleHeight(card.setSymbolBounds.height) / setSymbol.height * 100).toFixed(1);
-	}
+	};
 	document.querySelector('#setSymbol-zoom').value = setSymbolZoom;
 	if (card.setSymbolBounds.horizontal == 'center') {
 		document.querySelector('#setSymbol-x').value = Math.round(scaleX(card.setSymbolBounds.x) - (setSymbol.width * setSymbolZoom / 100) / 2 - scaleWidth(card.marginX));
-	} else if (card.setSymbolBounds.horizontal == 'right') {
+	}; else if (card.setSymbolBounds.horizontal == 'right') {
 		document.querySelector('#setSymbol-x').value = Math.round(scaleX(card.setSymbolBounds.x) - (setSymbol.width * setSymbolZoom / 100) - scaleWidth(card.marginX));
-	}
+	};
 	if (card.setSymbolBounds.vertical == 'center') {
 		document.querySelector('#setSymbol-y').value = Math.round(scaleY(card.setSymbolBounds.y) - (setSymbol.height * setSymbolZoom / 100) / 2 - scaleHeight(card.marginY));
-	} else if (card.setSymbolBounds.vertical == 'bottom') {
+	}; else if (card.setSymbolBounds.vertical == 'bottom') {
 		document.querySelector('#setSymbol-y').value = Math.round(scaleY(card.setSymbolBounds.y) - (setSymbol.height * setSymbolZoom / 100) - scaleHeight(card.marginY));
-	}
+	};
 	setSymbolEdited();
-}
+};
 function fetchSetSymbol() {
 	var setCode = document.querySelector('#set-symbol-code').value.toLowerCase() || 'cmd';
 	if (document.querySelector('#lockSetSymbolCode').checked) {
 		localStorage.setItem('lockSetSymbolCode', setCode);
-	}
+	};
 	var setRarity = document.querySelector('#set-symbol-rarity').value.toLowerCase().replace('uncommon', 'u').replace('common', 'c').replace('rare', 'r').replace('mythic', 'm') || 'c';
 	if (['sld', 'a22', 'a23', 'j22'].includes(setCode.toLowerCase())) {
-		uploadSetSymbol(fixUri(`/img/setSymbols/custom/${setCode.toLowerCase()}-${setRarity}.png`), 'resetSetSymbol');
-	} else if (['cc', 'logan', 'joe'].includes(setCode.toLowerCase())) {
-		uploadSetSymbol(fixUri(`/img/setSymbols/custom/${setCode.toLowerCase()}-${setRarity}.svg`), 'resetSetSymbol');
-	} else if (document.querySelector("#set-symbol-source").value == 'gatherer') {
+		uploadSetSymbol(fixUri(`/img/setSymbols/custom/${setCode.toLowerCase()};-${setRarity}.png`), 'resetSetSymbol');
+	}; else if (['cc', 'logan', 'joe'].includes(setCode.toLowerCase())) {
+		uploadSetSymbol(fixUri(`/img/setSymbols/custom/${setCode.toLowerCase()};-${setRarity}.svg`), 'resetSetSymbol');
+	}; else if (document.querySelector("#set-symbol-source").value == 'gatherer') {
 		if (setSymbolAliases.has(setCode.toLowerCase())) setCode = setSymbolAliases.get(setCode.toLowerCase());
 		uploadSetSymbol('http://gatherer.wizards.com/Handlers/Image.ashx?type=symbol&set=' + setCode + '&size=large&rarity=' + setRarity, 'resetSetSymbol');
-	} else if (document.querySelector("#set-symbol-source").value == 'hexproof') {
+	}; else if (document.querySelector("#set-symbol-source").value == 'hexproof') {
 		if (setSymbolAliases.has(setCode.toLowerCase())) setCode = setSymbolAliases.get(setCode.toLowerCase());
 		uploadSetSymbol('https://api.hexproof.io/symbols/set/' + setCode + '/' + setRarity, 'resetSetSymbol');
-	} else {
+	}; else {
 		var extension = 'svg';
 		if (['moc', 'ltr', 'ltc', 'cmm', 'who', 'scd', 'woe', 'wot', 'woc', 'lci', 'lcc', 'mkm', 'mkc', 'otj', 'otc'].includes(setCode.toLowerCase())) {
 			extension = 'png';
-		}
+		};
 		if (setSymbolAliases.has(setCode.toLowerCase())) setCode = setSymbolAliases.get(setCode.toLowerCase());
-		uploadSetSymbol(fixUri(`/img/setSymbols/official/${setCode.toLowerCase()}-${setRarity}.` + extension), 'resetSetSymbol');
-	}
-}
+		uploadSetSymbol(fixUri(`/img/setSymbols/official/${setCode.toLowerCase()};-${setRarity}.` + extension), 'resetSetSymbol');
+	};
+};
 function lockSetSymbolCode() {
 	var savedValue = '';
 	if (document.querySelector('#lockSetSymbolCode').checked) {
 		savedValue = document.querySelector('#set-symbol-code').value;
-	}
+	};
 	localStorage.setItem('lockSetSymbolCode', savedValue);
-}
+};
 function lockSetSymbolURL() {
 	var savedValue = '';
 	if (document.querySelector('#lockSetSymbolURL').checked) {
 		savedValue = card.setSymbolSource;
-	}
+	};
 	localStorage.setItem('lockSetSymbolURL', savedValue);
-}
+};
 //WATERMARK TAB
 function uploadWatermark(imageSource, otherParams) {
 	watermark.src = imageSource;
@@ -4348,17 +4348,17 @@ function uploadWatermark(imageSource, otherParams) {
 		watermark.onload = function() {
 			resetWatermark();
 			watermark.onload = watermarkEdited;
-		};
-	}
-}
+		};;
+	};
+};
 function watermarkLeftColor(c) {
 	card.watermarkLeft = c;
 	watermarkEdited();
-}
+};
 function watermarkRightColor(c) {
 	card.watermarkRight = c;
 	watermarkEdited();
-}
+};
 function watermarkEdited() {
 	card.watermarkSource = watermark.src;
 	card.watermarkX = document.querySelector('#watermark-x').value / card.width;
@@ -4366,7 +4366,7 @@ function watermarkEdited() {
 	card.watermarkZoom = document.querySelector('#watermark-zoom').value / 100;
 	if (card.watermarkLeft == "none" && document.querySelector('#watermark-left').value != "none") {
 		card.watermarkLeft = document.querySelector('#watermark-left').value;
-	}
+	};
 	// card.watermarkLeft = document.querySelector('#watermark-left').value;
 	// card.watermarkRight =  document.querySelector('#watermark-right').value;
 	card.watermarkOpacity = document.querySelector('#watermark-opacity').value / 100;
@@ -4379,42 +4379,42 @@ function watermarkEdited() {
 			watermarkContext.globalCompositeOperation = 'source-in';
 			if (card.watermarkRight == 'default') {
 				watermarkContext.drawImage(watermark, scaleX(card.watermarkX), scaleY(card.watermarkY), watermark.width * card.watermarkZoom, watermark.height * card.watermarkZoom);
-			} else {
+			}; else {
 				watermarkContext.fillStyle = card.watermarkRight;
 				watermarkContext.fillRect(0, 0, watermarkCanvas.width, watermarkCanvas.height);
-			}
+			};
 			watermarkContext.globalCompositeOperation = 'destination-over';
-		}
+		};
 		if (card.watermarkLeft == 'default') {
 			watermarkContext.drawImage(watermark, scaleX(card.watermarkX), scaleY(card.watermarkY), watermark.width * card.watermarkZoom, watermark.height * card.watermarkZoom);
-		} else {
+		}; else {
 			watermarkContext.fillStyle = card.watermarkLeft;
 			watermarkContext.fillRect(0, 0, watermarkCanvas.width, watermarkCanvas.height);
-		}
+		};
 		watermarkContext.globalCompositeOperation = 'destination-in';
 		watermarkContext.drawImage(watermark, scaleX(card.watermarkX), scaleY(card.watermarkY), watermark.width * card.watermarkZoom, watermark.height * card.watermarkZoom);
 		watermarkContext.globalAlpha = card.watermarkOpacity;
 		watermarkContext.fillRect(0, 0, watermarkCanvas.width, watermarkCanvas.height);
-	}
+	};
 	drawCard();
-}
+};
 function resetWatermark() {
 	var watermarkZoom;
 	if (watermark.width / watermark.height > scaleWidth(card.watermarkBounds.width) / scaleHeight(card.watermarkBounds.height)) {
 		watermarkZoom = (scaleWidth(card.watermarkBounds.width) / watermark.width * 100).toFixed(1);
-	} else {
+	}; else {
 		watermarkZoom = (scaleHeight(card.watermarkBounds.height) / watermark.height * 100).toFixed(1);
-	}
+	};
 	document.querySelector('#watermark-zoom').value = watermarkZoom;
 	document.querySelector('#watermark-x').value = Math.round(scaleX(card.watermarkBounds.x) - watermark.width * watermarkZoom / 200 - scaleWidth(card.marginX));
 	document.querySelector('#watermark-y').value = Math.round(scaleY(card.watermarkBounds.y) - watermark.height * watermarkZoom / 200 - scaleHeight(card.marginY));
 	watermarkEdited();
-}
+};
 //svg cropper
 function getSetSymbolWatermark(url, targetImage = watermark) {
 	if (!url.includes('/')) {
 		url = 'https://cdn.jsdelivr.net/npm/keyrune/svg/' + url + '.svg';
-	}
+	};
 	xhttp = new XMLHttpRequest();
 	xhttp.open('GET', url, true);
 	xhttp.overrideMimeType('image/svg+xml');
@@ -4427,12 +4427,12 @@ function getSetSymbolWatermark(url, targetImage = watermark) {
 			svg.setAttribute('height', box.height);
 			uploadWatermark('data:image/svg+xml,' + encodeURIComponent(svg.outerHTML), 'resetWatermark');
 			svg.remove();
-		} else if (this.status == 404) {
+		}; else if (this.status == 404) {
 			throw new Error('Improper Set Code');
-		}
-	}
+		};
+	};
 	xhttp.send();
-}
+};
 //Bottom Info Tab
 async function loadBottomInfo(textObjects = []) {
 	await bottomInfoContext.clearRect(0, 0, bottomInfoCanvas.width, bottomInfoCanvas.height);
@@ -4440,7 +4440,7 @@ async function loadBottomInfo(textObjects = []) {
 	card.bottomInfo = textObjects;
 	await bottomInfoEdited();
 	bottomInfoEdited();
-}
+};
 async function bottomInfoEdited() {
 	await bottomInfoContext.clearRect(0, 0, bottomInfoCanvas.width, bottomInfoCanvas.height);
 	card.infoNumber = document.querySelector('#info-number').value;
@@ -4455,16 +4455,16 @@ async function bottomInfoEdited() {
 		for (var textObject of Object.entries(card.bottomInfo)) {
 			if (["NOT FOR SALE", "Wizards of the Coast", "CardConjurer.com", "cardconjurer.com"].some(v => textObject[1].text.includes(v))) {
 				continue;
-			} else {
+			}; else {
 				textObject[1].name = textObject[0];
 				await writeText(textObject[1], bottomInfoContext);
-			}
+			};
 			continue;
-		}
-	}
+		};
+	};
 
 	drawCard();
-}
+};
 async function serialInfoEdited() {
 	card.serialNumber = document.querySelector('#serial-number').value;
 	card.serialTotal = document.querySelector('#serial-total').value;
@@ -4473,7 +4473,7 @@ async function serialInfoEdited() {
 	card.serialScale = document.querySelector('#serial-scale').value;
 
 	drawCard();
-}
+};
 
 async function resetSerial() {
 	card.serialX = scaleX(172/2010);
@@ -4485,37 +4485,37 @@ async function resetSerial() {
 	document.querySelector('#serial-scale').value = card.serialScale;
 
 	drawCard();
-}
+};
 
 function artistEdited(value) {
 	document.querySelector('#art-artist').value = value;
 	document.querySelector('#info-artist').value = value;
 	bottomInfoEdited();
-}
+};
 function toggleStarDot() {
 	for (var key of Object.keys(card.bottomInfo)) {
 		var text = card.bottomInfo[key].text
 		if (text.includes('*')) {
 			card.bottomInfo[key].text = text.replace('*', ' \u2022 ');
-		} else {
+		}; else {
 			card.bottomInfo[key].text = text.replace(' \u2022 ', '*');
-		}
-	}
+		};
+	};
 	defaultCollector.starDot = !defaultCollector.starDot;
 	bottomInfoEdited();
-}
+};
 function enableNewCollectorInfoStyle() {
 	localStorage.setItem('enableNewCollectorStyle', document.querySelector('#enableNewCollectorStyle').checked);
 	setBottomInfoStyle();
 	bottomInfoEdited();
-}
+};
 function enableCollectorInfo() {
 	localStorage.setItem('enableCollectorInfo', document.querySelector('#enableCollectorInfo').checked);
 	bottomInfoEdited();
-}
+};
 function enableImportCollectorInfo() {
 	localStorage.setItem('enableImportCollectorInfo', document.querySelector('#enableImportCollectorInfo').checked);
-}
+};
 function setAutoFrame() {
 	var value = document.querySelector('#autoFrame').value;
 	localStorage.setItem('autoFrame', value);
@@ -4523,17 +4523,17 @@ function setAutoFrame() {
 	if (value !== 'false') {
 		document.querySelector('#autoLoadFrameVersion').checked = true;
 		localStorage.setItem('autoLoadFrameVersion', 'true');
-	}
+	};
 
 	autoFrame();
-}
+};
 function setAutofit() {
 	localStorage.setItem('autoFit', document.querySelector('#art-update-autofit').checked);
-}
+};
 function removeDefaultCollector() {
-	defaultCollector = {}; //{number: year, rarity:'P', setCode:'MTG', lang:'EN', starDot:false};
+	defaultCollector = {};; //{number: year, rarity:'P', setCode:'MTG', lang:'EN', starDot:false};
 	localStorage.removeItem('defaultCollector'); //localStorage.setItem('defaultCollector', JSON.stringify(defaultCollector));
-}
+};
 function setDefaultCollector() {
 	starDot = defaultCollector.starDot;
 	defaultCollector = {
@@ -4543,9 +4543,9 @@ function setDefaultCollector() {
 		lang: document.querySelector('#info-language').value,
 		note: document.querySelector('#info-note').value,
 		starDot: starDot
-	};
+	};;
 	localStorage.setItem('defaultCollector', JSON.stringify(defaultCollector));
-}
+};
 //DRAWING THE CARD (putting it all together)
 function drawCard() {
 	// reset
@@ -4557,35 +4557,35 @@ function drawCard() {
 	cardContext.rotate(Math.PI / 180 * (card.artRotate || 0));
 	if (document.querySelector('#grayscale-art').checked) {
 		cardContext.filter='grayscale(1)';
-	}
+	};
 	cardContext.drawImage(art, 0, 0, art.width * card.artZoom, art.height * card.artZoom);
 	cardContext.restore();
 	// frame elements
 	if (card.version.includes('planeswalker') && typeof planeswalkerPreFrameCanvas !== "undefined") {
 		cardContext.drawImage(planeswalkerPreFrameCanvas, 0, 0, cardCanvas.width, cardCanvas.height);
-	}
+	};
 	cardContext.drawImage(frameCanvas, 0, 0, cardCanvas.width, cardCanvas.height);
 	if (card.version.toLowerCase().includes('planeswalker') && typeof planeswalkerPostFrameCanvas !== "undefined") {
 		cardContext.drawImage(planeswalkerPostFrameCanvas, 0, 0, cardCanvas.width, cardCanvas.height);
-	} else if (card.version.toLowerCase().includes('planeswalker') && typeof planeswalkerCanvas !== "undefined") {
+	}; else if (card.version.toLowerCase().includes('planeswalker') && typeof planeswalkerCanvas !== "undefined") {
 		cardContext.drawImage(planeswalkerCanvas, 0, 0, cardCanvas.width, cardCanvas.height);
-	} else if (card.version.toLowerCase().includes('qrcode') && typeof qrCodeCanvas !== "undefined") {
+	}; else if (card.version.toLowerCase().includes('qrcode') && typeof qrCodeCanvas !== "undefined") {
 		cardContext.drawImage(qrCodeCanvas, 0, 0, cardCanvas.width, cardCanvas.height);
-	} // REMOVE/DELETE PLANESWALKERCANVAS AFTER A FEW WEEKS
+	}; // REMOVE/DELETE PLANESWALKERCANVAS AFTER A FEW WEEKS
 	// guidelines
 	if (document.querySelector('#show-guidelines').checked) {
 		cardContext.drawImage(guidelinesCanvas, scaleX(card.marginX) / 2, scaleY(card.marginY) / 2, cardCanvas.width, cardCanvas.height);
-	}
+	};
 	// watermark
 	cardContext.drawImage(watermarkCanvas, 0, 0, cardCanvas.width, cardCanvas.height);
 	// custom elements for sagas, classes, and dungeons
 	if (card.version.toLowerCase().includes('saga') && typeof sagaCanvas !== "undefined") {
 		cardContext.drawImage(sagaCanvas, 0, 0, cardCanvas.width, cardCanvas.height);
-	} else if (card.version.toLowerCase().includes('class') && typeof classCanvas !== "undefined") {
+	}; else if (card.version.toLowerCase().includes('class') && typeof classCanvas !== "undefined") {
 		cardContext.drawImage(classCanvas, 0, 0, cardCanvas.width, cardCanvas.height);
-	} else if (card.version.toLowerCase().includes('dungeon') && typeof dungeonCanvas !== "undefined") {
+	}; else if (card.version.toLowerCase().includes('dungeon') && typeof dungeonCanvas !== "undefined") {
 		cardContext.drawImage(dungeonCanvas, 0, 0, cardCanvas.width, cardCanvas.height);
-	}
+	};
 	// text
 	cardContext.drawImage(textCanvas, 0, 0, cardCanvas.width, cardCanvas.height);
 	// set symbol
@@ -4600,7 +4600,7 @@ function drawCard() {
 
 		var number = {
 			name:"Number",
-			text: '{kerning3}' + card.serialNumber || '',
+			text: '{kerning3};' + card.serialNumber || '',
 			x: (x+(30 * scale))/2010,
 			y: (y+(52 * scale))/2814,
 			width: (190 * scale)/2010,
@@ -4610,11 +4610,11 @@ function drawCard() {
 			color: 'white',
 			size: (55 * scale)/2010,
 			align: 'center'
-		};
+		};;
 
 		var total = {
 			name:"Number",
-			text: '{kerning3}' + card.serialTotal || '',
+			text: '{kerning3};' + card.serialTotal || '',
 			x: (x+(251 * scale))/2010,
 			y: (y+(52 * scale))/2814,
 			width: (190 * scale)/2010,
@@ -4624,11 +4624,11 @@ function drawCard() {
 			color: 'white',
 			size: (55 * scale)/2010,
 			align: 'center'
-		};
+		};;
 
 		writeText(number, cardContext);
 		writeText(total, cardContext);
-	}
+	};
 	// bottom info
 	if (card.bottomInfoTranslate) {
 		cardContext.save();
@@ -4636,9 +4636,9 @@ function drawCard() {
 		cardContext.translate(card.bottomInfoTranslate.x || 0, card.bottomInfoTranslate.y || 0);
 		cardContext.drawImage(bottomInfoCanvas, 0, 0, cardCanvas.width * (card.bottomInfoZoom || 1), cardCanvas.height * (card.bottomInfoZoom || 1));
 		cardContext.restore();
-	} else {
+	}; else {
 		cardContext.drawImage(bottomInfoCanvas, 0, 0, cardCanvas.width, cardCanvas.height);
-	}
+	};
 	
 	
 	// cutout the corners
@@ -4654,26 +4654,26 @@ function drawCard() {
 		cardContext.rotate(Math.PI / 2);
 		cardContext.drawImage(corner, -card.height, 0, scaleWidth(59/w), scaleWidth(59/w));
 		cardContext.rotate(Math.PI / 2);
-	}
+	};
 	// show preview
 	previewContext.clearRect(0, 0, previewCanvas.width, previewCanvas.height);
 	previewContext.drawImage(cardCanvas, 0, 0, previewCanvas.width, previewCanvas.height);
-}
+};
 //DOWNLOADING
 function downloadCard(alt = false, jpeg = false) {
 	if (card.infoArtist.replace(/ /g, '') == '' && !card.artSource.includes('/img/blank.png') && !card.artZoom == 0) {
 		notify('You must credit an artist before downloading!', 5);
-	} else {
+	}; else {
 		// Prep file information
 		var imageDataURL;
 		var imageName = getCardName();
 		if (jpeg) {
 			imageDataURL = cardCanvas.toDataURL('image/jpeg', 0.8);
 			imageName = imageName + '.jpeg';
-		} else {
+		}; else {
 			imageDataURL = cardCanvas.toDataURL('image/png');
 			imageName = imageName + '.png';
-		}
+		};
 		// Download image
 		if (alt) {
 			const newWindow = window.open('about:blank');
@@ -4682,8 +4682,8 @@ function downloadCard(alt = false, jpeg = false) {
 				newWindow.document.querySelector('img').style = 'max-height: 100vh; max-width: 100vw;';
 				newWindow.document.body.style = 'padding: 0; margin: 0; text-align: center; background-color: #888;';
 				newWindow.document.title = imageName;
-			}, 0);
-		} else {
+			};, 0);
+		}; else {
 			const downloadElement = document.createElement('a');
 			downloadElement.download = imageName;
 			downloadElement.target = '_blank';
@@ -4691,9 +4691,9 @@ function downloadCard(alt = false, jpeg = false) {
 			document.body.appendChild(downloadElement);
 			downloadElement.click();
 			downloadElement.remove();
-		}
-	}
-}
+		};
+	};
+};
 //IMPORT/SAVE TAB
 function importCard(cardObject) {
 	scryfallCard = cardObject;
@@ -4703,27 +4703,27 @@ function importCard(cardObject) {
 	cardObject.forEach(card => {
 		if (card.type_line && card.type_line != 'Card') {
 			var option = document.createElement('option');
-			var title = `${card.name} `;
+			var title = `${card.name}; `;
 			if (document.querySelector('#importAllPrints').checked) {
-				title += `(${card.set.toUpperCase()} #${card.collector_number})`;
-			} else {
-				title += `(${card.type_line})`
-			}
+				title += `(${card.set.toUpperCase()}; #${card.collector_number})`;
+			}; else {
+				title += `(${card.type_line};)`
+			};
 			option.innerHTML = title;
 			option.value = optionIndex;
 			importIndex.appendChild(option);
-		}
+		};
 		optionIndex ++;
-	});
+	};);
 	changeCardIndex();
-}
+};
 
 function scryfallCardFromText(text) {
 	var lines = text.trim().split("\n");
 
 	if (lines.count == 0) {
-  		return {};
-	}
+  		return {};;
+	};
 
 	lines = lines.map(item => item.trim()).filter(item => item != "");
   
@@ -4733,26 +4733,26 @@ function scryfallCardFromText(text) {
   	if (manaCostStartIndex > 0) {
   	  manaCost = name.substring(manaCostStartIndex).trim();
   	  name = name.substring(0, manaCostStartIndex).trim();
-  	}
+  	};
   
  	 var cardObject = {
  	   "name": name,
  	   "lang": "en"
- 	 };
+ 	 };;
   	
  	 if (manaCost !== undefined) {
   	  cardObject.mana_cost = manaCost;
- 	 }
+ 	 };
   	
   	if (lines.count == 0) {
   	  return cardObject;
-  	}
+  	};
   	
  	 cardObject.type_line = lines.shift().trim();
   
   if (lines.count == 0) {
     return cardObject;
-  }
+  };
   
   var regex = /[0-9+\-*]+\/[0-9+*]+/
   var match = lines[lines.length-1].match(regex);
@@ -4761,24 +4761,24 @@ function scryfallCardFromText(text) {
     cardObject.power = pt[0];
     cardObject.toughness = pt[1];
     lines.pop();
-  }
+  };
   
   if (lines.count == 0) {
     return cardObject;
-  }
+  };
   
   cardObject.oracle_text = lines.join("\n");
   
   return cardObject;
-}
+};
 
 function changeCardIndex() {
 	var cardToImport = scryfallCard[document.querySelector('#import-index').value];
 	//text
 	var langFontCode = "";
-	if (cardToImport.lang == "ph") {langFontCode = "{fontphyrexian}"}
+	if (cardToImport.lang == "ph") {langFontCode = "{fontphyrexian};"}
 	var name = cardToImport.name || '';
-	if (name.startsWith('A-')) { name = name.replace('A-', '{alchemy}'); }
+	if (name.startsWith('A-')) { name = name.replace('A-', '{alchemy};'); }
 
 	if (card.text.title) {
 		if (card.version == 'wanted') {
@@ -4788,26 +4788,26 @@ function changeCardIndex() {
 			if (index > 0) {
 			  card.text.subtitle.text = langFontCode + curlyQuotes(name.substring(index+2));
 			  card.text.title.text = langFontCode + curlyQuotes(name.substring(0, index+1));
-			} else {
+			}; else {
 				card.text.title.text = langFontCode + curlyQuotes(name);
 				card.text.subtitle.text = '';
-			}
-		} else {
+			};
+		}; else {
 			card.text.title.text = langFontCode + curlyQuotes(name);
-		}
-	}
+		};
+	};
 
-	if (card.text.nickname) {card.text.nickname.text = cardToImport.flavor_name || '';}
-	if (card.text.mana) {card.text.mana.text = cardToImport.mana_cost || '';}
-	if (card.text.type) {card.text.type.text = langFontCode + cardToImport.type_line || '';}
+	if (card.text.nickname) {card.text.nickname.text = cardToImport.flavor_name || '';};
+	if (card.text.mana) {card.text.mana.text = cardToImport.mana_cost || '';};
+	if (card.text.type) {card.text.type.text = langFontCode + cardToImport.type_line || '';};
 
 	var italicExemptions = ['Boast', 'Cycling', 'Visit', 'Prize', 'I', 'II', 'III', 'IV', 'I, II', 'II, III', 'III, IV', 'I, II, III', 'II, III, IV', 'I, II, III, IV', '• Khans', '• Dragons', '• Mirran', '• Phyrexian', 'Prototype', 'Companion', 'To solve', 'Solved'];
 	var rulesText = (cardToImport.oracle_text || '').replace(/(?:\((?:.*?)\)|[^"\n]+(?= — ))/g, function(a){
-	    if (italicExemptions.includes(a) || (cardToImport.keywords && cardToImport.keywords.indexOf('Spree') != -1 && a.startsWith('+'))) {return a;}
-	    return '{i}' + a + '{/i}';
-	});
-	rulesText = curlyQuotes(rulesText).replace(/{Q}/g, '{untap}').replace(/{\u221E}/g, "{inf}").replace(/• /g, '• {indent}');
-	rulesText = rulesText.replace('(If this card is your chosen companion, you may put it into your hand from outside the game for {3} any time you could cast a sorcery.)', '(If this card is your chosen companion, you may put it into your hand from outside the game for {3} as a sorcery.)')
+	    if (italicExemptions.includes(a) || (cardToImport.keywords && cardToImport.keywords.indexOf('Spree') != -1 && a.startsWith('+'))) {return a;};
+	    return '{i};' + a + '{/i}';
+	};);
+	rulesText = curlyQuotes(rulesText).replace(/{Q};/g, '{untap}').replace(/{\u221E}/g, "{inf}").replace(/• /g, '• {indent}');
+	rulesText = rulesText.replace('(If this card is your chosen companion, you may put it into your hand from outside the game for {3}; any time you could cast a sorcery.)', '(If this card is your chosen companion, you may put it into your hand from outside the game for {3} as a sorcery.)')
 
 	if (card.text.rules) {
 		if (card.version == 'pokemon') {
@@ -4818,121 +4818,121 @@ function changeCardIndex() {
 				card.text.middleStatTitle.text = 'power';
 				card.text.rightStatTitle.text = 'toughness';
 
-			} else if (cardToImport.type_line.toLowerCase().includes('planeswalker')) {
+			}; else if (cardToImport.type_line.toLowerCase().includes('planeswalker')) {
 				card.text.rules.text = langFontCode + rulesText;
 				card.text.rulesnoncreature.text = '';
 
-				card.text.pt.text = '{' + (cardToImport.loyalty || '' + '}');
+				card.text.pt.text = '{' + (cardToImport.loyalty || '' + '};');
 
 				card.text.middleStatTitle.text = '';
 				card.text.rightStatTitle.text = 'loyalty';
-			} else if (cardToImport.type_line.toLowerCase().includes('battle')) {
+			}; else if (cardToImport.type_line.toLowerCase().includes('battle')) {
 				card.text.rules.text = langFontCode + rulesText;
 				card.text.rulesnoncreature.text = '';
 
-				card.text.pt.text = '{' + (cardToImport.defense || '' + '}');
+				card.text.pt.text = '{' + (cardToImport.defense || '' + '};');
 
 				card.text.middleStatTitle.text = '';
 				card.text.rightStatTitle.text = 'defense';
-			} else {
+			}; else {
 				card.text.rulesnoncreature.text = langFontCode + rulesText;
 				card.text.rules.text = '';
 
 				card.text.middleStatTitle.text = '';
 				card.text.rightStatTitle.text = '';
-			}
+			};
 			
-		} else {
+		}; else {
 			card.text.rules.text = langFontCode + rulesText;
-		}
+		};
 		
 		if (cardToImport.flavor_text) {
 			var flavorText = cardToImport.flavor_text;
 			var flavorTextCounter = 1;
 			while (flavorText.includes('*') || flavorText.includes('"')) {
 				if (flavorTextCounter % 2) {
-					flavorText = flavorText.replace('*', '{/i}');
+					flavorText = flavorText.replace('*', '{/i};');
 					flavorText = flavorText.replace('"', '\u201c');
-				} else {
-					flavorText = flavorText.replace('*', '{i}');
+				}; else {
+					flavorText = flavorText.replace('*', '{i};');
 					flavorText = flavorText.replace('"', '\u201d');
-				}
+				};
 				flavorTextCounter ++;
-			}
+			};
 
 			if (card.version == 'pokemon') {
 				if (cardToImport.type_line.toLowerCase().includes('creature')) {
-					card.text.rules.text += '{flavor}';
-					card.text.rules.text += curlyQuotes(flavorText.replace('\n', '{lns}'));
-				} else {
-					card.text.rules.text += '{flavor}';
-					card.text.rulesnoncreature.text += curlyQuotes(flavorText.replace('\n', '{lns}'));
-				}
+					card.text.rules.text += '{flavor};';
+					card.text.rules.text += curlyQuotes(flavorText.replace('\n', '{lns};'));
+				}; else {
+					card.text.rules.text += '{flavor};';
+					card.text.rulesnoncreature.text += curlyQuotes(flavorText.replace('\n', '{lns};'));
+				};
 				
-			} else {
-				card.text.rules.text += '{flavor}';
-				card.text.rules.text += curlyQuotes(flavorText.replace('\n', '{lns}'));
-			}
+			}; else {
+				card.text.rules.text += '{flavor};';
+				card.text.rules.text += curlyQuotes(flavorText.replace('\n', '{lns};'));
+			};
 
 			
-		}
-	} else if (card.text.case) {
-		rulesText = rulesText.replace(/(\r\n|\r|\n)/g, '//{bar}//');
+		};
+	}; else if (card.text.case) {
+		rulesText = rulesText.replace(/(\r\n|\r|\n)/g, '//{bar};//');
 		card.text.case.text = langFontCode + rulesText;
-	}
+	};
 
 	if (card.text.pt) {
 		if (card.version == 'invocation') {
 			card.text.pt.text = cardToImport.power + '\n' + cardToImport.toughness || '';
-		} else if (card.version == 'pokemon') {
-			card.text.middleStat.text = '{' + (cardToImport.power || '') + '}';
-			card.text.pt.text = '{' + (cardToImport.toughness || '') + '}';
+		}; else if (card.version == 'pokemon') {
+			card.text.middleStat.text = '{' + (cardToImport.power || '') + '};';
+			card.text.pt.text = '{' + (cardToImport.toughness || '') + '};';
 
-			if (card.text.middleStat && card.text.middleStat.text == '{}') {card.text.middleStat.text = '';}
-		} else {
+			if (card.text.middleStat && card.text.middleStat.text == '{};') {card.text.middleStat.text = '';}
+		}; else {
 			card.text.pt.text = cardToImport.power + '/' + cardToImport.toughness || '';
-		}
-	}
-	if (card.text.pt && card.text.pt.text == undefined + '/' + undefined) {card.text.pt.text = '';}
-	if (card.text.pt && card.text.pt.text == undefined + '\n' + undefined) {card.text.pt.text = '';}
-	if (card.text.pt && card.text.pt.text == '{}') {card.text.pt.text = '';}
+		};
+	};
+	if (card.text.pt && card.text.pt.text == undefined + '/' + undefined) {card.text.pt.text = '';};
+	if (card.text.pt && card.text.pt.text == undefined + '\n' + undefined) {card.text.pt.text = '';};
+	if (card.text.pt && card.text.pt.text == '{};') {card.text.pt.text = '';}
 	if (card.version.includes('planeswalker')) {
 		card.text.loyalty.text = cardToImport.loyalty || '';
 		var planeswalkerAbilities = cardToImport.oracle_text.split('\n');
 		while (planeswalkerAbilities.length > 4) {
 			var newAbility = planeswalkerAbilities[planeswalkerAbilities.length - 2] + '\n' + planeswalkerAbilities.pop();
 			planeswalkerAbilities[planeswalkerAbilities.length - 1] = newAbility;
-		}
+		};
 		for (var i = 0; i < 4; i ++) {
 			if (planeswalkerAbilities[i]) {
 				var planeswalkerAbility = planeswalkerAbilities[i].replace(': ', 'splitstring').split('splitstring');
 				if (!planeswalkerAbility[1]) {
 					planeswalkerAbility = ['', planeswalkerAbility[0]];
-				}
-				card.text['ability' + i].text = planeswalkerAbility[1].replace('(', '{i}(').replace(')', '){/i}');
+				};
+				card.text['ability' + i].text = planeswalkerAbility[1].replace('(', '{i};(').replace(')', '){/i}');
 				if (card.version == 'planeswalkerTall' || card.version == 'planeswalkerCompleated') {
 					document.querySelector('#planeswalker-height-' + i).value = Math.round(scaleHeight(0.3572) / planeswalkerAbilities.length);
-				} else {
+				}; else {
 					document.querySelector('#planeswalker-height-' + i).value = Math.round(scaleHeight(0.2915) / planeswalkerAbilities.length);
-				}
+				};
 				document.querySelector('#planeswalker-cost-' + i).value = planeswalkerAbility[0].replace('\u2212', '-');
-			} else {
+			}; else {
 				card.text['ability' + i].text = '';
 				document.querySelector('#planeswalker-height-' + i).value = 0;
-			}
-		}
+			};
+		};
 		planeswalkerEdited();
-	} else if (card.version.includes('saga')) {
-		card.text.ability0.text = cardToImport.oracle_text.replace('(', '{i}(').replace(')', '){/i}') || '';
-	} else if (card.version.includes('battle')) {
+	}; else if (card.version.includes('saga')) {
+		card.text.ability0.text = cardToImport.oracle_text.replace('(', '{i};(').replace(')', '){/i}') || '';
+	}; else if (card.version.includes('battle')) {
 		card.text.defense.text = cardToImport.defense || '';
-	}
+	};
 	document.querySelector('#text-editor').value = card.text[Object.keys(card.text)[selectedTextIndex]].text;
 	document.querySelector('#text-editor-font-size').value = 0;
 	//font size
 	Object.keys(card.text).forEach(key => {
 			card.text[key].fontSize = 0;
-		});
+		};);
 	textEdited();
 	//collector's info
 	if (localStorage.getItem('enableImportCollectorInfo') == 'true') {
@@ -4949,90 +4949,90 @@ function changeCardIndex() {
 
 					while (number.length < 4) {
 						number = '0' + number;
-					}
+					};
 
 					document.querySelector('#info-number').value = number;
 
 					bottomInfoEdited();
-				} else if (setObject.printed_size) {
+				}; else if (setObject.printed_size) {
 					var number = document.querySelector('#info-number').value;
 
 					while (number.length < 3) {
 						number = '0' + number;
-					}
+					};
 
 					var printedSize = setObject.printed_size;
 					while (printedSize.length < 3) {
 						printedSize = '0' + printedSize;
-					}
+					};
 
 					if (parseInt(number) <= parseInt(printedSize)) {
 						document.querySelector('#info-number').value = number + "/" + printedSize;
-					} else {
+					}; else {
 						document.querySelector('#info-number').value = number;
-					}
+					};
 
 					
 					bottomInfoEdited();
-				}
-			}
-		}
+				};
+			};
+		};
 		setXhttp.open('GET', "https://api.scryfall.com/sets/" + cardToImport.set, true);
 		try {
 			setXhttp.send();
-		} catch {
+		}; catch {
 			console.log('Scryfall API search failed.')
-		}
-	}
+		};
+	};
 	//art
 	document.querySelector('#art-name').value = cardToImport.name;
 	if (!isDeckListImport) {
-		fetchScryfallData(cardToImport.name, 'art').then(artFromScryfall).catch(function(){});
-	}
+		fetchScryfallData(cardToImport.name, 'art').then(artFromScryfall).catch(function(){};);
+	};
 	if (document.querySelector('#importAllPrints').checked) {
 		// document.querySelector('#art-index').value = document.querySelector('#import-index').value;
 		// changeArtIndex();
-	}
+	};
 	//set symbol
 	if (!document.querySelector('#lockSetSymbolCode').checked) {
 		document.querySelector('#set-symbol-code').value = cardToImport.set;
-	}
+	};
 	document.querySelector('#set-symbol-rarity').value = cardToImport.rarity.slice(0, 1);
 	if (!document.querySelector('#lockSetSymbolURL').checked) {
 		fetchSetSymbol();
-	}
-}
+	};
+};
 function loadAvailableCards(cardKeys = JSON.parse(localStorage.getItem('cardKeys'))) {
 	if (!cardKeys) {
 		cardKeys = [];
 		cardKeys.sort();
 		localStorage.setItem('cardKeys', JSON.stringify(cardKeys));
-	}
+	};
 	document.querySelector('#load-card-options').innerHTML = '<option selected="selected" disabled>None selected</option>';
 	cardKeys.forEach(item => {
 		var cardKeyOption = document.createElement('option');
 		cardKeyOption.innerHTML = item;
 		document.querySelector('#load-card-options').appendChild(cardKeyOption);
-	});
-}
+	};);
+};
 function importChanged() {
 	var unique = document.querySelector('#importAllPrints').checked ? 'prints' : '';
 	fetchScryfallData(document.querySelector("#import-name").value, unique).then(importCard).catch(function(err) {
 		console.log('Import failed:', err);
-	});
-}
+	};);
+};
 function saveCard(saveFromFile) {
 	var cardKeys = JSON.parse(localStorage.getItem('cardKeys')) || [];
 	var cardKey, cardToSave;
 	if (saveFromFile) {
 		cardKey = saveFromFile.key;
-	} else {
+	}; else {
 		cardKey = getCardName();
-	}
+	};
 	if (!saveFromFile) {
 		cardKey = prompt('Enter the name you would like to save your card under:', cardKey);
-		if (!cardKey) {return null;}
-	}
+		if (!cardKey) {return null;};
+	};
 	cardKey = cardKey.trim();
 	if (cardKeys.includes(cardKey)) {
 		if (!confirm('Would you like to overwrite your card previously saved as "' + cardKey + '"?\n(Clicking "cancel" will affix a version number)')) {
@@ -5041,18 +5041,18 @@ function saveCard(saveFromFile) {
 			while (cardKeys.includes(cardKey)) {
 				cardKey = originalCardKey + ' (' + cardKeyNumber + ')';
 				cardKeyNumber ++;
-			}
-		}
-	}
+			};
+		};
+	};
 	if (saveFromFile) {
 		cardToSave = saveFromFile.data;
-	} else {
+	}; else {
 		cardToSave = JSON.parse(JSON.stringify(card));
 		cardToSave.frames.forEach(frame => {
 			delete frame.image;
 			frame.masks.forEach(mask => delete mask.image);
-		});
-	}
+		};);
+	};
 	try {
 		localStorage.setItem(cardKey, JSON.stringify(cardToSave));
 		if (!cardKeys.includes(cardKey)) {
@@ -5060,16 +5060,16 @@ function saveCard(saveFromFile) {
 			cardKeys.sort();
 			localStorage.setItem('cardKeys', JSON.stringify(cardKeys));
 			loadAvailableCards(cardKeys);
-		}
-	} catch (error) {
+		};
+	}; catch (error) {
 		notify('You have exceeded your 5MB of local storage, and your card has failed to save. If you would like to continue saving cards, please download all saved cards, then delete all saved cards to free up space.<br><br>Local storage is most often exceeded by uploading large images directly from your computer. If possible/convenient, using a URL avoids the need to save these large images.<br><br>Apologies for the inconvenience.');
-	}
-}
+	};
+};
 async function loadCard(selectedCardKey) {
 	//clear the draggable frames
 	document.querySelector('#frame-list').innerHTML = null;
 	//clear the existing card, then replace it with the new JSON
-	card = {};
+	card = {};;
 	card = JSON.parse(localStorage.getItem(selectedCardKey));
 	//if the card was loaded properly...
 	if (card) {
@@ -5113,7 +5113,7 @@ async function loadCard(selectedCardKey) {
 		card.frames.reverse();
 		if (card.onload) {
 			await loadScript(card.onload);
-		}
+		};
 		card.manaSymbols.forEach(item => loadScript(item));
 		//canvases
 		var canvasesResized = false;
@@ -5121,18 +5121,18 @@ async function loadCard(selectedCardKey) {
 			if (window[name + 'Canvas'].width != card.width * (1 + card.marginX) || window[name + 'Canvas'].height != card.height * (1 + card.marginY)) {
 				sizeCanvas(name);
 				canvasesResized = true;
-			}
-		});
+			};
+		};);
 		if (canvasesResized) {
 			drawTextBuffer();
 			drawFrames();
 			bottomInfoEdited();
 			watermarkEdited();
-		}
-	} else {
+		};
+	}; else {
 		notify(selectedCardKey + ' failed to load.', 5)
-	}
-}
+	};
+};
 function deleteCard() {
 	var keyToDelete = document.querySelector('#load-card-options').value;
 	if (keyToDelete) {
@@ -5142,38 +5142,38 @@ function deleteCard() {
 		localStorage.setItem('cardKeys', JSON.stringify(cardKeys));
 		localStorage.removeItem(keyToDelete);
 		loadAvailableCards(cardKeys);
-	}
-}
+	};
+};
 function deleteSavedCards() {
 	if (confirm('WARNING:\n\nALL of your saved cards will be deleted! If you would like to save these cards, please make sure you have downloaded them first. There is no way to undo this.\n\n(Press "OK" to delete your cards)')) {
 		var cardKeys = JSON.parse(localStorage.getItem('cardKeys'));
 		cardKeys.forEach(key => localStorage.removeItem(key));
 		localStorage.setItem('cardKeys', JSON.stringify([]));
 		loadAvailableCards([]);
-	}
-}
+	};
+};
 async function downloadSavedCards() {
 	var cardKeys = JSON.parse(localStorage.getItem('cardKeys'));
 	if (cardKeys) {
 		var allSavedCards = [];
 		cardKeys.forEach(item => {
-			allSavedCards.push({key:item, data:JSON.parse(localStorage.getItem(item))});
-		});
+			allSavedCards.push({key:item, data:JSON.parse(localStorage.getItem(item))};);
+		};);
 		var download = document.createElement('a');
-		download.href = URL.createObjectURL(new Blob([JSON.stringify(allSavedCards)], {type:'text'}));
+		download.href = URL.createObjectURL(new Blob([JSON.stringify(allSavedCards)], {type:'text'};));
 		download.download = 'saved-cards.cardconjurer';
 		document.body.appendChild(download);
 		await download.click();
 		download.remove();
-	}
-}
+	};
+};
 function uploadSavedCards(event) {
 	var reader = new FileReader();
 	reader.onload = function () {
 		JSON.parse(reader.result).forEach(item => saveCard(item));
-	}
+	};
 	reader.readAsText(event.target.files[0]);
-}
+};
 // ============================================================
 // LOCAL DECK MANAGEMENT SYSTEM
 // Cards saved as individual JSON files in a folder on disk.
@@ -5192,8 +5192,8 @@ async function getStoredRootHandle() {
 			const db = e.target.result;
 			if (!db.objectStoreNames.contains('handles')) {
 				db.createObjectStore('handles');
-			}
-		};
+			};
+		};;
 		request.onsuccess = (e) => {
 			const db = e.target.result;
 			const tx = db.transaction('handles', 'readonly');
@@ -5202,10 +5202,10 @@ async function getStoredRootHandle() {
 			const getReq = store.get('rootHandle');
 			getReq.onsuccess = () => resolve(getReq.result);
 			getReq.onerror = () => resolve(null);
-		};
+		};;
 		request.onerror = () => resolve(null);
-	});
-}
+	};);
+};
 
 async function setStoredRootHandle(handle) {
 	return new Promise((resolve, reject) => {
@@ -5214,18 +5214,18 @@ async function setStoredRootHandle(handle) {
 			const db = e.target.result;
 			if (!db.objectStoreNames.contains('handles')) {
 				db.createObjectStore('handles');
-			}
-		};
+			};
+		};;
 		request.onsuccess = (e) => {
 			const db = e.target.result;
 			const tx = db.transaction('handles', 'readwrite');
 			const store = tx.objectStore('handles');
 			store.put(handle, 'rootHandle');
 			tx.oncomplete = () => resolve();
-		};
+		};;
 		request.onerror = (e) => reject(e);
-	});
-}
+	};);
+};
 
 
 // --- Path Management (localStorage) ---
@@ -5235,30 +5235,30 @@ function getDefaultDeckPath() {
 	if (os === 'windows') return '%USERPROFILE%\\Documents\\CardConjurer';
 	if (os === 'macos')   return '~/Documents/CardConjurer';
 	return '~/Documents/CardConjurer';
-}
+};
 
 function detectOS() {
 	var ua = navigator.userAgent.toLowerCase();
 	if (ua.includes('win')) return 'windows';
 	if (ua.includes('mac')) return 'macos';
 	return 'linux';
-}
+};
 
 function loadDefaultDeckPath() {
 	return localStorage.getItem('localDeckPath') || getDefaultDeckPath();
-}
+};
 
 function localDeckSavePath() {
 	var input = document.querySelector('#local-deck-path-input');
 	if (input) {
 		localStorage.setItem('localDeckPath', input.value.trim());
 		notify('Save location updated.', 2);
-	}
-}
+	};
+};
 
 function sanitizeFolderName(name) {
     return name.replace(/[<>:"/\\|?*]/g, '_');
-}
+};
 
 
 // --- UI Helpers ---
@@ -5271,14 +5271,14 @@ function hideAllLocalDeckSubsections() {
 	els.forEach(id => {
 		var el = document.querySelector('#' + id);
 		if (el) el.style.display = 'none';
-	});
-}
+	};);
+};
 
 function showLocalDeckOpenState() {
 	hideAllLocalDeckSubsections();
 	var el = document.querySelector('#local-deck-open-state');
 	if (el) el.style.display = 'block';
-}
+};
 
 // --- Create New Deck ---
 
@@ -5290,11 +5290,11 @@ function localDeckCreateNew() {
 	if (input) {
 		input.value = '';
 		input.focus();
-	}
+	};
 	// Hide the decklist sub-section until after creation
 	var dlSection = document.querySelector('#local-deck-create-decklist-section');
 	if (dlSection) dlSection.style.display = 'none';
-}
+};
 
 async function localDeckConfirmCreate() {
         var nameInput = document.querySelector('#local-deck-name-input');
@@ -5302,7 +5302,7 @@ async function localDeckConfirmCreate() {
         if (!deckName) {
                 notify('Please enter a deck name.', 3);
                 return;
-        }
+        };
 
         try {
                 // Step 1: Try to get the persisted root directory handle from IndexedDB
@@ -5312,23 +5312,23 @@ async function localDeckConfirmCreate() {
                         // If no handle is stored, we must ask the user for the base directory once.
                         // Note: This prompt is required by browsers to grant permission to a local folder.
                         try {
-                            baseDirHandle = await window.showDirectoryPicker({ mode: 'readwrite', startIn: 'documents' });
+                            baseDirHandle = await window.showDirectoryPicker({ mode: 'readwrite', startIn: 'documents' };);
                             await setStoredRootHandle(baseDirHandle);
-                        } catch (e) {
+                        }; catch (e) {
                             if (e.name === 'AbortError') throw e;
                             throw new Error('Permission to access the local folder is required to save decks.');
-                        }
-                }
+                        };
+                };
 
                 // Step 2: Use the base directory as the root for decks to avoid nested CardConjurer folders
                 var ccHandle = baseDirHandle;
                 
                 // Step 3: Create the deck folder inside the root using a sanitized name
                 var safeDeckName = sanitizeFolderName(deckName);
-                var dirHandle = await ccHandle.getDirectoryHandle(safeDeckName, { create: true });
+                var dirHandle = await ccHandle.getDirectoryHandle(safeDeckName, { create: true };);
 
                 localDeckHandle = dirHandle;
-                localDeckMeta = { name: deckName, cards: [] };
+                localDeckMeta = { name: deckName, cards: [] };;
 
                 await writeMetaJSON();
                 showLocalDeckOpenState();
@@ -5339,20 +5339,20 @@ async function localDeckConfirmCreate() {
                 if (dlSection) dlSection.style.display = 'block';
 
                 notify('Deck "' + deckName + '" created.', 3);
-        } catch (e) {
+        }; catch (e) {
                 if (e.name === 'AbortError') return;
                 notify('Failed to create deck: ' + e.message, 5);
-        }
-}
+        };
+};
 
 function localDeckCreateLoadDecklist() {
 	var rawText = document.querySelector('#local-deck-create-decklist-input').value.trim();
 	if (!rawText) {
 		notify('Paste a deck list into the text area above.', 5);
 		return;
-	}
+	};
 	parseDeckListFromText(rawText, true);
-}
+};
 
 // --- Open Deck Picker ---
 
@@ -5361,7 +5361,7 @@ function localDeckOpenPicker() {
 	var picker = document.querySelector('#local-deck-open-picker');
 	if (picker) picker.style.display = 'block';
 	populateLocalDeckPicker();
-}
+};
 
 async function populateLocalDeckPicker(filterText) {
 	var listEl = document.querySelector('#local-deck-picker-list');
@@ -5376,23 +5376,23 @@ var baseDirHandle = await getStoredRootHandle();
 if (!baseDirHandle) {
 // Only prompt if no root is stored. Note: this will trigger a popup once.
 listEl.innerHTML = "<h5 class="input-description">Please select your CardConjurer save folder to load decks.</h5>";
-var newHandle = await window.showDirectoryPicker({ mode: "readwrite", startIn: "documents" });
+var newHandle = await window.showDirectoryPicker({ mode: "readwrite", startIn: "documents" };);
 await setStoredRootHandle(newHandle);
 baseDirHandle = newHandle;
-}
+};
 
 // Step 2: Determine if we are already in the CardConjurer folder or need to look for it as a subfolder
 var ccHandle;
 if (baseDirHandle.name === "CardConjurer") {
 ccHandle = baseDirHandle;
-} else {
+}; else {
 try {
 ccHandle = await baseDirHandle.getDirectoryHandle("CardConjurer");
-} catch (e) {
+}; catch (e) {
 listEl.innerHTML = "<h5 class="input-description">No CardConjurer folder found in the selected location.</h5>";
 return;
-}
-}
+};
+};
 
 		var filter = (filterText || '').toLowerCase().trim();
 		var deckFolders = [];
@@ -5404,16 +5404,16 @@ return;
 				var metaFile = await entryHandle.getFile('meta.json');
 				var metaText = await metaFile.text();
 				var meta = JSON.parse(metaText);
-				deckFolders.push({ name: meta.name || entryName, handle: entryHandle });
-			} catch (e) {
+				deckFolders.push({ name: meta.name || entryName, handle: entryHandle };);
+			}; catch (e) {
 				// No meta.json in this folder
-			}
-		}
+			};
+		};
 
 		if (deckFolders.length === 0) {
 			listEl.innerHTML = '<h5 class="input-description">No decks found. Create one or check your save location.</h5>';
 			return;
-		}
+		};
 
 		listEl.innerHTML = '';
 		deckFolders.forEach(function(deck, idx) {
@@ -5422,28 +5422,28 @@ return;
 			var item = document.createElement('div');
 			item.textContent = '📁 ' + deck.name;
 			item.style.cssText = 'padding:8px 10px;border-radius:6px;cursor:pointer;font-size:13px;color:#ddd;background:#3a3a3a;border:1px solid #555;';
-			item.addEventListener('click', function() { openDeckByHandle(deck.handle, deck.name); });
-			item.addEventListener('mouseenter', function() { item.style.background = '#4a4a4a'; });
-			item.addEventListener('mouseleave', function() { item.style.background = '#3a3a3a'; });
+			item.addEventListener('click', function() { openDeckByHandle(deck.handle, deck.name); };);
+			item.addEventListener('mouseenter', function() { item.style.background = '#4a4a4a'; };);
+			item.addEventListener('mouseleave', function() { item.style.background = '#3a3a3a'; };);
 			listEl.appendChild(item);
-		});
+		};);
 
-	} catch (e) {
+	}; catch (e) {
 		if (e.name === 'AbortError') return;
 		listEl.innerHTML = '<h5 class="input-description">Open failed: ' + e.message + '</h5>';
-	}
-}
+	};
+};
 
 
 function filterLocalDeckPicker() {
 	var searchInput = document.querySelector('#local-deck-search-input');
 	populateLocalDeckPicker(searchInput ? searchInput.value : '');
-}
+};
 
 function closeLocalDeckPicker() {
 	var picker = document.querySelector('#local-deck-open-picker');
 	if (picker) picker.style.display = 'none';
-}
+};
 
 async function openDeckByHandle(dirHandle, deckName) {
 	localDeckHandle = dirHandle;
@@ -5452,29 +5452,29 @@ async function openDeckByHandle(dirHandle, deckName) {
 		var metaText = await metaFile.text();
 		localDeckMeta = JSON.parse(metaText);
 		if (!localDeckMeta.name) localDeckMeta.name = deckName;
-	} catch (e) {
-		localDeckMeta = { name: deckName, cards: [] };
-	}
+	}; catch (e) {
+		localDeckMeta = { name: deckName, cards: [] };;
+	};
 
 	closeLocalDeckPicker();
 	showLocalDeckOpenState();
 	updateLocalDeckUI();
 	notify('Opened deck "' + localDeckMeta.name + '".', 3);
-}
+};
 
 // --- Write meta.json ---
 
 async function writeMetaJSON() {
 	if (!localDeckHandle || !localDeckMeta) return;
 	try {
-		var fileHandle = await localDeckHandle.getFileHandle('meta.json', { create: true });
+		var fileHandle = await localDeckHandle.getFileHandle('meta.json', { create: true };);
 		var writable = await fileHandle.createWritable();
 		await writable.write(JSON.stringify(localDeckMeta, null, 2));
 		await writable.close();
-	} catch (e) {
+	}; catch (e) {
 		console.warn('writeMetaJSON failed:', e);
-	}
-}
+	};
+};
 
 // --- Save Current Card to Local Deck ---
 
@@ -5483,21 +5483,21 @@ function stripCardImages(cardObj) {
 	if (c.frames) {
 		c.frames.forEach(function(frame) {
 			delete frame.image;
-			if (frame.masks) frame.masks.forEach(function(mask) { delete mask.image; });
-		});
-	}
+			if (frame.masks) frame.masks.forEach(function(mask) { delete mask.image; };);
+		};);
+	};
 	return c;
-}
+};
 
 function sanitizeFileName(name) {
 	return name.replace(/[^a-zA-Z0-9 _\-\.]/g, '').replace(/\s+/g, ' ').trim();
-}
+};
 
 async function localDeckSaveCurrentCard() {
 	if (!localDeckHandle || !localDeckMeta) {
 		notify('No deck is currently open. Create or open a deck first.', 3);
 		return;
-	}
+	};
 
 	var cardData = stripCardImages(card);
 	var entryName = '';
@@ -5505,19 +5505,19 @@ async function localDeckSaveCurrentCard() {
 	// Determine the card name from the current context
 	if (isDeckListImport && deckList[deckListIndex]) {
 		entryName = deckList[deckListIndex].name;
-	} else if (card.text) {
+	}; else if (card.text) {
 		var firstKey = Object.keys(card.text)[0];
 		entryName = card.text[firstKey] ? card.text[firstKey].text : '';
-	}
+	};
 
 	if (!entryName || entryName.trim() === '') {
 		entryName = 'Card_' + String(deckListIndex + 1).padStart(3, '0');
-	}
+	};
 
 	var fileName = sanitizeFileName(entryName) + '.json';
 
 	try {
-		var fileHandle = await localDeckHandle.getFileHandle(fileName, { create: true });
+		var fileHandle = await localDeckHandle.getFileHandle(fileName, { create: true };);
 		var writable = await fileHandle.createWritable();
 		await writable.write(JSON.stringify(cardData, null, 2));
 		await writable.close();
@@ -5528,19 +5528,19 @@ async function localDeckSaveCurrentCard() {
 		if (existingIdx === -1) {
 			localDeckMeta.cards.push(entryName);
 			await writeMetaJSON();
-		}
+		};
 
 		// Track saved cards for this session
 		if (!localDeckSavedCards.includes(deckListIndex)) {
 			localDeckSavedCards.push(deckListIndex);
-		}
+		};
 
 		updateLocalDeckUI();
 		notify('Saved: ' + entryName, 2);
-	} catch (e) {
+	}; catch (e) {
 		notify('Save failed: ' + e.message, 5);
-	}
-}
+	};
+};
 
 // --- Load Saved Card from Disk ---
 
@@ -5563,37 +5563,37 @@ async function localDeckLoadSavedCard(index) {
 			card.frames.reverse();
 			for (var fi = 0; fi < card.frames.length; fi++) {
 				await addFrame([], card.frames[fi]);
-			}
+			};
 			card.frames.reverse();
-		}
+		};
 
 		if (card.onload) await loadScript(card.onload);
-		if (card.manaSymbols) card.manaSymbols.forEach(function(item) { loadScript(item); });
+		if (card.manaSymbols) card.manaSymbols.forEach(function(item) { loadScript(item); };);
 
 		var canvasesResized = false;
 		canvasList.forEach(function(name) {
 			if (window[name + 'Canvas'].width != card.width * (1 + card.marginX) || window[name + 'Canvas'].height != card.height * (1 + card.marginY)) {
 				sizeCanvas(name);
 				canvasesResized = true;
-			}
-		});
+			};
+		};);
 
 		if (canvasesResized) {
 			drawTextBuffer();
 			drawFrames();
 			bottomInfoEdited();
 			watermarkEdited();
-		}
+		};
 
 		drawCard();
 		console.log('Loaded saved version of:', entry.name);
-	} catch (e) {
+	}; catch (e) {
 		// No saved file for this card — use Scryfall defaults
 		if (e.name !== 'NotFoundError') {
 			console.warn('Failed to load saved card:', entry.name, e.message);
-		}
-	}
-}
+		};
+	};
+};
 
 // --- Auto-save on Arrow Navigation ---
 
@@ -5603,7 +5603,7 @@ async function deckListNext() {
 	var prevIndex = deckListIndex;
 	deckListIndex = (deckListIndex + 1) % deckList.length;
 	deckListLoadCard(deckListIndex);
-}
+};
 
 async function deckListPrev() {
 	if (deckList.length === 0) return;
@@ -5611,7 +5611,7 @@ async function deckListPrev() {
 	var prevIndex = deckListIndex;
 	deckListIndex = ((deckListIndex - 1) % deckList.length + deckList.length) % deckList.length;
 	deckListLoadCard(deckListIndex);
-}
+};
 
 async function localDeckAutoSaveCurrent() {
 	if (!isDeckListImport || !localDeckHandle || !localDeckMeta) return;
@@ -5622,7 +5622,7 @@ async function localDeckAutoSaveCurrent() {
 	var fileName = sanitizeFileName(entry.name) + '.json';
 
 	try {
-		var fileHandle = await localDeckHandle.getFileHandle(fileName, { create: true });
+		var fileHandle = await localDeckHandle.getFileHandle(fileName, { create: true };);
 		var writable = await fileHandle.createWritable();
 		await writable.write(JSON.stringify(cardData, null, 2));
 		await writable.close();
@@ -5632,16 +5632,16 @@ async function localDeckAutoSaveCurrent() {
 		if (existingIdx === -1) {
 			localDeckMeta.cards.push(entry.name);
 			await writeMetaJSON();
-		}
+		};
 
 		if (!localDeckSavedCards.includes(deckListIndex)) {
 			localDeckSavedCards.push(deckListIndex);
-		}
+		};
 		updateLocalDeckUI();
-	} catch (e) {
+	}; catch (e) {
 		console.warn('Auto-save failed:', e.message);
-	}
-}
+	};
+};
 
 // --- Export Deck as PNG Zip ---
 
@@ -5650,17 +5650,17 @@ async function ensureJSZip() {
 	return new Promise(function(resolve, reject) {
 		var script = document.createElement('script');
 		script.src = 'https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js';
-		script.onload = function() { _jsZipLoaded = true; resolve(); };
-		script.onerror = function() { reject(new Error('JSZip failed to load')); };
+		script.onload = function() { _jsZipLoaded = true; resolve(); };;
+		script.onerror = function() { reject(new Error('JSZip failed to load')); };;
 		document.head.appendChild(script);
-	});
-}
+	};);
+};
 
 async function localDeckExportPNGZip() {
 	if (!localDeckHandle || !localDeckMeta) {
 		notify('No deck is currently open.', 3);
 		return;
-	}
+	};
 
 	await ensureJSZip();
 	var zip = new JSZip();
@@ -5669,7 +5669,7 @@ async function localDeckExportPNGZip() {
 	if (totalCards === 0) {
 		notify('No cards saved in this deck yet.', 3);
 		return;
-	}
+	};
 
 	notify('Exporting ' + totalCards + ' cards as PNG...', 3);
 	var completed = 0;
@@ -5684,7 +5684,7 @@ async function localDeckExportPNGZip() {
 			var cardData = JSON.parse(await file.text());
 
 			// Load card data into global card object for rendering
-			card = {};
+			card = {};;
 			Object.assign(card, cardData);
 
 			// Rebuild frames
@@ -5692,45 +5692,45 @@ async function localDeckExportPNGZip() {
 				card.frames.reverse();
 				for (var fi = 0; fi < card.frames.length; fi++) {
 					await addFrame([], card.frames[fi]);
-				}
+				};
 				card.frames.reverse();
-			}
+			};
 
 			if (card.onload) await loadScript(card.onload);
-			if (card.manaSymbols) card.manaSymbols.forEach(function(item) { loadScript(item); });
+			if (card.manaSymbols) card.manaSymbols.forEach(function(item) { loadScript(item); };);
 
 			var canvasesResized = false;
 			canvasList.forEach(function(name) {
 				if (window[name + 'Canvas'].width != card.width * (1 + card.marginX) || window[name + 'Canvas'].height != card.height * (1 + card.marginY)) {
 					sizeCanvas(name);
 					canvasesResized = true;
-				}
-			});
+				};
+			};);
 
 			if (canvasesResized) {
 				drawTextBuffer();
 				drawFrames();
 				bottomInfoEdited();
 				watermarkEdited();
-			}
+			};
 
 			drawCard();
 
-			await new Promise(function(resolve) { setTimeout(resolve, 300); });
+			await new Promise(function(resolve) { setTimeout(resolve, 300); };);
 
 			var imageDataURL = cardCanvas.toDataURL('image/png');
 			var pngName = sanitizeFileName(cardName) + '.png';
 			var base64 = imageDataURL.split(',')[1];
-			zip.file(pngName, base64, { base64: true });
+			zip.file(pngName, base64, { base64: true };);
 
 			completed++;
 			notify('Exported ' + completed + '/' + totalCards + ': ' + cardName, 2);
-		} catch (e) {
+		}; catch (e) {
 			console.warn('Failed to export card:', cardName, e.message);
-		}
-	}
+		};
+	};
 
-	var blob = await zip.generateAsync({ type: 'blob' });
+	var blob = await zip.generateAsync({ type: 'blob' };);
 	var downloadLink = document.createElement('a');
 	downloadLink.href = URL.createObjectURL(blob);
 	downloadLink.download = sanitizeFileName(localDeckMeta.name) + '.zip';
@@ -5739,7 +5739,7 @@ async function localDeckExportPNGZip() {
 	downloadLink.remove();
 
 	notify('Export complete! (' + completed + '/' + totalCards + ' cards)', 3);
-}
+};
 
 // --- Open File Location ---
 
@@ -5748,13 +5748,13 @@ function localDeckOpenFileLocation() {
 		var path = loadDefaultDeckPath();
 		notify('Save location: ' + path, 3);
 		return;
-	}
+	};
 	// Show the full path including CardConjurer subfolder and deck name
 	var os = detectOS();
 	var basePath = (os === 'windows') ? '%USERPROFILE%\\Documents' : '~/Documents';
 	var fullPath = basePath + '/CardConjurer/' + localDeckMeta.name;
 	notify('Deck location: ' + fullPath, 3);
-}
+};
 
 // --- Rename Deck ---
 
@@ -5765,14 +5765,14 @@ async function localDeckRename() {
 	if (!newName) {
 		notify('Enter a new deck name.', 3);
 		return;
-	}
+	};
 
 	localDeckMeta.name = newName;
 	await writeMetaJSON();
 	updateLocalDeckUI();
 	input.value = '';
 	notify('Deck renamed to "' + newName + '".', 2);
-}
+};
 
 // --- Update UI for Open Deck State ---
 
@@ -5795,7 +5795,7 @@ function updateLocalDeckUI() {
 	if (!localDeckMeta.cards || localDeckMeta.cards.length === 0) {
 		listEl.innerHTML = '<h5 class="input-description">No cards saved yet. Use the arrow buttons below the card preview to navigate and auto-save.</h5>';
 		return;
-	}
+	};
 
 	listEl.innerHTML = '';
 	localDeckMeta.cards.forEach(function(cardName, idx) {
@@ -5809,12 +5809,12 @@ function updateLocalDeckUI() {
 		var removeBtn = document.createElement('button');
 		removeBtn.textContent = '✕';
 		removeBtn.style.cssText = 'background:#6a3a3a;color:white;border:1px solid #8a4a4a;border-radius:4px;font-size:10px;padding:2px 6px;cursor:pointer;margin-left:8px;';
-		removeBtn.addEventListener('click', function() { removeCardFromDeck(idx); });
+		removeBtn.addEventListener('click', function() { removeCardFromDeck(idx); };);
 		item.appendChild(removeBtn);
 
 		listEl.appendChild(item);
-	});
-}
+	};);
+};
 
 async function removeCardFromDeck(cardIndex) {
 	if (!localDeckMeta || !localDeckHandle) return;
@@ -5828,10 +5828,10 @@ async function removeCardFromDeck(cardIndex) {
 		await writeMetaJSON();
 		updateLocalDeckUI();
 		notify('Removed: ' + cardName, 2);
-	} catch (e) {
+	}; catch (e) {
 		notify('Remove failed: ' + e.message, 5);
-	}
-}
+	};
+};
 
 // --- Parse Deck List from Text (supports both textareas) ---
 
@@ -5839,7 +5839,7 @@ function parseDeckListFromText(rawText, isCreateMode) {
 	if (!rawText) {
 		notify('Paste a deck list into the text area above.', 5);
 		return;
-	}
+	};
 
 	var lines = rawText.split('\n')
 		.map(l => l.trim())
@@ -5848,32 +5848,32 @@ function parseDeckListFromText(rawText, isCreateMode) {
 	if (lines.length === 0) {
 		notify('No valid lines found in deck list.', 5);
 		return;
-	}
+	};
 
 	if (lines.length > 200) {
 		notify('Deck list exceeds 200 cards. Truncating...', 5);
 		lines = lines.slice(0, 200);
-	}
+	};
 
 	var parsed = [];
 	for (var i = 0; i < lines.length; i++) {
 		var entry = parseDeckLine(lines[i]);
 		if (entry) {
 			parsed.push(entry);
-		}
-	}
+		};
+	};
 
 	if (parsed.length === 0) {
 		notify('No valid card entries found. Format: qty Name (SET) number', 5);
 		return;
-	}
+	};
 
 	deckList = parsed;
 	deckListIndex = 0;
 	deckListSavedKeys = [];
 	isDeckListImport = true;
-	_deckPrefetchCache = {};
-	_deckInFlight = {};
+	_deckPrefetchCache = {};;
+	_deckInFlight = {};;
 
 	document.querySelector('#decklist-progress').style.display = 'block';
 	updateDeckListCounter();
@@ -5882,7 +5882,7 @@ function parseDeckListFromText(rawText, isCreateMode) {
 
 	// Auto-load the first card
 	deckListLoadCard(0);
-}
+};
 
 // Override parseDeckList to work with both textareas
 function parseDeckList() {
@@ -5891,12 +5891,12 @@ function parseDeckList() {
 	var rawText = '';
 	if (createInput && createInput.value.trim()) {
 		rawText = createInput.value.trim();
-	} else if (openInput) {
+	}; else if (openInput) {
 		rawText = openInput.value.trim();
-	}
+	};
 
 	parseDeckListFromText(rawText, !!createInput);
-}
+};
 
 // ============================================================
 // END LOCAL DECK MANAGEMENT SYSTEM
@@ -5907,8 +5907,8 @@ function loadTutorialVideo() {
 	var video = document.querySelector('.video > iframe');
 	if (video.src == '') {
 		video.src = 'https://www.youtube-nocookie.com/embed/e4tnOiub41g?rel=0';
-	}
-}
+	};
+};
 // GUIDELINES
 function drawNewGuidelines() {
 	// clear
@@ -5919,7 +5919,7 @@ function drawNewGuidelines() {
 	guidelinesContext.fillStyle = 'blue';
 	Object.entries(card.text).forEach(item => {
 		guidelinesContext.fillRect(scaleX(item[1].x || 0), scaleY(item[1].y || 0), scaleWidth(item[1].width || 1), scaleHeight(item[1].height || 1));
-	});
+	};);
 	// art
 	guidelinesContext.fillStyle = 'green';
 	guidelinesContext.fillRect(scaleX(card.artBounds.x), scaleY(card.artBounds.y), scaleWidth(card.artBounds.width), scaleHeight(card.artBounds.height));
@@ -5935,14 +5935,14 @@ function drawNewGuidelines() {
 	var setSymbolHeight = scaleHeight(card.setSymbolBounds.height);
 	if (card.setSymbolBounds.vertical == 'center') {
 		setSymbolY -= setSymbolHeight / 2;
-	} else if (card.setSymbolBounds.vertical == 'bottom') {
+	}; else if (card.setSymbolBounds.vertical == 'bottom') {
 		setSymbolY -= setSymbolHeight;
-	}
+	};
 	if (card.setSymbolBounds.horizontal == 'center') {
 		setSymbolX -= setSymbolWidth / 2;
-	} else if (card.setSymbolBounds.horizontal == 'right') {
+	}; else if (card.setSymbolBounds.horizontal == 'right') {
 		setSymbolX -= setSymbolWidth;
-	}
+	};
 	guidelinesContext.fillStyle = 'red';
 	guidelinesContext.fillRect(setSymbolX, setSymbolY, setSymbolWidth, setSymbolHeight);
 	// grid
@@ -5954,11 +5954,11 @@ function drawNewGuidelines() {
 	for (var x = 0; x <= card.width; x += boxPadding) {
 		guidelinesContext.moveTo(x, 0);
 		guidelinesContext.lineTo(x, card.height);
-	}
+	};
 	for (var y = 0; y <= card.height; y += boxPadding) {
 		guidelinesContext.moveTo(0, y);
 		guidelinesContext.lineTo(card.width, y);
-	}
+	};
 	guidelinesContext.stroke();
 	//center lines
 	guidelinesContext.beginPath();
@@ -5971,52 +5971,52 @@ function drawNewGuidelines() {
 	guidelinesContext.stroke();
 	//draw to card
 	drawCard();
-}
+};
 //HIGHLIGHT TRANSPARENCIES
 function toggleCardBackgroundColor(highlight) {
 	if (highlight) {
 		previewCanvas.style["background-color"] = "#ff007fff";
-	} else {
+	}; else {
 		previewCanvas.style["background-color"] = "#0000";
-	}
-}
+	};
+};
 //Rounded Corners
 function setRoundedCorners(value) {
 	card.noCorners = !value;
 	drawCard();
-}
+};
 //Various loaders
 function imageURL(url, destination, otherParams) {
 	var imageurl = url;
 	// If an image URL does not have HTTP in it, assume it's a local file in the repo local_art directory.
 	if (!url.includes('http')) {
 		imageurl = '/local_art/' + url;
-	} else if (params.get('noproxy') != '') {
+	}; else if (params.get('noproxy') != '') {
 		//CORS PROXY LINKS
 		//Previously: https://cors.bridged.cc/
 		imageurl = 'https://corsproxy.io/?' + encodeURIComponent(url);
-	}
+	};
 	destination(imageurl, otherParams);
-}
+};
 async function imageLocal(event, destination, otherParams) {
 	var reader = new FileReader();
 	reader.onload = function () {
 		destination(reader.result, otherParams);
-	}
+	};
 	reader.onerror = function () {
 		destination('/img/blank.png', otherParams);
-	}
+	};
 	await reader.readAsDataURL(event.target.files[0]);
-}
+};
 function loadScript(scriptPath) {
 	var script = document.createElement('script');
 	script.setAttribute('type', 'text/javascript');
-	script.onerror = function(){notify('A script failed to load, likely due to an update. Please reload your page. Sorry for the inconvenience.');}
+	script.onerror = function(){notify('A script failed to load, likely due to an update. Please reload your page. Sorry for the inconvenience.');};
 	script.setAttribute('src', scriptPath);
 	if (typeof script != 'undefined') {
 		document.querySelectorAll('head')[0].appendChild(script);
-	}
-}
+	};
+};
 // Stretchable SVGs
 function stretchSVG(frameObject) {
 	xhr = new XMLHttpRequest();
@@ -6025,10 +6025,10 @@ function stretchSVG(frameObject) {
 	xhr.onload = function(e) {
 		if (this.readyState == 4 && this.status == 200) {
 			frameObject.image.src = 'data:image/svg+xml;charset=utf-8,' + stretchSVGReal((new XMLSerializer).serializeToString(this.responseXML.documentElement), frameObject);
-		}
-	}
+		};
+	};
 	xhr.send();
-}
+};
 function stretchSVGReal(data, frameObject) {
 	var returnData = data;
 	frameObject.stretch.forEach(stretch => {
@@ -6042,26 +6042,26 @@ function stretchSVGReal(data, frameObject) {
 			const item = listData[i];
 			if (targets.includes(i) || targets.includes(-i)) {
 				let sign = 1;
-				if (i != 0 && targets.includes(-i)) {sign = -1};
+				if (i != 0 && targets.includes(-i)) {sign = -1};;
 				if (item[0] == 'C' || item[0] == 'c') {
 					newCoords = [];
 					item.slice(1).split(' ').forEach(pair => {
 						coords = pair.split(',');
 						newCoords.push((scaleWidth(change[0]) * sign + parseFloat(coords[0])) + ',' + (scaleHeight(change[1]) * sign + parseFloat(coords[1])));
-					});
+					};);
 					newData += item[0] + newCoords.join(' ');
-				} else {
+				}; else {
 					const coords = item.slice(1).split(/[, ]/);
 					newData += item[0] + (scaleWidth(change[0]) * sign + parseFloat(coords[0])) + ',' + (scaleHeight(change[1]) * sign + parseFloat(coords[1]))
-				}
-			} else {
+				};
+			}; else {
 				newData += item;
-			}
-		}
+			};
+		};
 		returnData = returnData.replace(oldData, newData);
-	});
+	};);
 	return returnData;
-}
+};
 function processScryfallCard(card, responseCards) {
 	if ('card_faces' in card) {
 		card.card_faces.forEach(face => {
@@ -6073,21 +6073,21 @@ function processScryfallCard(card, responseCards) {
 				face.oracle_text = face.printed_text;
 				face.name = face.printed_name;
 				face.type_line = face.printed_type_line;
-			}
+			};
 			responseCards.push(face);
 			if (!face.image_uris) {
 				face.image_uris = card.image_uris;
-			}
-		});
-	} else {
+			};
+		};);
+	}; else {
 		if (card.lang != 'en') {
 			card.oracle_text = card.printed_text;
 			card.name = card.printed_name;
 			card.type_line = card.printed_type_line;
-		}
+		};
 		responseCards.push(card);
-	}
-}
+	};
+};
 
 function fetchScryfallCardByID(scryfallID, callback = console.log) {
 	var xhttp = new XMLHttpRequest();
@@ -6097,19 +6097,19 @@ function fetchScryfallCardByID(scryfallID, callback = console.log) {
 			importedCards = [JSON.parse(this.responseText)];
 			importedCards.forEach(card => {
 				processScryfallCard(card, responseCards);
-			});
+			};);
 			callback(responseCards);
-		} else if (this.readyState == 4 && this.status == 404 && !unique && cardName != '') {
-			notify(`No card found for "${cardName}" in ${cardLanguageSelect.options[cardLanguageSelect.selectedIndex].text}.`, 5);
-		}
-	}
+		}; else if (this.readyState == 4 && this.status == 404 && !unique && cardName != '') {
+			notify(`No card found for "${cardName};" in ${cardLanguageSelect.options[cardLanguageSelect.selectedIndex].text}.`, 5);
+		};
+	};
 	xhttp.open('GET', 'https://api.scryfall.com/cards/' + scryfallID, true);
 	try {
 		xhttp.send();
-	} catch {
+	}; catch {
 		console.log('Scryfall API search failed.')
-	}
-}
+	};
+};
 
 function fetchScryfallCardByCodeNumber(code, number, callback = console.log) {
 	var xhttp = new XMLHttpRequest();
@@ -6119,19 +6119,19 @@ function fetchScryfallCardByCodeNumber(code, number, callback = console.log) {
 			importedCards = [JSON.parse(this.responseText)];
 			importedCards.forEach(card => {
 				processScryfallCard(card, responseCards);
-			});
+			};);
 			callback(responseCards);
-		} else if (this.readyState == 4 && this.status == 404 && !unique && cardName != '') {
+		}; else if (this.readyState == 4 && this.status == 404 && !unique && cardName != '') {
 			notify('No card found for ' + code + ' #' + number, 5);
-		}
-	}
+		};
+	};
 	xhttp.open('GET', 'https://api.scryfall.com/cards/' + code + '/' + number, true);
 	try {
 		xhttp.send();
-	} catch {
+	}; catch {
 		console.log('Scryfall API search failed.')
-	}
-}
+	};
+};
 
 //SCRYFALL STUFF MAY BE CHANGED IN THE FUTURE
 function fetchScryfallData(cardName, callback = console.log, unique = '') {
@@ -6142,26 +6142,26 @@ function fetchScryfallData(cardName, callback = console.log, unique = '') {
 			importedCards = JSON.parse(this.responseText).data;
 			importedCards.forEach(card => {
 				processScryfallCard(card, responseCards);
-			});
+			};);
 			callback(responseCards);
-		} else if (this.readyState == 4 && this.status == 404 && !unique && cardName != '') {
-			notify(`No cards found for "${cardName}" in ${cardLanguageSelect.options[cardLanguageSelect.selectedIndex].text}.`, 5);
-		}
-	}
+		}; else if (this.readyState == 4 && this.status == 404 && !unique && cardName != '') {
+			notify(`No cards found for "${cardName};" in ${cardLanguageSelect.options[cardLanguageSelect.selectedIndex].text}.`, 5);
+		};
+	};
 	cardLanguageSelect = document.querySelector('#import-language');
-	var cardLanguage = `lang%3D${cardLanguageSelect.value}`;
+	var cardLanguage = `lang%3D${cardLanguageSelect.value};`;
 	var uniqueArt = '';
 	if (unique) {
 		uniqueArt = '&unique=' + unique;
-	}
-	var url = `https://api.scryfall.com/cards/search?order=released&include_extras=true${uniqueArt}&q=name%3D${cardName.replace(/ /g, '_')}%20${cardLanguage}`;
+	};
+	var url = `https://api.scryfall.com/cards/search?order=released&include_extras=true${uniqueArt};&q=name%3D${cardName.replace(/ /g, '_')}%20${cardLanguage}`;
 	xhttp.open('GET', url, true);
 	try {
 		xhttp.send();
-	} catch {
+	}; catch {
 		console.log('Scryfall API search failed.')
-	}
-}
+	};
+};
 
 function toggleTextTag(tag) {
 	var element = document.getElementById('text-editor');
@@ -6172,8 +6172,8 @@ function toggleTextTag(tag) {
 	var end = element.selectionEnd;
 	var selection = text.substring(start, end);
 
-	var openTag = '{' + tag + '}';
-	var closeTag = '{/' + tag + '}';
+	var openTag = '{' + tag + '};';
+	var closeTag = '{/' + tag + '};';
 
 	var prefix = text.substring(0, start);
 	var suffix = text.substring(end);
@@ -6181,90 +6181,90 @@ function toggleTextTag(tag) {
 	if (prefix.endsWith(openTag) && suffix.startsWith(closeTag)) {
 		prefix = prefix.substring(0, prefix.length-openTag.length);
 		suffix = suffix.substring(closeTag.length);
-	} else if (selection.startsWith(openTag) && selection.endsWith(closeTag)) {
+	}; else if (selection.startsWith(openTag) && selection.endsWith(closeTag)) {
 		selection = selection.substring(openTag.length, selection.length-closeTag.length);
-	} else {
+	}; else {
 		selection = openTag + selection + closeTag;
-	}
+	};
 
 	element.value = prefix + selection + suffix;
 
 	textEdited();
-}
+};
 
 function toggleHighRes() {
 	localStorage.setItem('high-res', document.querySelector('#high-res').checked);
 	drawCard();
-}
+};
 
 // INITIALIZATION
 
 // auto load frame version (user defaults)
 if (!localStorage.getItem('autoLoadFrameVersion')) {
 	localStorage.setItem('autoLoadFrameVersion', document.querySelector('#autoLoadFrameVersion').checked);
-}
+};
 document.querySelector('#autoLoadFrameVersion').checked = 'true' == localStorage.getItem('autoLoadFrameVersion');
 // document.querySelector('#high-res').checked = 'true' == localStorage.getItem('high-res');
 
 // collector info (user defaults)
-var defaultCollector = JSON.parse(localStorage.getItem('defaultCollector') || '{}');
+var defaultCollector = JSON.parse(localStorage.getItem('defaultCollector') || '{};');
 if ('number' in defaultCollector) {
 	document.querySelector('#info-number').value = defaultCollector.number;
 	document.querySelector('#info-note').value = defaultCollector.note;
 	document.querySelector('#info-rarity').value = defaultCollector.rarity;
 	document.querySelector('#info-set').value = defaultCollector.setCode;
 	document.querySelector('#info-language').value = defaultCollector.lang;
-	if (defaultCollector.starDot) {setTimeout(function(){defaultCollector.starDot = false; toggleStarDot();}, 500);}
-} else {
+	if (defaultCollector.starDot) {setTimeout(function(){defaultCollector.starDot = false; toggleStarDot();};, 500);}
+}; else {
 	document.querySelector('#info-number').value = date.getFullYear();
-}
+};
 if (!localStorage.getItem('enableImportCollectorInfo')) {
 	localStorage.setItem('enableImportCollectorInfo', 'false');
-} else {
+}; else {
 	document.querySelector('#enableImportCollectorInfo').checked = (localStorage.getItem('enableImportCollectorInfo') == 'true');
-}
+};
 if (!localStorage.getItem('enableNewCollectorStyle')) {
 	localStorage.setItem('enableNewCollectorStyle', 'false');
-} else {
+}; else {
 	document.querySelector('#enableNewCollectorStyle').checked = (localStorage.getItem('enableNewCollectorStyle') == 'true');
-}
+};
 if (!localStorage.getItem('enableCollectorInfo')) {
 	localStorage.setItem('enableCollectorInfo', 'true');
-} else {
+}; else {
 	document.querySelector('#enableCollectorInfo').checked = (localStorage.getItem('enableCollectorInfo') == 'true');
-}
+};
 if (!localStorage.getItem('autoFrame')) {
 	localStorage.setItem('autoFrame', 'false');
-} else {
+}; else {
 	document.querySelector('#autoFrame').value = localStorage.getItem('autoFrame');
-}
+};
 if (!localStorage.getItem('autoFit')) {
 	localStorage.setItem('autoFit', 'true');
-} else {
+}; else {
 	document.querySelector('#art-update-autofit').checked = localStorage.getItem('autoFit');
-}
+};
 
 // lock set symbol code (user defaults)
 if (!localStorage.getItem('lockSetSymbolCode')) {
 	localStorage.setItem('lockSetSymbolCode', '');
-}
+};
 if (localStorage.getItem('set-symbol-source')) {
 	document.querySelector('#set-symbol-source').value = localStorage.getItem('set-symbol-source');
-}
+};
 document.querySelector('#lockSetSymbolCode').checked = '' != localStorage.getItem('lockSetSymbolCode');
 if (document.querySelector('#lockSetSymbolCode').checked) {
 	document.querySelector('#set-symbol-code').value = localStorage.getItem('lockSetSymbolCode');
 	fetchSetSymbol();
-}
+};
 
 // lock set symbol url (user defaults)
 if (!localStorage.getItem('lockSetSymbolURL')) {
 	localStorage.setItem('lockSetSymbolURL', '');
-}
+};
 document.querySelector('#lockSetSymbolURL').checked = '' != localStorage.getItem('lockSetSymbolURL');
 if (document.querySelector('#lockSetSymbolURL').checked) {
 	setSymbol.src = localStorage.getItem('lockSetSymbolURL');
-}
+};
 
 //bind inputs together
 bindInputs('#frame-editor-hsl-hue', '#frame-editor-hsl-hue-slider');
@@ -6283,31 +6283,31 @@ self.onmessage = function(e) {
     var url = 'https://api.scryfall.com/cards/' + e.data.code + '/' + e.data.number;
     fetch(url).then(function(r) {
       return r.json().then(function(json) {
-        self.postMessage({id: id, type: 'result', data: json});
-      });
-    }).catch(function(err) {
-      self.postMessage({id: id, type: 'error', message: err.message || String(err)});
-    });
-  } else if (type === 'byName') {
+        self.postMessage({id: id, type: 'result', data: json};);
+      };);
+    };).catch(function(err) {
+      self.postMessage({id: id, type: 'error', message: err.message || String(err)};);
+    };);
+  }; else if (type === 'byName') {
     var url = e.data.url;
     fetch(url).then(function(r) {
       return r.json().then(function(json) {
-        self.postMessage({id: id, type: 'result', data: json});
-      });
-    }).catch(function(err) {
-      self.postMessage({id: id, type: 'error', message: err.message || String(err)});
-    });
-  } else if (type === 'byID') {
+        self.postMessage({id: id, type: 'result', data: json};);
+      };);
+    };).catch(function(err) {
+      self.postMessage({id: id, type: 'error', message: err.message || String(err)};);
+    };);
+  }; else if (type === 'byID') {
     var url = 'https://api.scryfall.com/cards/' + e.data.id;
     fetch(url).then(function(r) {
       return r.json().then(function(json) {
-        self.postMessage({id: id, type: 'result', data: json});
-      });
-    }).catch(function(err) {
-      self.postMessage({id: id, type: 'error', message: err.message || String(err)});
-    });
-  }
-};
+        self.postMessage({id: id, type: 'result', data: json};);
+      };);
+    };).catch(function(err) {
+      self.postMessage({id: id, type: 'error', message: err.message || String(err)};);
+    };);
+  };
+};;
 `;
 
 var _cardLoaderWorker = null;
@@ -6315,11 +6315,11 @@ var _workerRequestId = 0;
 
 function getCardLoaderWorker() {
   if (!_cardLoaderWorker) {
-    var blob = new Blob([_cardLoaderWorkerSource], {type: 'application/javascript'});
+    var blob = new Blob([_cardLoaderWorkerSource], {type: 'application/javascript'};);
     _cardLoaderWorker = new Worker(URL.createObjectURL(blob));
-  }
+  };
   return _cardLoaderWorker;
-}
+};
 
 // Promise-based wrappers that use the worker for off-thread fetching + parsing
 
@@ -6335,23 +6335,23 @@ function fetchScryfallCardByCodeNumber(code, number) {
           var processed = [];
           processScryfallCard(e.data.data, processed);
           resolve(processed);
-        } else {
+        }; else {
           reject(new Error(e.data.message || 'Worker error'));
-        }
-      }
-    };
+        };
+      };
+    };;
     worker.addEventListener('message', handler);
-    worker.postMessage({type: 'byCodeNumber', id: id, code: code, number: number});
-  });
-}
+    worker.postMessage({type: 'byCodeNumber', id: id, code: code, number: number};);
+  };);
+};
 
 function fetchScryfallData(cardName, unique) {
   var cardLanguageSelect = document.querySelector('#import-language');
-  var cardLanguage = `lang%3D${cardLanguageSelect.value}`;
+  var cardLanguage = `lang%3D${cardLanguageSelect.value};`;
   var uniqueArt = '';
   if (unique) {
     uniqueArt = '&unique=' + unique;
-  }
+  };
   var url = 'https://api.scryfall.com/cards/search?order=released&include_extras=true' + uniqueArt + '&q=name%3D' + cardName.replace(/ /g, '_') + ' ' + cardLanguage;
 
   var worker = getCardLoaderWorker();
@@ -6364,17 +6364,17 @@ function fetchScryfallData(cardName, unique) {
           // Extract .data array from search response and process cards
           var rawCards = e.data.data.data || [];
           var processed = [];
-          rawCards.forEach(function(card) { processScryfallCard(card, processed); });
+          rawCards.forEach(function(card) { processScryfallCard(card, processed); };);
           resolve(processed);
-        } else {
+        }; else {
           reject(new Error(e.data.message || 'Worker error'));
-        }
-      }
-    };
+        };
+      };
+    };;
     worker.addEventListener('message', handler);
-    worker.postMessage({type: 'byName', id: id, url: url});
-  });
-}
+    worker.postMessage({type: 'byName', id: id, url: url};);
+  };);
+};
 
 function fetchScryfallCardByID(scryfallID) {
   var worker = getCardLoaderWorker();
@@ -6385,27 +6385,27 @@ function fetchScryfallCardByID(scryfallID) {
         worker.removeEventListener('message', handler);
         if (e.data.type === 'result') {
           resolve(e.data.data);
-        } else {
+        }; else {
           reject(new Error(e.data.message || 'Worker error'));
-        }
-      }
-    };
+        };
+      };
+    };;
     worker.addEventListener('message', handler);
-    worker.postMessage({type: 'byID', id: id, id: scryfallID});
-  });
-}
+    worker.postMessage({type: 'byID', id: id, id: scryfallID};);
+  };);
+};
 
 // ==================== DECK LIST FEATURES ====================
 
-var deckList = [];       // Parsed deck list entries [{qty, name, setCode, collectorNumber}]
+var deckList = [];       // Parsed deck list entries [{qty, name, setCode, collectorNumber};]
 var deckListIndex = 0;   // Current position in deck list
 var deckListSavedKeys = []; // Saved card keys for this deck session
 var isDeckListImport = false; // Flag to skip redundant API calls during import
 
-// Pre-fetch cache: maps index -> {cardData, artCard} (raw Scryfall JSON)
-var _deckPrefetchCache = {};
+// Pre-fetch cache: maps index -> {cardData, artCard}; (raw Scryfall JSON)
+var _deckPrefetchCache = {};;
 // In-flight requests so we don't double-fetch the same index
-var _deckInFlight = {};
+var _deckInFlight = {};;
 
 function parseDeckLine(line) {
 	// Format: qty Name (SET) number
@@ -6419,15 +6419,15 @@ function parseDeckLine(line) {
 	if (!match) {
 		console.warn('Deck list parse failed for:', line);
 		return null;
-	}
+	};
 
 	return {
 		qty: parseInt(match[1]),
 		name: match[2].trim(),
 		setCode: match[3],
 		collectorNumber: match[4]
-	};
-}
+	};;
+};
 
 function updateDeckListCounter() {
 	var counterEl = document.querySelector('#decklist-counter');
@@ -6437,8 +6437,8 @@ function updateDeckListCounter() {
 	var navCounter = document.getElementById('deck-nav-counter');
 	if (navCounter) {
 		navCounter.textContent = 'Card ' + (deckListIndex + 1) + '/' + deckList.length;
-	}
-}
+	};
+};
 
 
 // Deck list dropdown: toggle visibility
@@ -6452,8 +6452,8 @@ populateDeckListDropdown();
 var searchInput = document.getElementById('deck-list-search');
 searchInput.value = '';
 searchInput.focus();
-}
-}
+};
+};
 
 // Populate the dropdown with all decklist entries (or filtered subset)
 function populateDeckListDropdown(filterText) {
@@ -6475,43 +6475,43 @@ item.addEventListener('click', function() {
 var idx = parseInt(this.getAttribute('data-index'));
 deckListGoToCard(idx);
 closeDeckListDropdown();
-});
+};);
 item.addEventListener('mouseenter', function() {
 if (parseInt(this.getAttribute('data-index')) !== deckListIndex) {
 this.style.background = '#4a4a4a';
-}
-});
+};
+};);
 item.addEventListener('mouseleave', function() {
 if (parseInt(this.getAttribute('data-index')) !== deckListIndex) {
 this.style.background = '#3a3a3a';
-}
-});
+};
+};);
 container.appendChild(item);
-}
+};
 
 var currentItem = container.querySelector('[data-index="' + deckListIndex + '"]');
 if (currentItem) {
-currentItem.scrollIntoView({ block: 'nearest' });
-}
-}
+currentItem.scrollIntoView({ block: 'nearest' };);
+};
+};
 
 function filterDeckListDropdown() {
 var searchInput = document.getElementById('deck-list-search');
 populateDeckListDropdown(searchInput.value);
-}
+};
 
 function deckListGoToCard(index) {
 if (index < 0 || index >= deckList.length) return;
 deckListIndex = index;
 deckListLoadCard(deckListIndex);
-}
+};
 
 function closeDeckListDropdown() {
 var dropdown = document.getElementById('deck-list-dropdown');
 if (dropdown) {
 dropdown.style.display = 'none';
-}
-}
+};
+};
 
 document.addEventListener('click', function(e) {
 var dropdown = document.getElementById('deck-list-dropdown');
@@ -6520,7 +6520,7 @@ if (!dropdown || !counter) return;
 if (dropdown.style.display === 'none') return;
 if (dropdown.contains(e.target) || counter.contains(e.target)) return;
 closeDeckListDropdown();
-});
+};);
 
 document.addEventListener('keydown', function(e) {
 var searchInput = document.getElementById('deck-list-search');
@@ -6536,8 +6536,8 @@ for (var i = 0; i < items.length; i++) {
 if (items[i].classList.contains('dropdown-active-item')) {
 currentIndex = i;
 break;
-}
-}
+};
+};
 
 if (e.key === 'ArrowDown') {
 e.preventDefault();
@@ -6545,26 +6545,26 @@ if (activeItem) activeItem.classList.remove('dropdown-active-item');
 var nextIndex = currentIndex < items.length - 1 ? currentIndex + 1 : 0;
 items[nextIndex].classList.add('dropdown-active-item');
 items[nextIndex].style.background = '#4a4a4a';
-items[nextIndex].scrollIntoView({ block: 'nearest' });
-} else if (e.key === 'ArrowUp') {
+items[nextIndex].scrollIntoView({ block: 'nearest' };);
+}; else if (e.key === 'ArrowUp') {
 e.preventDefault();
 if (activeItem) activeItem.classList.remove('dropdown-active-item');
 var prevIndex = currentIndex > 0 ? currentIndex - 1 : items.length - 1;
 items[prevIndex].classList.add('dropdown-active-item');
 items[prevIndex].style.background = '#4a4a4a';
-items[prevIndex].scrollIntoView({ block: 'nearest' });
-} else if (e.key === 'Enter') {
+items[prevIndex].scrollIntoView({ block: 'nearest' };);
+}; else if (e.key === 'Enter') {
 var focusedItem = container.querySelector('.dropdown-active-item');
 if (focusedItem) {
 e.preventDefault();
 var idx = parseInt(focusedItem.getAttribute('data-index'));
 deckListGoToCard(idx);
 closeDeckListDropdown();
-}
-} else if (e.key === 'Escape') {
+};
+}; else if (e.key === 'Escape') {
 closeDeckListDropdown();
-}
-});
+};
+};);
 
 function positionDeckNav() {
 	var overlay = document.getElementById('deck-nav-overlay');
@@ -6575,8 +6575,8 @@ function positionDeckNav() {
 		overlay.style.left = rect.left + 'px';
 		overlay.style.top = (rect.bottom + 12) + 'px';
 		overlay.style.width = rect.width + 'px';
-	}
-}
+	};
+};
 
 function showDeckNav(show) {
 	var overlay = document.getElementById('deck-nav-overlay');
@@ -6585,12 +6585,12 @@ function showDeckNav(show) {
 		positionDeckNav();
 		window.addEventListener('scroll', positionDeckNav, true);
 		window.addEventListener('resize', positionDeckNav);
-	} else {
+	}; else {
 		window.removeEventListener('scroll', positionDeckNav, true);
 		window.removeEventListener('resize', positionDeckNav);
-	}
+	};
 	overlay.style.display = show ? 'block' : 'none';
-}
+};
 
 // Keyboard shortcuts for deck list navigation (Left/Right arrow keys)
 document.addEventListener('keydown', function(e) {
@@ -6601,17 +6601,17 @@ document.addEventListener('keydown', function(e) {
 	if (e.key === 'ArrowLeft') {
 		e.preventDefault();
 		deckListPrev();
-	} else if (e.key === 'ArrowRight') {
+	}; else if (e.key === 'ArrowRight') {
 		e.preventDefault();
 		deckListNext();
-	}
-});
+	};
+};);
 
 // Fetch raw Scryfall JSON for a deck list entry (uses worker off-main-thread)
 function _fetchDeckEntryRaw(index) {
 	var entry = deckList[index];
 	return fetchScryfallCardByCodeNumber(entry.setCode, entry.collectorNumber);
-}
+};
 
 // Populate the UI from already-fetched card data — runs on main thread in a rAF frame.
 // Only applies if the user is still viewing `targetIndex` (guards against stale completions).
@@ -6631,16 +6631,16 @@ function _applyDeckCardToUI(processedCards, targetIndex) {
 			uploadArt(cardToImport.image_uris.art_crop, 'autoFit');
 			if (cardToImport.artist) {
 				artistEdited(cardToImport.artist);
-			}
-		}
+			};
+		};
 
 		changeCardIndex();
 		updateDeckListCounter();
 
 		// After loading Scryfall defaults, check for saved version on disk and merge it in
 		localDeckLoadSavedCard(targetIndex);
-	});
-}
+	};);
+};
 
 // Start pre-fetching neighbors of the given index (±1, ±2), skipping already-cached/in-flight
 function _prefetchNeighbors(index) {
@@ -6654,14 +6654,14 @@ function _prefetchNeighbors(index) {
 			return function(data) {
 				_deckPrefetchCache[idx] = data;
 				delete _deckInFlight[idx];
-			};
-		}(ni)).catch(function(idx) {
+			};;
+		};(ni)).catch(function(idx) {
 			return function() {
 				delete _deckInFlight[idx];
-			};
-		}(ni));
-	}
-}
+			};;
+		};(ni));
+	};
+};
 
 function deckListLoadCard(index) {
 	if (index < 0 || index >= deckList.length) return;
@@ -6674,7 +6674,7 @@ function deckListLoadCard(index) {
 		_applyDeckCardToUI(_deckPrefetchCache[index], index);
 		_prefetchNeighbors(index);
 		return;
-	}
+	};
 
 	// Check if already in-flight — wait for it
 	if (_deckInFlight[index]) {
@@ -6683,12 +6683,12 @@ function deckListLoadCard(index) {
 				clearInterval(pollId);
 				notify('Loaded: ' + entry.name, 2);
 				_applyDeckCardToUI(_deckPrefetchCache[index], index);
-			} else if (!_deckInFlight[index]) {
+			}; else if (!_deckInFlight[index]) {
 				clearInterval(pollId);
-			}
-		}, 50);
+			};
+		};, 50);
 		return;
-	}
+	};
 
 	// Fetch on background thread, then apply to UI via rAF (guarded by targetIndex)
 	notify('Fetching: ' + entry.name + ' (' + entry.setCode + ' #' + entry.collectorNumber + ')', 3);
@@ -6698,14 +6698,14 @@ function deckListLoadCard(index) {
 		// Cache for future navigation
 		_deckPrefetchCache[index] = raw;
 		_applyDeckCardToUI(raw, index);
-	}).catch(function() {
+	};).catch(function() {
 		delete _deckInFlight[index];
 		notify('No card found for ' + entry.name + ' (' + entry.setCode + ' #' + entry.collectorNumber + ')', 5);
-	});
+	};);
 
 	// Start pre-fetching neighbors in parallel
 	_prefetchNeighbors(index);
-}
+};
 
 function deckListSaveCurrent() {
 	var entry = deckList[deckListIndex];
@@ -6719,32 +6719,32 @@ function deckListSaveCurrent() {
 	var cardToSave = JSON.parse(JSON.stringify(card));
 	cardToSave.frames.forEach(function(frame) {
 		delete frame.image;
-		frame.masks.forEach(function(mask) { delete mask.image; });
-	});
+		frame.masks.forEach(function(mask) { delete mask.image; };);
+	};);
 
 	if (!cardKeys.includes(saveKey)) {
 		cardKeys.push(saveKey);
 		cardKeys.sort();
 		localStorage.setItem('cardKeys', JSON.stringify(cardKeys));
-	}
+	};
 
 	try {
 		localStorage.setItem(saveKey, JSON.stringify(cardToSave));
 		if (deckListSavedKeys.indexOf(deckListIndex) === -1) {
 			deckListSavedKeys.push(deckListIndex);
-		}
+		};
 		updateDeckListCounter();
 		notify('Saved: ' + entry.name + ' (' + deckListSavedKeys.length + '/' + deckList.length + ' saved)', 3);
-	} catch (error) {
+	}; catch (error) {
 		notify('Storage full! Download cards to free space.', 5);
-	}
-}
+	};
+};
 
 async function deckListBatchDownload() {
 	if (deckListSavedKeys.length === 0) {
 		notify('No cards have been saved yet. Save each card before batch downloading.', 5);
 		return;
-	}
+	};
 
 	var total = deckListSavedKeys.length;
 	var currentIndex = 0;
@@ -6753,7 +6753,7 @@ async function deckListBatchDownload() {
 		if (currentIndex >= total) {
 			notify('Batch download complete! (' + total + ' cards)', 3);
 			return;
-		}
+		};
 
 		var savedIndex = deckListSavedKeys[currentIndex];
 		var entry = deckList[savedIndex];
@@ -6765,23 +6765,23 @@ async function deckListBatchDownload() {
 			currentIndex++;
 			downloadNext();
 			return;
-		}
+		};
 
 		// Load saved card data into global card object (mirrors loadCard)
-		card = {};
+		card = {};;
 		Object.assign(card, savedCardData);
 
 		// Rebuild frames
 		card.frames.reverse();
-		await card.frames.forEach(function(item) { return addFrame([], item); });
+		await card.frames.forEach(function(item) { return addFrame([], item); };);
 		card.frames.reverse();
 
 		if (card.onload) {
 			await loadScript(card.onload);
-		}
+		};
 		if (card.manaSymbols) {
-			card.manaSymbols.forEach(function(item) { loadScript(item); });
-		}
+			card.manaSymbols.forEach(function(item) { loadScript(item); };);
+		};
 
 		// Resize canvases if needed
 		var canvasesResized = false;
@@ -6789,15 +6789,15 @@ async function deckListBatchDownload() {
 			if (window[name + 'Canvas'].width != card.width * (1 + card.marginX) || window[name + 'Canvas'].height != card.height * (1 + card.marginY)) {
 				sizeCanvas(name);
 				canvasesResized = true;
-			}
-		});
+			};
+		};);
 
 		if (canvasesResized) {
 			drawTextBuffer();
 			drawFrames();
 			bottomInfoEdited();
 			watermarkEdited();
-		}
+		};
 
 		// Draw the card
 		drawCard();
@@ -6818,12 +6818,12 @@ async function deckListBatchDownload() {
 			notify('Downloaded ' + currentIndex + '/' + total + ': ' + entry.name, 2);
 
 			setTimeout(downloadNext, 500);
-		}, 300);
-	}
+		};, 300);
+	};
 
 	notify('Starting batch download of ' + total + ' cards...', 3);
 	downloadNext();
-}
+};
 
 // Load / init whatever
 loadScript('/js/frames/groupStandard-3.js');
@@ -6835,5 +6835,5 @@ initDraggableArt();
 	var pathInput = document.querySelector('#local-deck-path-input');
 	if (pathInput) {
 		pathInput.value = loadDefaultDeckPath();
-	}
-})();
+	};
+};)();
