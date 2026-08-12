@@ -82,7 +82,7 @@ var selectedFrame = null;
 var selectedFrameIndex = 0;
 var selectedMaskIndex = 0;
 var selectedTextIndex = 0;
-var replacementMasks = {}
+var replacementMasks = {};
 var customCount = 0;
 var lastFrameClick = null;
 var lastMaskClick = null;
@@ -108,11 +108,11 @@ var loadedVersions = [];
 async function resetCardIrregularities({canvas = [getStandardWidth(), getStandardHeight(), 0, 0], resetOthers = true} = {}) {
 	//misc details
 	card.margins = false;
-	        card.bottomInfoTranslate = {x:0, y:0}
+	card.bottomInfoTranslate = {x:0, y:0};
 	card.bottomInfoRotate = 0;
 	card.bottomInfoZoom = 1;
 	card.bottomInfoColor = 'white';
-	replacementMasks = {}
+	replacementMasks = {};
 	//rotation
 	if (card.landscape) {
 		// previewContext.scale(card.width/card.height, card.height/card.width);
@@ -3161,14 +3161,14 @@ function frameElementMaskRemoved() {
 	}
 }
 function uploadMaskOption(imageSource) {
-	const uploadedMask = {name:`Uploaded Image (${customCount});`, src:imageSource, noThumb:true, image: new Image()}
+	const uploadedMask = {name:`Uploaded Image (${customCount})`, src:imageSource, noThumb:true, image: new Image()};
 	customCount ++;
 	selectedFrame.masks.push(uploadedMask);
 	uploadedMask.image.onload = drawFrames;
 	uploadedMask.image.src = imageSource;
 }
 function uploadFrameOption(imageSource) {
-	const uploadedFrame = {name:`Uploaded Image (${customCount});`, src:imageSource, noThumb:true}
+	const uploadedFrame = {name:`Uploaded Image (${customCount})`, src:imageSource, noThumb:true};
 	customCount ++;
 	availableFrames.push(uploadedFrame);
 	loadFramePack();
@@ -4531,7 +4531,7 @@ function setAutofit() {
 	localStorage.setItem('autoFit', document.querySelector('#art-update-autofit').checked);
 }
 function removeDefaultCollector() {
-	defaultCollector = {}; //{number: year, rarity:'P', setCode:'MTG', lang:'EN', starDot:false}
+	defaultCollector = {}; //{number: year, rarity:'P', setCode:'MTG', lang:'EN', starDot:false};
 	localStorage.removeItem('defaultCollector'); //localStorage.setItem('defaultCollector', JSON.stringify(defaultCollector));
 }
 function setDefaultCollector() {
@@ -4707,7 +4707,7 @@ function importCard(cardObject) {
 			if (document.querySelector('#importAllPrints').checked) {
 				title += `(${card.set.toUpperCase()} #${card.collector_number})`;
 			} else {
-				title += `(${card.type_line});`
+				title += `(${card.type_line})`
 			}
 			option.innerHTML = title;
 			option.value = optionIndex;
@@ -6285,7 +6285,7 @@ self.onmessage = function(e) {
       return r.json().then(function(json) {
         self.postMessage({id: id, type: 'result', data: json});
       });
-    });.catch(function(err) {
+    }).catch(function(err) {
       self.postMessage({id: id, type: 'error', message: err.message || String(err)});
     });
   } else if (type === 'byName') {
@@ -6294,7 +6294,7 @@ self.onmessage = function(e) {
       return r.json().then(function(json) {
         self.postMessage({id: id, type: 'result', data: json});
       });
-    });.catch(function(err) {
+    }).catch(function(err) {
       self.postMessage({id: id, type: 'error', message: err.message || String(err)});
     });
   } else if (type === 'byID') {
@@ -6303,7 +6303,7 @@ self.onmessage = function(e) {
       return r.json().then(function(json) {
         self.postMessage({id: id, type: 'result', data: json});
       });
-    });.catch(function(err) {
+    }).catch(function(err) {
       self.postMessage({id: id, type: 'error', message: err.message || String(err)});
     });
   }
