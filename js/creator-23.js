@@ -5185,26 +5185,55 @@ var localDeckMeta = null;         // Parsed meta.json contents
 var localDeckSavedCards = [];     // Names of cards that have been saved to disk
 var _jsZipLoaded = false;         // Whether JSZip has been dynamically loaded
 
+const ROOT_HANDLE_ID = 'cardconjurer-root';
+
 async function getStoredRootHandle() {
-	return new Promise((resolve) => {
-		const request = indexedDB.open('CardConjurerStorage', 1);
-		request.onupgradeneeded = (e) => {
-			const db = e.target.result;
-			if (!db.objectStoreNames.contains('handles')) {
-				db.createObjectStore('handles');
+	// Try IndexedDB first for a cached handle within the same session.
+	let cachedHandle = null;
+	try {
+		cachedHandle = await new Promise((resolve) => {
+			const request = indexedDB.open('CardConjurerStorage', 1);
+			request.onupgradeneeded = (e) => {
+				const db = e.target.result;
+				if (!db.objectStoreNames.contains('handles')) {
+					db.createObjectStore('handles');
+				}
+			};
+			request.onsuccess = (e) => {
+				const db = e.target.result;
+				const tx = db.transaction('handles', 'readonly');
+				const store = tx.objectStore('handles');
+				const getReq = store.get('rootHandle');
+				getReq.onsuccess = () => resolve(getReq.result);
+				getReq.onerror = () => resolve(null);
+			};
+			request.onerror = () => resolve(null);
+		});
+	} catch (e) { /* ignore */ }
+
+	// Verify the cached handle is still valid by iterating one entry.
+	if (cachedHandle) {
+		try {
+			let isValid = false;
+			for await (const _ of cachedHandle.entries()) {
+				isValid = true;
+				break;
 			}
-		};
-		request.onsuccess = (e) => {
-			const db = e.target.result;
-			const tx = db.transaction('handles', 'readonly');
-			const store = tx.objectStore('handles');
-			// Store the handle to the CardConjurer root folder here
-			const getReq = store.get('rootHandle');
-			getReq.onsuccess = () => resolve(getReq.result);
-			getReq.onerror = () => resolve(null);
-		};
-		request.onerror = () => resolve(null);
-	});
+			// If iteration returned 0 entries, the handle may be stale — fall through to restore via ID.
+			if (isValid) return cachedHandle;
+		} catch (e) { /* stale or permission revoked */ }
+	}
+
+	// Use showDirectoryPicker with a persistent id so Chrome restores permissions silently
+	// on subsequent calls without showing the picker dialog again.
+	try {
+		const handle = await window.showDirectoryPicker({ mode: 'readwrite', id: ROOT_HANDLE_ID });
+		await setStoredRootHandle(handle);
+		return handle;
+	} catch (e) {
+		if (e.name === 'AbortError') return null;
+		throw e;
+	}
 }
 
 async function setStoredRootHandle(handle) {
@@ -5312,7 +5341,7 @@ async function localDeckConfirmCreate() {
                         // If no handle is stored, we must ask the user for the base directory once.
                         // Note: This prompt is required by browsers to grant permission to a local folder.
                         try {
-                            baseDirHandle = await window.showDirectoryPicker({ mode: 'readwrite', startIn: 'documents' });
+                            baseDirHandle = await window.showDirectoryPicker({ mode: 'readwrite', id: ROOT_HANDLE_ID, startIn: 'documents' });
                             await setStoredRootHandle(baseDirHandle);
                         } catch (e) {
                             if (e.name === 'AbortError') throw e;
@@ -5376,7 +5405,7 @@ var baseDirHandle = await getStoredRootHandle();
 if (!baseDirHandle) {
 // Only prompt if no root is stored. Note: this will trigger a popup once.
 listEl.innerHTML = "<h5 class='input-description'>Please select your CardConjurer save folder to load decks.</h5>";
-var newHandle = await window.showDirectoryPicker({ mode: "readwrite", startIn: "documents" });
+var newHandle = await window.showDirectoryPicker({ mode: "readwrite", id: ROOT_HANDLE_ID, startIn: "documents" });
 await setStoredRootHandle(newHandle);
 baseDirHandle = newHandle;
 }
