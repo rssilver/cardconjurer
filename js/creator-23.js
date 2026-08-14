@@ -5381,23 +5381,13 @@ await setStoredRootHandle(newHandle);
 baseDirHandle = newHandle;
 }
 
-// Step 2: Determine if we are already in the CardConjurer folder or need to look for it as a subfolder
-var ccHandle;
-if (baseDirHandle.name === "CardConjurer") {
-ccHandle = baseDirHandle;
-} else {
-try {
-ccHandle = await baseDirHandle.getDirectoryHandle("CardConjurer");
-} catch (e) {
-listEl.innerHTML = "<h5 class='input-description'>No CardConjurer folder found in the selected location.</h5>";
-return;
-}
-}
+// Step 2: Use the base directory directly as the root for decks (matches localDeckConfirmCreate)
+var ccHandle = baseDirHandle;
 
 		var filter = (filterText || '').toLowerCase().trim();
 		var deckFolders = [];
 
-		// Step 3: Scan CardConjurer folder for decks with meta.json
+		// Step 3: Scan base directory for deck folders containing meta.json
 		for await (var [entryName, entryHandle] of ccHandle.entries()) {
 			if (entryHandle.kind !== 'directory') continue;
 			try {
