@@ -5289,6 +5289,19 @@ function sanitizeFolderName(name) {
     return name.replace(/[<>:"/\\|?*]/g, '_');
 }
 
+// A folder counts as a deck if it has a valid meta.json OR at least one saved card file.
+async function isDeckDirectory(dirHandle) {
+	try {
+		var metaFile = await dirHandle.getFile('meta.json');
+		return JSON.parse(await metaFile.text());
+	} catch (e) { /* no readable/valid meta.json — fall back to checking for card files */ }
+	try {
+		for await (var [entryName, entryHandle] of dirHandle.entries()) {
+			if (entryHandle.kind === 'file' && /\.json$/i.test(entryName)) return {};
+		}
+	} catch (e) { /* ignore read errors while probing */ }
+	return null;
+}
 
 // --- UI Helpers ---
 
@@ -5410,29 +5423,41 @@ await setStoredRootHandle(newHandle);
 baseDirHandle = newHandle;
 }
 
-// Step 2: Use the base directory directly as the root for decks (matches localDeckConfirmCreate)
-var ccHandle = baseDirHandle;
+// Step 2: Gather candidate deck folders. Decks are created directly under the
+// base directory (see localDeckConfirmCreate), but also look inside a nested
+// "CardConjurer" subfolder so decks saved there are found too.
+var filter = (filterText || '').toLowerCase().trim();
+var deckFolders = [];
+var seenNames = {};
 
-		var filter = (filterText || '').toLowerCase().trim();
-		var deckFolders = [];
+async function scanForDecks(dirHandle) {
+	for await (var [entryName, entryHandle] of dirHandle.entries()) {
+		if (entryHandle.kind !== 'directory') continue;
+		var meta = await isDeckDirectory(entryHandle);
+		if (meta === null) continue; // not a deck folder
+		var displayName = (meta && meta.name) || entryName;
+		if (seenNames[displayName]) continue; // avoid duplicates across scan roots
+		seenNames[displayName] = true;
+		deckFolders.push({ name: displayName, handle: entryHandle });
+	}
+}
 
-		// Step 3: Scan base directory for deck folders containing meta.json
-		for await (var [entryName, entryHandle] of ccHandle.entries()) {
-			if (entryHandle.kind !== 'directory') continue;
-			try {
-				var metaFile = await entryHandle.getFile('meta.json');
-				var metaText = await metaFile.text();
-				var meta = JSON.parse(metaText);
-				deckFolders.push({ name: meta.name || entryName, handle: entryHandle });
-			} catch (e) {
-				// No meta.json in this folder
-			}
-		}
+await scanForDecks(baseDirHandle);
 
-		if (deckFolders.length === 0) {
-			listEl.innerHTML = '<h5 class="input-description">No decks found. Create one or check your save location.</h5>';
-			return;
-		}
+// Fallback: if the base directory contains a "CardConjurer" subfolder (and it is
+// not itself already named CardConjurer), scan that too.
+if (baseDirHandle.name !== 'CardConjurer') {
+	try {
+		var nested = await baseDirHandle.getDirectoryHandle('CardConjurer');
+		await scanForDecks(nested);
+	} catch (e) { /* no nested CardConjurer folder — that's fine */ }
+}
+
+if (deckFolders.length === 0) {
+	listEl.innerHTML = '<h5 class="input-description">No decks found in "' + baseDirHandle.name + '". ' +
+		'Create one, or use "Update Path" above to point at the folder that contains your deck folders.</h5>';
+	return;
+}
 
 		listEl.innerHTML = '';
 		deckFolders.forEach(function(deck, idx) {
