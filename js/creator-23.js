@@ -5918,17 +5918,43 @@ async function localDeckExportPNGZip() {
 
 // --- Open File Location ---
 
-function localDeckOpenFileLocation() {
+async function localDeckOpenFileLocation() {
 	if (!localDeckHandle) {
 		var path = loadDefaultDeckPath();
 		notify('Save location: ' + path, 3);
 		return;
 	}
-	// Show the full path including CardConjurer subfolder and deck name
-	var os = detectOS();
-	var basePath = (os === 'windows') ? '%USERPROFILE%\\Documents' : '~/Documents';
-	var fullPath = basePath + '/CardConjurer/' + localDeckMeta.name;
-	notify('Deck location: ' + fullPath, 3);
+
+	// Reveal the deck folder in the OS file manager (Finder / File Explorer).
+	// showItemInFolder() must run within the click gesture and needs an active
+	// permission grant, so try it directly first. If that fails (e.g. the
+	// persisted handle's permission was revoked after a reload), request
+	// permission and retry before falling back to showing the path as text.
+	var revealed = false;
+	try {
+		await localDeckHandle.showItemInFolder();
+		revealed = true;
+	} catch (e) { /* fall through to permission re-grant below */ }
+
+	if (!revealed && typeof localDeckHandle.requestPermission === 'function') {
+		try {
+			var perm = await localDeckHandle.queryPermission({ mode: 'read' });
+			if (perm !== 'granted') perm = await localDeckHandle.requestPermission({ mode: 'read' });
+			if (perm === 'granted') {
+				await localDeckHandle.showItemInFolder();
+				revealed = true;
+			}
+		} catch (e) { /* fall through to path text below */ }
+	}
+
+	if (!revealed) {
+		var os = detectOS();
+		var basePath = (os === 'windows') ? '%USERPROFILE%\\Documents' : '~/Documents';
+		var fullPath = basePath + '/CardConjurer/' + localDeckMeta.name;
+		notify('Could not open file manager. Deck location: ' + fullPath, 5);
+	} else {
+		notify('Opened deck folder in file manager.', 2);
+	}
 }
 
 // --- Rename Deck ---
